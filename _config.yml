@@ -1,5 +1,33 @@
-title: Tailwind Jekyll Starter Kit
-description: A starter kit for using Tailwind with Jekyll
+author: Aaron Taylor
+title: Way of Compassion Bike Project
+email: aaron@wocompassion.org
+phone: 970.340.8151
+hours: "Bike Project closed until further notice"
+description: >- # this means to ignore newlines until "baseurl:"
+  The Mission of the Way of Compassion Bicycle Project is to increase individual,
+  community, environmental, and global health by operating a sustainable, safe,
+  and educational community bicycle shop and bicycle education programs.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-responsive-image
+  - jekyll-feed
+
+responsive_image:
+  template: _includes/responsive-image.html
+  sizes:
+    - width: 300 # [Required] How wide the resized image will be.
+    - width: 400
+    - width: 600
+    - width: 800
+    - width: 975
+    - width: 1600
+  strip: false
+  output_path_format: "assets/img/%{width}/%{basename}"
 
 exclude:
   - Gemfile

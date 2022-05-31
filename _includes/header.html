@@ -1,12 +1,67 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en-US">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Tailwind Jekyll Starter Kit</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css" />
-  </head>
-
-  <body>
-</html>
+<!-- Top banner with phone number -->
+<section>
+    <div class="bg-gray-900 flex h-10 items-center justify-end max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 text-gray-200">
+      <span class="font-thin mr-1">P:</span>
+      <a href="tel:970-340-8151">970.340.8151</a>
+    </div>
+  </section>
+  
+  <!--  Header component with logo and hamburger or nav -->
+  <header>
+    <div class="bg-white h-16 max-w-7xl mx-auto">
+      <nav x-data="{ isOpen: false }" class="relative">
+        <!-- mobile nav toggle -->
+        <div class="absolute right-0 inset-y-0 h-16 flex items-center lg:hidden sm:pr-2">
+          <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="inline-flex items-center justify-center p-2 rounded-md text-teal-500 focus:outline-none transition duration-150 ease-in-out">
+            <svg class="h-10 w-10" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+              <path :class="{'hidden': isOpen, 'inline-flex': !isOpen }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              <path :class="{'hidden': !isOpen, 'inline-flex': isOpen }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <!-- nav starting at large breakpoint -->
+        <div class="flex h-16 items-center justify-start w-full">
+          <!-- logo -->
+          <div class="flex-shrink-0 px-2 sm:px-4 lg:px-8">
+            <img class="block sm:hidden h-10 w-auto" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2307997/logo.svg" alt="" />
+            <img class="hidden sm:block h-12 w-auto" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2307997/logo.svg" alt="" />
+          </div>
+          <!-- navigation on larger view ports -->
+          <div class="hidden lg:block lg:ml-6 flex-grow">
+            <div class="ml-4 flex items-center h-16">
+              <div class="flex items-center h-16 border-l border-r border-gray-200 border-solid hover:bg-gray-200 transition duration-150 ease-in-out">
+                <a href="#" class="px-4 text-sm xl:text-lg font-medium leading-5 text-gray-800 focus:outline-none focus:text-black">About Us</a>
+              </div>
+              <div class="flex items-center h-16 border-r border-gray-200 border-solid hover:bg-gray-200 transition duration-150 ease-in-out">
+                <a href="#" class="px-4 text-sm xl:text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:text-black">Our Programs</a>
+              </div>
+              <div class="flex items-center h-16 border-r border-gray-200 border-solid hover:bg-gray-200 transition duration-150 ease-in-out">
+                <a href="#" class="px-4 text-sm xl:text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:text-black">Events</a>
+              </div>
+              <div class="flex items-center h-16 border-r border-gray-200 border-solid hover:bg-gray-200 transition duration-150 ease-in-out">
+                <a href="#" class="px-4 text-sm xl:text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:text-black">Photos & Videos</a>
+              </div>
+              <div class="flex items-center h-16 hover:bg-gray-200 transition duration-150 ease-in-out">
+                <a href="#" class="px-4 text-sm xl:text-lg font-medium leading-5 text-gray-900 focus:outline-none focus:text-black">Contact Us</a>
+              </div>
+            </div>
+          </div>
+          <div class="hidden xl:block shadow h-16 flex-shrink">
+            <a href="#" class="w-full h-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium text-white bg-teal-600 hover:bg-gray-900 focus:outline-none focus:shadow-outline-gray transition duration-150 ease-in-out">
+              Donate a Bike <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2307997/arrow.svg" class="px-2" />
+            </a>
+          </div>
+        </div>
+        <!-- mobile nav flyout -->
+        <div :class="{'block': isOpen, 'hidden': !isOpen}" class="bg-white h-screen hidden lg:hidden relative z-20">
+        <div class="px-2 pt-2 pb-3">
+          <a href="#" class="mt-2 block px-3 py-2 rounded-md text-base font-medium text-gray-900  hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out">About Us</a>
+          <a href="#" class="mt-2 block px-3 py-2 rounded-md text-base font-medium text-gray-900  hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out">Our Programs</a>
+          <a href="#" class="mt-2 block px-3 py-2 rounded-md text-base font-medium text-gray-900  hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out">Events</a>
+          <a href="#" class="mt-2 block px-3 py-2 rounded-md text-base font-medium text-gray-900  hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out">Photos & Videos</a>
+          <a href="#" class="mt-2 block px-3 py-2 rounded-md text-base font-medium text-gray-900  hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out">Contact Us</a>
+        </div>
+      </div>
+      </nav>
+    </div> 
+  </header>

@@ -1,5 +1,5 @@
 module.exports = {
-  purge: [`_site/**/*.html`],
+  content: [`_site/**/*.html`],
   theme: {
     extend: {
       fontFamily: {
@@ -54,5 +54,5 @@ module.exports = {
     }
   },
   variants: {},
-  plugins: []
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 }

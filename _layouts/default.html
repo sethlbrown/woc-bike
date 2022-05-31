@@ -1,12 +1,17 @@
----
----
+<!DOCTYPE html>
+<html class="no-js" lang="en-US">
+  {% include head.html %}
+  <body>
+    {% include header.html %}
 
-{% include header.html %}
+    {% include banner.html %}
 
-<main
-  class="bg-indigo-500 flex h-screen items-center justify-center w-full"
->
-  {{ content }}
-</main>
+    <div id="content" class="max-w-7xl px-2 sm:px-4 lg:px-8 xl:px-20 mx-auto leading-9 text-xl text-gray-800">{{ content }}</div>
 
-{% include footer.html %}
+    {% include donate.html %}
+
+    {% include testimonials.html %}
+
+    {% include footer.html %}
+  </body>
+</html>

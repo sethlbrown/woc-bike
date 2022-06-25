@@ -1,0 +1,36 @@
+<!-- navigation on larger view ports -->
+<div class="hidden lg:block lg:ml-6 flex-grow">
+    <div class="ml-4 flex items-center h-16">
+        {% assign sorted_pages = site.pages | sort:"name" %}
+        {% for p in sorted_pages %}
+        {% unless p.exclude %}
+        {% if p.title %}
+        <div class="flex 
+                    items-center 
+                    h-16 
+                    lg:border-t-4 
+                    lg:border-teal-400 
+                    lg:border-solid 
+                    lg:border-opacity-0 
+                    hover:border-opacity-100 
+                    hover:bg-gray-200
+                    transition 
+                    duration-150 
+                    ease-in-out">
+            <a href="{{ p.url | prepend: site.baseurl }}" class="px-4                 
+                        text-base 
+                        font-bold 
+                        leading-5 
+                        xl:text-lg 
+                        text-gray-800 
+                        focus:text-black 
+                        focus:outline-none 
+                        lg:mt-0
+                        {% if p.url == page.url %}active{% endif %}">
+                {{p.title}}</a>
+        </div>
+        {% endif %}
+        {% endunless %}
+        {% endfor %}
+    </div>
+</div>

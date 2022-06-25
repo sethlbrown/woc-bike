@@ -1,0 +1,40 @@
+---
+layout: page
+title: "Photos and Videos"
+canonical_url: "https://wocbikeproject.org/gallery/"
+permalink: /gallery/
+---
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.js"></script>
+<div class="woc-gallery">
+  <h2>Videos</h2>
+  <a data-fancybox="gallery" href="https://www.youtube.com/watch?v=REDyP1w7IVo&t=8s">
+    <img src="https://img.youtube.com/vi/REDyP1w7IVo/0.jpg" alt="Way of Compassion Bike Project" width="300"
+      height="225" border="0" />
+  </a>
+  <a data-fancybox="gallery" href="https://www.youtube.com/watch?feature=player_embedded&v=vwWFUpzS4Fw">
+    <img src="https://img.youtube.com/vi/vwWFUpzS4Fw/0.jpg" alt="Way of Compassion Bike Project" width="300"
+      height="225" border="0" />
+  </a>
+  <a data-fancybox="gallery" href="https://www.youtube.com/watch?feature=player_embedded&v=fBAuNyqgRPQ">
+    <img src="https://img.youtube.com/vi/fBAuNyqgRPQ/0.jpg" alt="Way of Compassion Bike Project" width="300"
+      height="225" border="0" />
+  </a>
+  <a data-fancybox="gallery" href="https://www.youtube.com/watch?feature=player_embedded&v=_HtRkQSuPb8">
+    <img src="https://img.youtube.com/vi/_HtRkQSuPb8/0.jpg" alt="Way of Compassion Bike Project" width="300"
+      height="225" border="0" />
+  </a>
+</div>
+<div class="woc-gallery">
+  <h2>Images</h2>
+  {% assign sorted = site.data.images | sort: 'weight' %} {% for image in sorted %}
+  {% comment %} Explode the image path into an array and grab the last item,
+  which is the actual file name.{% endcomment %} {% assign src_array =
+  image.image_path | split: "/" %}
+  <a data-fancybox="gallery" href="/assets/img/975/{{ src_array.last }}">
+    <img src="/assets/img/300/{{ src_array.last }}" alt="{{ image.description }}" class="{{ image.aspect_ratio }}" />
+  </a>
+  {% endfor %}
+</div>

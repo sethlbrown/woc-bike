@@ -1,0 +1,330 @@
+---
+layout: page
+title: Bikes
+canonical_url: 'https://wocbikeproject.org/bikes/'
+permalink: /bikes/
+published: false
+---
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.js"></script>
+<ul class="bike-links">
+  <li><a href="#road">Road Bikes</a></li>
+  <li><a href="#mountain">Mountain Bikes</a></li>
+  <li><a href="#cruisers">Cruisers</a></li>
+  <li><a href="#frames">Frames</a></li>
+  <li><a href="#kids-12">Kids 12"</a></li>
+  <li><a href="#kids-16">Kids 16"</a></li>
+  <li><a href="#kids-18">Kids 18"</a></li>
+  <li><a href="#kids-20">Kids 20"</a></li>
+  <li><a href="#kids-24">Kids 24"</a></li>
+</ul>
+<h2>Bikes for Sale</h2>
+<div id="google-photos">
+  <p>
+    The following bikes are currently available. Check back soon as we add sizes
+    and prices. In the meantime, if you're interested in a particular bike,
+    please give us a call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/wfSW2sPWgnFxgrXy5 none %}
+  <script>
+    let galleryForSaleHTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryForSaleHTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos").append(galleryForSaleHTML);
+  </script>
+</div>
+<a name="road"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Road Bikes</h2>
+<div id="google-photos2">
+  <p>
+    The following road bikes are currently available as project stock from the
+    bike pile. Check back soon as we add sizes and prices. In the meantime, if
+    you're interested in a particular bike, please give us a call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/MxhGDu87H7jg6mY79 none %}
+  <script>
+    let galleryRoadBikesHTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryRoadBikesHTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos2").append(galleryRoadBikesHTML);
+  </script>
+</div>
+
+<a name="mountain"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Mountain Bikes</h2>
+<div id="google-photos3">
+  <p class="google-photos">
+    The following mountain bikes are currently available as project stock from
+    the bike pile. If you're interested in a particular bike, please give us a
+    call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/S5dVcWqu7ZkjUEYG7 none %}
+  <script>
+    let galleryMountainBikesHTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryMountainBikesHTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos3").append(galleryMountainBikesHTML);
+  </script>
+</div>
+
+<a name="cruisers"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Cruisers</h2>
+<div id="google-photos4">
+  <p class="google-photos">
+    The following cruiser bikes are currently available as project stock from
+    the bike pile. If you're interested in a particular bike, please give us a
+    call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/DBFdYetqs25yoJhaA none %}
+  <script>
+    let galleryCruisersHTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryCruisersHTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos4").append(galleryCruisersHTML);
+  </script>
+</div>
+
+<a name="frames"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Frames</h2>
+<div id="google-photos5">
+  <p class="google-photos">
+    The following frames are currently available as project stock from the bike
+    pile. If you're interested in a particular bike, please give us a call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/A5PqV4A5rExiZ1j87 none %}
+  <script>
+    let galleryFramesHTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryFramesHTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos5").append(galleryFramesHTML);
+  </script>
+</div>
+
+<a name="kids-12"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Kids 12"</h2>
+<div id="google-photos6">
+  <p>
+    The following 12" kids bikes are currently available as project stock from
+    the bike pile. If you're interested in a particular bike, please give us a
+    call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/PgC1dsQNAtSx24i7A none %}
+  <script>
+    let galleryKids12HTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryKids12HTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos6").append(galleryKids12HTML);
+  </script>
+</div>
+
+<a name="kids-16"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Kids 16"</h2>
+<div id="google-photos7">
+  <p>
+    The following 16" kids bikes are currently available as project stock from
+    the bike pile. If you're interested in a particular bike, please give us a
+    call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/tibNFbzDJJw3kChW6 none %}
+  <script>
+    let galleryKids16HTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryKids16HTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos7").append(galleryKids16HTML);
+  </script>
+</div>
+
+<a name="kids-18"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Kids 18"</h2>
+<div id="google-photos8">
+  <p>
+    The following 18" kids bikes are currently available as project stock from
+    the bike pile. If you're interested in a particular bike, please give us a
+    call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/L5Mcjytp5GiXsHyx6 none %}
+  <script>
+    let galleryKids18HTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryKids18HTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos8").append(galleryKids18HTML);
+  </script>
+</div>
+
+<a name="kids-20"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Kids 20"</h2>
+<div id="google-photos9">
+  <p>
+    The following 20" kids bikes are currently available as project stock from
+    the bike pile. If you're interested in a particular bike, please give us a
+    call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/KFrbKJBHdsTkmtai8 none %}
+  <script>
+    let galleryKids20HTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryKids20HTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos9").append(galleryKids20HTML);
+  </script>
+</div>
+
+<a name="kids-24"></a>
+<p style="clear:both;"><a href="#top">Back to top</a></p>
+<h2>Kids 24"</h2>
+<div id="google-photos10">
+  <p class="google-photos">
+    The following 24" kids bikes are currently available as project stock from
+    the bike pile. If you're interested in a particular bike, please give us a
+    call.
+  </p>
+  {% google_photos https://photos.app.goo.gl/MQGS5S5HGNm6xeKj9 none %}
+  <script>
+    let galleryKids24HTML = "";
+    $.each(googlePhotos.urls, function renderPhotos(index, value) {
+      galleryKids24HTML += ` <a
+            data-fancybox="gallery"
+            href="${value}=w975"
+          >
+            <img
+                src="${value}=w300"
+                alt="Bike for Sale"
+                width="300"
+                border="0"
+                class="google-gallery-image"
+              />
+          </a>
+       `;
+    });
+    $("#google-photos10").append(galleryKids24HTML);
+  </script>
+</div>

@@ -1,0 +1,27 @@
+---
+layout: page
+title: Calendar
+permalink: /calendar/
+canonical_url: 'https://wocbikeproject.org/calendar/'
+---
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/en-ca.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.js'></script>
+<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/gcal.min.js'></script>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.min.css' />
+<script type='text/javascript'>
+
+    $(function() {
+      $('#calendar').fullCalendar({
+        googleCalendarApiKey: 'AIzaSyDLJBM6rnfUm4l_HjjGKNoPKB_nZoO7HkY',
+        events: {
+          googleCalendarId: 'ah9ebl95omf4gg1g6vo29a5vqk@group.calendar.google.com'
+        },
+        defaultView: 'listMonth'
+      });
+    });
+    
+    </script>
+<div id='calendar'></div>

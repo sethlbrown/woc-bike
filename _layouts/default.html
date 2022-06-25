@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en-US">
-  {% include head.html %}
-  <body>
-    {% include header.html %}
+{% include head.html %}
 
-    {% include banner.html %}
+<body>
+  {% include hat.html %}
+  {% include header.html %}
+  {% if page.title == "Home" %}
+  {% include home-banner.html %}
+  {% else %}
+  {% include banner.html %}
+  {% endif %}
+  <div class="max-w-7xl 
+              px-2 
+              sm:px-4 
+              lg:px-8 
+              xl:px-20 
+              mx-auto 
+              leading-9 
+              prose-xl 
+              text-gray-800">
+    {{ content }}
+  </div>
+  {% include donate.html %}
+  {% include testimonials.html %}
+  {% include footer.html %}
+</body>
 
-    <div id="content" class="max-w-7xl px-2 sm:px-4 lg:px-8 xl:px-20 mx-auto leading-9 text-xl text-gray-800">{{ content }}</div>
-
-    {% include donate.html %}
-
-    {% include testimonials.html %}
-
-    {% include footer.html %}
-  </body>
 </html>

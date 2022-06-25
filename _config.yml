@@ -41,3 +41,4 @@ exclude:
   - src
   - tailwind.config.js
   - netlify.toml
+  - .nvm.rc

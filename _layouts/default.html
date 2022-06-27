@@ -10,17 +10,24 @@
   {% else %}
   {% include banner.html %}
   {% endif %}
-  <div class="max-w-7xl 
+  <article class="max-w-7xl 
               px-2 
               sm:px-4 
               lg:px-8 
               xl:px-20 
+              mt-4
+              lg:mt-6
               mx-auto 
               leading-9 
-              prose-xl 
-              text-gray-800">
+              text-gray-800
+              text-xl
+              {% if page.title != 'Calendar' %}prose-xl{% endif %}">
+    {% if page.title == "About" %}
+    <h2>Mission:</h2>
+    <blockquote>{{ site.description }}</blockquote>
+    {% endif %}
     {{ content }}
-  </div>
+  </article>
   {% include donate.html %}
   {% include testimonials.html %}
   {% include footer.html %}

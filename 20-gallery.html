@@ -1,33 +1,139 @@
 ---
-layout: page
+layout: default
 title: "Photos and Videos"
 canonical_url: "https://wocbikeproject.org/gallery/"
 permalink: /gallery/
+banner: IMG_18_road.jpg
+credit: "18 Road Fruita, Photo by Seth Brown"
+published: true
 ---
+<div class="grid grid-cols-12 w-full lg:max-w-7xl mx-auto">
+  <div class="col-span-6 lg:col-span-12 lg:mr-2">
+    <div class="transition-all duration-1000 ease-in-out w-full" x-data="ProductGallery"
+      x-init="init($el); $watch('activeImage', value => scroll());"
+      :class="{ 'fixed top-0 bottom-0 right-0 left-0 z-50 w-screen h-screen overflow-hidden bg-white flex flex-col gap-4 p-6': isOpen }">
+      <div class="text-right" x-show="isOpen" x-cloak>
+        <a href="#" @click.prevent="toggleImage">
+          <i class="fas fa-times text-2xl text-teal-500"></i>
+        </a>
+      </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.js"></script>
-<div class="woc-gallery">
-  <h2>Videos</h2>
-  <a data-fancybox="gallery" href="https://www.youtube.com/watch?v=REDyP1w7IVo&t=8s">
-    <img src="https://img.youtube.com/vi/REDyP1w7IVo/0.jpg" alt="Way of Compassion Bike Project" width="300"
-      height="225" border="0" />
-  </a>
-  <a data-fancybox="gallery" href="https://www.youtube.com/watch?feature=player_embedded&v=vwWFUpzS4Fw">
-    <img src="https://img.youtube.com/vi/vwWFUpzS4Fw/0.jpg" alt="Way of Compassion Bike Project" width="300"
-      height="225" border="0" />
-  </a>
-  <a data-fancybox="gallery" href="https://www.youtube.com/watch?feature=player_embedded&v=fBAuNyqgRPQ">
-    <img src="https://img.youtube.com/vi/fBAuNyqgRPQ/0.jpg" alt="Way of Compassion Bike Project" width="300"
-      height="225" border="0" />
-  </a>
-  <a data-fancybox="gallery" href="https://www.youtube.com/watch?feature=player_embedded&v=_HtRkQSuPb8">
-    <img src="https://img.youtube.com/vi/_HtRkQSuPb8/0.jpg" alt="Way of Compassion Bike Project" width="300"
-      height="225" border="0" />
-  </a>
-</div>
-<div class="woc-gallery">
+      <ul
+        class="flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth pb-6 list-none"
+        @wheel="mousewheelEvent($event)">
+        <template x-for="(image, i) in images" :key="image">
+          <li class="w-full flex-shrink-0 snap-start">
+            <a href="#" @click.prevent="if(!isOpen){toggleImage()}">
+              <img :src="image.url" class="m-auto max-h-full max-w-full">
+            </a>
+          </li>
+        </template>
+      </ul>
+
+      <div class="m-auto max-w-full">
+        <div class="flex" x-show="images.length>1" x-cloak>
+          <a id="arrow-right"
+            class="h-28 flex-grow-0 text-teal-500 inline-flex items-center text-xl bg-white p-4 no-underline" href="#"
+            @click.prevent="prev">
+            <i class="fas fa-arrow-left no-underline"></i>
+          </a>
+          <ul
+            class="flex flex-grow-1 flex-nowrap overflow-x-scroll whitespace-nowrap snap snap-x snap-mandatory no-scrollbar scroll-behavior-smooth list-none">
+            <template x-for="(image, i) in images" :key="image">
+              <li class="w-28 flex-shrink-0 snap-start  mx-1" @wheel="mousewheelEvent($event)">
+                <a class="inline-block border-4" href="#" @click.prevent="activeImage=i"
+                  :class="{'border-gray-200': activeImage==i, 'border-white': activeImage!=i}">
+                  <img :src="image.thumb" class="" height="150" width="150">
+                </a>
+              </li>
+            </template>
+          </ul>
+          <a id="arrow-left"
+            class="h-28 flex-grow-0 inline-flex items-center text-xl text-teal-500 bg-white p-4 no-underline" href="#"
+            @click.prevent="next">
+            <i class="fas fa-arrow-right no-underline"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var images = [
+      {% assign sorted = site.data.images | sort: 'weight' %}
+    {% for image in sorted %}
+    {% if image.aspect_ratio == "horizontal" %}
+    {% comment %} Explode the image path into an array and grab the last item,
+      which is the actual file name.
+{% endcomment %}
+    {% assign src_array = image.image_path | split: "/" %}
+    { url: `/assets/img/975/{{ src_array.last }}`, 'thumb': `/assets/img/150/{{ src_array.last }}` },
+    {% endif %}
+    {% endfor %}
+      ];
+
+    window.ProductGallery = {
+      $el: null,
+      images: null,
+      activeImage: 0,
+      isOpen: false,
+      $imageEl: null,
+      $thumbNavEl: null,
+      init($el) {
+        this.$el = $el;
+        this.$imageEl = $el.querySelectorAll('ul')[0];
+        this.$thumbNavEl = $el.querySelectorAll('ul')[1];
+        this.images = images;
+      },
+      next: function () {
+        this.activeImage = this.activeImage + 1 < this.images.length ? this.activeImage + 1 : 0;
+      },
+      prev: function () {
+        this.activeImage = this.activeImage > 0 ? this.activeImage - 1 : this.images.length - 1;
+      },
+      mousewheelEvent: function (event) {
+        if (event.deltaY > 0) {
+          this.next();
+          event.preventDefault();
+        } else if (event.deltaY < 0) {
+          this.prev();
+          event.preventDefault();
+        }
+      },
+      scroll: function () {
+        this.scrollToImage();
+        this.scrollToThumb();
+      },
+      scrollToThumb: function () {
+        const $activeThumb = this.$thumbNavEl.querySelector('ul li:nth-child(0n+' + (this.activeImage + 2) + ')');
+        this.$thumbNavEl.scrollLeft = ($activeThumb.offsetLeft - $activeThumb.clientWidth) - (this.$thumbNavEl.clientWidth / 2) + ($activeThumb.clientWidth / 2);
+      },
+      scrollToImage: function () {
+        const $activeImage = this.$imageEl.querySelector('ul li:nth-child(0n+' + (this.activeImage + 2) + ')');
+        this.$imageEl.scrollLeft = $activeImage.offsetLeft - (this.$thumbNavEl.clientWidth / 2);
+      },
+      toggleImage: function () {
+        this.isOpen ? this.close() : this.open();
+        // wait for css rendering then scroll to active image
+        let _this = this;
+        setTimeout(function () {
+          _this.scroll();
+        }, 100);
+      },
+      open: function () {
+        document.body.style.overflowY = 'hidden';
+        document.body.style.height = '100vh';
+        this.isOpen = true;
+      },
+      close: function () {
+        document.body.style.overflowY = null;
+        document.body.style.height = null;
+        this.isOpen = false;
+      }
+    };
+  </script>
+
+  <!-- <div class="woc-gallery">
   <h2>Images</h2>
   {% assign sorted = site.data.images | sort: 'weight' %} {% for image in sorted %}
   {% comment %} Explode the image path into an array and grab the last item,
@@ -37,4 +143,4 @@ permalink: /gallery/
     <img src="/assets/img/300/{{ src_array.last }}" alt="{{ image.description }}" class="{{ image.aspect_ratio }}" />
   </a>
   {% endfor %}
-</div>
+</div> -->

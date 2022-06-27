@@ -1,9 +1,9 @@
 ---
-layout: page
+layout: default
 title: Our Programs
 permalink: /programs/
 canonical_url: 'https://wocbikeproject.org/programs/'
-banner: bike_project_programs.jpg
+banner: carbondale_elementary.jpg
 credit: 'Bike Project Students, Photo by Aaron Taylor'
 published: true
 ---

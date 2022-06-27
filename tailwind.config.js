@@ -51,6 +51,9 @@ module.exports = {
           '900': '#1A2328', // Black 1
         },
       },
+      backgroundImage: {
+        aspens: 'url("/assets/img/aspens.png")',
+      },
     }
   },
   variants: {},

@@ -24,13 +24,16 @@
               {% if page.title != 'Calendar' %}prose-xl{% endif %}">
     {% if page.title == "About" %}
     <h2>Mission:</h2>
-    <blockquote class="font-semibold">{{ site.description }}</blockquote>
+    <p class="font-semibold">{{ site.description }}</p>
     {% endif %}
     {{ content }}
   </article>
   {% include donate.html %}
   {% include testimonials.html %}
   {% include footer.html %}
+  {% if page.title == "Photos and Videos" %}
+  <script src="https://unpkg.com/@markusantonwolf/ta-gallery@latest/dist/js/ta-gallery.min.js"></script>
+  {% endif %}
 </body>
 
 </html>

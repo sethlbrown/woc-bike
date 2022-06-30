@@ -6,12 +6,11 @@
   <title>
     {% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}
   </title>
-  {% if page.title == "Photos and Videos" %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  {% endif %}
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css" />
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ " /feed.xml" | prepend:
     site.baseurl | prepend: site.url }}" /> {% seo
   %}
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.4.1/dist/alpine.min.js" defer></script>
+  <link href="https://unpkg.com/@markusantonwolf/ta-gallery@latest/dist/css/ta-gallery.css" rel="stylesheet">
+
 </head>

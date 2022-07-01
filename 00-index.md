@@ -2,6 +2,9 @@
 layout: default
 title: Home
 permalink: /
+redirect_from: 
+- /testimonials
+- /testimonials/
 canonical_url: 'https://wocbikeproject.org'
 banner: bike_project_illustration.jpg
 credit: 'Bike Project Illustration, Paper Cut Out by Olivia Pevec'

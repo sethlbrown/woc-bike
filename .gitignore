@@ -6,3 +6,8 @@ assets/css
 node_modules
 .bundle/
 vendor/
+.firebase
+.firebase/*
+.firebase-debug.log
+.firebaserc
+.firebase/hosting.X3NpdGU.cache

@@ -2,6 +2,9 @@
 layout: default
 title: About
 permalink: /about/
+redirect_from: 
+- /history
+- /history/
 canonical_url: 'https://wocbikeproject.org/about/'
 banner: IMG_sopris_panorama.jpg
 credit: 'A Day at the Bike Project, Photo by Aaron Taylor'

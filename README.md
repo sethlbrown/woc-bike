@@ -34,12 +34,6 @@ A starter kit for using [Tailwind](https://tailwindcss.com) with [Jekyll](https:
 * `npm run build:dev` to compile the site with development settings
 * `npm run build:production` or `npm run build` to compile the site for production
 
-
-## Deploy Preview
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/taylorbryant/jekyll-starter-tailwind)
-
-Note: By default, Netlify uses `jekyll build` as the build command. The included `netlify.toml` file will override it to use `npm run build`.
-
 ## Deploy Production (Firebase)
 This site is currently hosted on Google's Firebase Hosting.
 

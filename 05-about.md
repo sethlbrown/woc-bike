@@ -26,7 +26,7 @@ The Carbondale Bike Project is a community-driven and volunteer-run bicycle shop
 
 We aim to keep bikes out of the land fill and put back on the road for use. We delight in working with community members who have an interest in learning something new, being of service to others, and keeping themselves and others rolling on pedal power!
 
-We invite you to stop in and use the community shop during our open shop time. No appointments necessary. &nbsp;
+We invite you to stop in and use the community shop during our open shop time. No appointments necessary.
 
 ## History
 
@@ -40,10 +40,17 @@ In January of 2017, the Bonedale Bicycle Project became a non-profit under the W
 
 In the first year of operation as the WOCBP, and increasing the community tuning days to two days a week, the WOCBP was able to generate around $12,000 through donations and sales. We continued to recognize the benefits that people are getting from the WOCBP, and in February of 2018 a vision of an above ground dedicated community bicycle shop become a reality as we moved into the Third Street Center. The new above ground location had windows, heat, running water, and bathrooms! The operating budget increased with a salaried position for a director, and an increased rent from $2400 to $12,000 per year.
 
-2018 was a year full of wonderful new events in our new space. We hosted open shop time 2.5 days a week, hosted bicycle tuning workshops, saw a boom in volunteer and donation support, hosted school programs, created a women's specific tuning night, and much more. We were delighted to reach our financial goals as well with the support of donations from Umbrella Roofing, the Rebekah Lodge, and many individuals. We earned over half of our income through bicycle repairs, sales, and services.&nbsp;
+2018 was a year full of wonderful new events in our new space. We hosted open shop time 2.5 days a week, hosted bicycle tuning workshops, saw a boom in volunteer and donation support, hosted school programs, created a women's specific tuning night, and much more. We were delighted to reach our financial goals as well with the support of donations from Umbrella Roofing, the Rebekah Lodge, and many individuals. We earned over half of our income through bicycle repairs, sales, and services.
 
 In the beginning of 2020, the global pandemic brought a halt to our in-person events, and we wondered if we might be able to "make it." As it turns out, the bicycle industry went through the largest boom in recent history and we responded by focusing all our efforts in building much needed bikes and providing much needed service for our community. Bicycles became a much needed outlet and recreation for a time of increased stress and difficulty. We were well supported by the community and kept people pedaling to the best of our ability. 
 
 As the global pandemic release a bit we returned to open shop hours and inviting our community in for repairs and building bikes. In the end of 2021, Aaron Taylor stepped down as acting director of the Way of Compassion Bicycle Project and with the help of the Third Street Center, we formed our own non-profit and once again changed our name to the Carbondale Bike Project. We transitioned the bicycle project to a group of volunteers to operate the shop for the community. 
+
+The following individuals comprise the Carbondale Bike Project advisory board: 
+
+- Steve Novy
+- Lyn Williams
+- Aaron Taylor
+- Colin Laird (Fiscal Sponsor Contact)
 
 The Carbondale Bike Project is grateful for its supporting community: Aloha Mountain Cyclery, Umbrella Roofing, The Rebekah Lodge, Roaring Fork Transit Authority, Crystal River Elementary School, Roaring Fork High School, Ragged Mountain Sports, The Buddy Program, and all the individuals who are too many to name!

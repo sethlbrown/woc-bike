@@ -23,6 +23,8 @@ published: true
 ## Open Shop Time
 - Tuesdays from 2 to 6 p.m.
 - Thursdays and Sundays from noon to 6 p.m.
+- Please note: **There are no new projects or walk-ins after 5:00 p.m. and workstation clean-up starts at 5:45 p.m.**
+
 
 Join us during our open shop hours to use our space and mechanical experience to fix your own bicycle or build one out of our donated inventory. Recommended donation of $10 per hour. Nobody is turned away due to lack of funds. 
 

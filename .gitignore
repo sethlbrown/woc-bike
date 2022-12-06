@@ -10,3 +10,4 @@ vendor/
 .firebase/*
 .firebase-debug.log
 .firebase/hosting.X3NpdGU.cache
+firebase-debug.log

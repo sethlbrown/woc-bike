@@ -34,6 +34,7 @@ module.exports = {
           '400': '#46B0B7', // Teal 2
           '500': '#25A2AA', // Teal 1
           '600': '#25A2AA',
+          '700': '#1B7C83', // Higher contrast teal
         },
         yellow: {
 	        '800': '#867E79', // Brown 1

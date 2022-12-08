@@ -4,7 +4,7 @@
     <nav x-data="{ isOpen: false }" class="relative">
       <!-- mobile nav toggle -->
       <div class="absolute right-0 inset-y-0 h-16 flex items-center lg:hidden sm:pr-2">
-        <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
+        <button id="al" aria-label="hamburger menu" @click="isOpen = !isOpen" @keydown.escape="isOpen = false"
           class="inline-flex items-center justify-center p-2 rounded-md text-teal-500 focus:outline-none transition duration-150 ease-in-out">
           <svg class="h-10 w-10" stroke="currentColor" fill="none" viewBox="0 0 24 24">
             <path :class="{'hidden': isOpen, 'inline-flex': !isOpen }" class="inline-flex" stroke-linecap="round"

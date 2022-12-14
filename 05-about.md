@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: markdown-content
 title: About
 permalink: /about/
 redirect_from: 

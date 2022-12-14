@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: markdown-content
 title: Our Programs
 permalink: /programs/
 canonical_url: 'https://wocbikeproject.org/programs/'

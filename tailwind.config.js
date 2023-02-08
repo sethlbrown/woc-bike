@@ -61,6 +61,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'), 
     require('@tailwindcss/typography'),
-    require('@markusantonwolf/ta-gallery')
+    require('@tailwindcss/aspect-ratio')
   ],
 }

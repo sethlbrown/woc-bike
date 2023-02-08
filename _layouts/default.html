@@ -14,9 +14,6 @@
   {% include donate.html %}
   {% include testimonials.html %}
   {% include footer.html %}
-  {% if page.title == "Photos and Videos" %}
-  <script src="https://unpkg.com/@markusantonwolf/ta-gallery@latest/dist/js/ta-gallery.min.js"></script>
-  {% endif %}
 
   <script type="module">
 
@@ -24,7 +21,7 @@
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
 
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js";
+    // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js";
 
     // TODO: Add SDKs for Firebase products that you want to use
 
@@ -60,7 +57,7 @@
 
     const app = initializeApp(firebaseConfig);
 
-    const analytics = getAnalytics(app);
+    // const analytics = getAnalytics(app);
 
   </script>
 </body>

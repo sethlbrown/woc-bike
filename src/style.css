@@ -24,7 +24,7 @@
     -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-/* iOS devices */
+/* iOS devices, stuff for Apple */
 @supports (-webkit-overflow-scrolling: touch) {
     .scroll {
         -webkit-overflow-scrolling: touch;

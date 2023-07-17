@@ -52,5 +52,7 @@ The following individuals comprise the Carbondale Bike Project advisory board:
 - Lyn Williams
 - Aaron Taylor
 - Colin Laird (Fiscal Sponsor Contact)
+- Darryl Fuller
+- Aaron Humphrey
 
 The Carbondale Bike Project is grateful for its supporting community: Aloha Mountain Cyclery, Umbrella Roofing, The Rebekah Lodge, Roaring Fork Transit Authority, Crystal River Elementary School, Roaring Fork High School, Ragged Mountain Sports, The Buddy Program, and all the individuals who are too many to name!

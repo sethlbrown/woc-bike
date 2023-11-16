@@ -4,9 +4,9 @@
   "description": "A starter kit for using Tailwind with Jekyll",
   "main": "gulpfile.babel.js",
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.2",
     "@tailwindcss/typography": "^0.5.2",
-    "@tailwindcss/aspect-ratio": "^0.4.2",
     "autoprefixer": "^10.4.7",
     "babel-preset-env": "1.7.0",
     "babel-register": "6.26.0",
@@ -39,5 +39,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "prettier-plugin-tailwindcss": "^0.5.7"
   }
 }

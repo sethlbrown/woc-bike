@@ -36,7 +36,7 @@ canonical_url: 'https://carbondalebikeproject.org/contact/'
             </dl>
         </div>
     </div>
-    <form action="https://formspree.io/f/mlekbvpr" id="contact-form" method="POST" @submit="fathom.trackEvent('contact form');" class="px-6 pb-24 pt-20 sm:pb-32">
+    <form action="https://formspree.io/f/mlekbvpr" id="contact-form" method="POST" class="px-6 pb-24 pt-20 sm:pb-32">
         <div class="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
             <div class="grid grid-cols-1 gap-y-6 gap-x-8">
                 <div>
@@ -74,13 +74,50 @@ canonical_url: 'https://carbondalebikeproject.org/contact/'
                         </div>
                     </label>
                 </div>
+                <p id="my-form-status"></p>
             </div>
             <div class="g-recaptcha mt-8 flex justify-end" data-sitekey="6LckhKwkAAAAAJQv-RdfkX6PeyWzQPtTGBMbTrzM">
             </div>
             <div class="mt-8 flex justify-end">
-                <button type="submit"
+                <button 
+                    type="submit"
                     class="rounded-sm bg-teal-700 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit</button>
             </div>
         </div>
     </form>
+
 </div>
+
+<script>
+    var form = document.getElementById("contact-form");
+    
+    async function handleSubmit(event) {
+      event.preventDefault();
+      var status = document.getElementById("my-form-status");
+      var data = new FormData(event.target);
+      fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          status.innerHTML = "Thanks for your submission!";
+          fathom.trackEvent("contact form submitted");
+          form.reset()
+        } else {
+          response.json().then(data => {
+            if (Object.hasOwn(data, 'errors')) {
+              status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+            } else {
+              status.innerHTML = "Oops! There was a problem submitting your form"
+            }
+          })
+        }
+      }).catch(error => {
+        status.innerHTML = "Oops! There was a problem submitting your form"
+      });
+    }
+    form.addEventListener("submit", handleSubmit)
+</script>

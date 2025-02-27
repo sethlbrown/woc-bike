@@ -16,11 +16,19 @@
   
   {{ content }}
   
-  {% if page.title == "Home" %}
-    {% include city-market.html %}
-    {% include donate.html %}
-    {% include testimonials.html %}
-  {% endif %}
+  {% unless page.hide_common_sections %}
+    {% if page.show_city_market != false %}
+      {% include city-market.html %}
+    {% endif %}
+    
+    {% if page.show_donate != false %}
+      {% include donate.html %}
+    {% endif %}
+    
+    {% if page.show_testimonials != false %}
+      {% include testimonials.html %}
+    {% endif %}
+  {% endunless %}
   
   {% include footer.html %}
   {% include firebase-init.html %}

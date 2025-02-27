@@ -43,6 +43,6 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.5",
-    "prettier-plugin-tailwindcss": "^0.5.7"
+    "prettier-plugin-tailwindcss": "^0.6.11"
   }
 }

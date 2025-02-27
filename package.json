@@ -27,7 +27,8 @@
     "build:dev": "cross-env NODE_ENV=development gulp",
     "build": "npm run build:production",
     "dev": "cross-env NODE_ENV=development gulp serve",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "dev:config": "cross-env NODE_ENV=development JEKYLL_ENV=development gulp serve -- --config _config.yml,_config_development.yml"
   },
   "repository": {
     "type": "git",

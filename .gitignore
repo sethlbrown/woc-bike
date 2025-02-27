@@ -12,3 +12,4 @@ vendor/
 .firebase/hosting.X3NpdGU.cache
 firebase-debug.log
 git.backup
+.github/FIREBASE_CONFIG_BACKUP.md

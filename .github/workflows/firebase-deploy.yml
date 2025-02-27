@@ -1,0 +1,60 @@
+name: Build and Deploy to Firebase
+on:
+  push:
+    branches:
+      - main
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          bundle install
+
+      - name: Update Firebase Config
+        run: |
+          # Create a temporary file with actual values
+          cat > _data/firebase_config.yml << EOL
+          api_key: '${{ secrets.FIREBASE_API_KEY }}'
+          auth_domain: '${{ secrets.FIREBASE_AUTH_DOMAIN }}'
+          database_url: '${{ secrets.FIREBASE_DATABASE_URL }}'
+          project_id: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          storage_bucket: '${{ secrets.FIREBASE_STORAGE_BUCKET }}'
+          messaging_sender_id: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'
+          app_id: '${{ secrets.FIREBASE_APP_ID }}'
+          measurement_id: '${{ secrets.FIREBASE_MEASUREMENT_ID }}'
+          EOL
+
+      - name: Build site
+        run: |
+          npm run build:production
+        env:
+          JEKYLL_ENV: production
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'

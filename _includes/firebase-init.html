@@ -1,0 +1,26 @@
+<!-- Firebase Initialization -->
+<script type="module">
+  // Import the functions you need from Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "{{ site.data.firebase_config.api_key }}",
+    authDomain: "{{ site.data.firebase_config.auth_domain }}",
+    databaseURL: "{{ site.data.firebase_config.database_url }}",
+    projectId: "{{ site.data.firebase_config.project_id }}",
+    storageBucket: "{{ site.data.firebase_config.storage_bucket }}",
+    messagingSenderId: "{{ site.data.firebase_config.messaging_sender_id }}",
+    appId: "{{ site.data.firebase_config.app_id }}",
+    measurementId: "{{ site.data.firebase_config.measurement_id }}"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  
+  // Enable analytics if not in development environment
+  {% if jekyll.environment != 'development' %}
+  const analytics = getAnalytics(app);
+  {% endif %}
+</script>

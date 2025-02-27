@@ -25,6 +25,15 @@ task("buildJekyll", () => {
   if (isDevelopmentBuild) {
     args.push("--incremental");
   }
+  
+  // Check if additional args were passed to gulp
+  const gulpArgs = process.argv.slice(3);
+  const configIndex = gulpArgs.indexOf('--config');
+  
+  if (configIndex !== -1 && gulpArgs[configIndex + 1]) {
+    args.push('--config');
+    args.push(gulpArgs[configIndex + 1]);
+  }
 
   return spawn("bundle", args, { stdio: "inherit" });
 });

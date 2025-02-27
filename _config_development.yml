@@ -1,0 +1,18 @@
+# Development configuration
+# This file extends _config.yml for local development
+# Run with: JEKYLL_ENV=development bundle exec jekyll serve --config _config.yml,_config_development.yml
+
+# Use environment-specific settings here
+firebase_development: true
+
+# Custom data for development environment
+data:
+  firebase_config:
+    api_key: "AIzaSyDgrZg2IximiZXNXr3VODMvtP4MhBKZl84"
+    auth_domain: "woc-bike-project-org.firebaseapp.com"
+    database_url: "https://woc-bike-project-org.firebaseio.com"
+    project_id: "woc-bike-project-org"
+    storage_bucket: "woc-bike-project-org.appspot.com"
+    messaging_sender_id: "793291846782"
+    app_id: "1:793291846782:web:6c01ded0ef1289c2a3542f"
+    measurement_id: "G-S4EJ2Y2EM1"

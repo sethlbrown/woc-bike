@@ -1,33 +1,24 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en-US">
-{% include head.html %}
+---
+layout: default
+hide_common_sections: true
+---
 
-<body>
-  {% include hat.html %}
-  {% include header.html %}
-  {% include banner.html %}
-  <article class="max-w-7xl 
-    px-2 
-    sm:px-4 
-    lg:px-8 
-    xl:px-20 
-    mt-4
-    lg:mt-6
-    mx-auto 
-    leading-9 
-    text-gray-800
-    text-xl
-{% if page.title != 'Calendar' %}prose-xl{% endif %}">
-    {% if page.title == "About" %}
-    <h2>Mission:</h2>
-    <p class="font-semibold">{{ site.description }}</p>
-    {% endif %}
-    {{ content }}
-  </article>
-  <div class="mt-16 md:mt-24"></div>
-  {% include footer.html %}
-
-  {% include firebase-init.html %}
-</body>
-
-</html>
+<article class="max-w-7xl 
+  px-2 
+  sm:px-4 
+  lg:px-8 
+  xl:px-20 
+  mt-4
+  lg:mt-6
+  mx-auto 
+  leading-9 
+  text-gray-800
+  text-xl
+  prose-xl">
+  {% if page.title == "About" %}
+  <h2>Mission:</h2>
+  <p class="font-semibold">{{ site.description }}</p>
+  {% endif %}
+  {{ content }}
+</article>
+<div class="mt-16 md:mt-24"></div>

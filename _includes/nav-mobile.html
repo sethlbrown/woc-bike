@@ -3,7 +3,6 @@
   %} {% unless p.exclude %} {% if p.title %} {% if p.title == 'Calendar' %}
   <a
     href="/#open-shop-time"
-    @click="isOpen = false"
     class="mt-2 block px-3 py-2 rounded-md text-xl font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out"
   >
     Shop Hours
@@ -11,7 +10,6 @@
   {% else %}
   <a
     href="{{ p.url | prepend: site.baseurl }}"
-    @click="isOpen = false"
     class="mt-2 block px-3 py-2 rounded-md text-xl font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out"
   >
     {{p.title}}

@@ -10,6 +10,8 @@ import tailwindcss from "tailwindcss";
 const SITE_ROOT = "./_site";
 const POST_BUILD_STYLESHEET = `${SITE_ROOT}/assets/css/`;
 const PRE_BUILD_STYLESHEET = "./src/stylev3.css";
+const PRE_BUILD_JS = "./src/js/**/*.js";
+const POST_BUILD_JS = `${SITE_ROOT}/assets/js/`;
 const TAILWIND_CONFIG = "./tailwind.config.js";
 
 // Fix for Windows compatibility
@@ -52,6 +54,14 @@ task("processStyles", () => {
     .pipe(dest(POST_BUILD_STYLESHEET));
 });
 
+task("processScripts", () => {
+  browserSync.notify("Processing scripts...");
+  
+  // Create js directory if it doesn't exist
+  return src(PRE_BUILD_JS)
+    .pipe(dest(POST_BUILD_JS));
+});
+
 task("startServer", () => {
   browserSync.init({
     files: [SITE_ROOT + "/**"],
@@ -80,7 +90,7 @@ task("startServer", () => {
   );
 });
 
-const buildSite = series("buildJekyll", "processStyles");
+const buildSite = series("buildJekyll", "processStyles", "processScripts");
 
 exports.serve = series(buildSite, "startServer");
 exports.default = series(buildSite);

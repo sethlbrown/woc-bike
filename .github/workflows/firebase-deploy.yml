@@ -17,7 +17,9 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libxml2-dev libxslt1-dev
+          sudo apt-get install -y libxml2-dev libxslt1-dev imagemagick libmagickwand-dev
+          identify -version # Verify ImageMagick installation
+          pkg-config --list-all | grep -i magick # Check if pkg-config can find ImageMagick
           
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -35,6 +37,7 @@ jobs:
         run: |
           gem install bundler
           bundle config path vendor/bundle
+          export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
           bundle install --jobs 4 --retry 3
           npm ci
 

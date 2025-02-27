@@ -8,27 +8,41 @@ credit: 'Bike Project Students, Photo by Aaron Taylor'
 published: true
 ---
 
-
 ## Community Shop Time
 {% responsive_image path: "assets/img/bike_project_in_action.jpg" alt: "Kids working at the bike project" %}
 
-Come join for our open shop time hours. We invite the community in to work on their own bikes or build one from our donated inventory. We are inspired to provide anyone who needs a bike and would like a bike with an option. You can use our stands, tools, and expertise!
+Visit during open shop hours to work on your bike or build one from our donated inventory. Our mission is simple: everyone who needs a bike should have one. Use our:
+- Professional repair stands
+- Specialized tools
+- Expert volunteer guidance
 
-**Recommended $10 per hour donation**
+**Recommended donation: $10 per hour**
 
-## Materials Processing
+## Keeping Bikes Out of Landfills
 
-Since our beginnings we have recognized the limitless resource of old and abandoned bicycles. Our shop acts as a "filter" for this resource. We stock our shop with used but functional parts that are useful for repair. In addition, we offer the service of separating metals for recycling and the recycling of tubes and tires. We estimate that we keep on average 250 bicycles out of the landfill every year (over 6,500 pounds of materials).&nbsp;
+Our shop acts as a "filter" for abandoned and donated bicycles. We:
+- Save usable parts for repairs
+- Separate metals for recycling
+- Recycle tubes and tires
 
-## Third Grade Crystal River Elementary School Program:
+Each year, we divert approximately 250 bicycles (over 6,500 pounds of materials) from local landfills.
 
-In 2018, we completed the first year of providing a bicycle and helmet to third graders at Crystal River Elementary School who did not have one. We were able to provide around 20 bicycles and helmets to classes of the past and donate 2 days of education and services to students at the school. To ensure the functionality and safety of the bicycles we donated, we hosted bicycle tuning parties with local bike shops. We helped prepare the students and their bicycles for the end of year field trip when they ride from school to Rock Bottom Ranch for an overnight camping trip. 
+## School Programs
 
+### Crystal River Elementary Third Grade Program
+Since 2018, we've provided bicycles and helmets to third graders who didn't have them. Our impact includes:
+- 20+ bicycles and helmets donated annually
+- Educational workshops for students
+- Bike tune-up parties with local bike shops
+- Support for the end-of-year field trip when students ride to Rock Bottom Ranch
 
 {% responsive_image path: "assets/img/IMG_0119.jpg" alt: "Sometimes an unexpected treasure, like this Braxton Frame, comes into the shop and we restore it." %}
 
-## Workshops
+## Workshops & Community Outreach
 
-We invite groups into the shop for bike repair workshops. We enjoy guiding people through repairing their own bicycles! We also set up mobile repair workshops in the lower income areas of our community. 
+We offer specialized workshops for groups wanting to learn bicycle repair skills. Our outreach includes:
+- Guided repair sessions
+- Mobile repair workshops in lower-income areas
+- Custom programs for schools and organizations
 
-
+Contact us to schedule a workshop for your group!

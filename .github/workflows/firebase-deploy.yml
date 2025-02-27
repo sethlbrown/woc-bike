@@ -13,12 +13,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+        
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-dev libxslt1-dev
+          
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
-          bundler-cache: true
+          ruby-version: '3.2'
+          bundler-cache: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -28,8 +33,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
           npm ci
-          bundle install
 
       - name: Update Firebase Config
         run: |
@@ -50,7 +57,12 @@ jobs:
           npm run build:production
         env:
           JEKYLL_ENV: production
-
+          
+      - name: Install Firebase CLI
+        run: |
+          npm install -g firebase-tools
+          firebase --version
+          
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:

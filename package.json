@@ -42,7 +42,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-env": "^7.26.9",
     "prettier-plugin-tailwindcss": "^0.5.7"
   }
 }

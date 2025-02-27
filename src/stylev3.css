@@ -12,6 +12,19 @@
     }
 }
 
+/* Explicit hover colors for social media icons */
+a.hover\:text-blue-500:hover svg {
+    color: #3b82f6; /* Facebook blue */
+}
+
+a.hover\:text-red-500:hover svg {
+    color: #ef4444; /* YouTube red */
+}
+
+a.hover\:text-pink-600:hover svg {
+    color: #db2777; /* Instagram pink */
+}
+
 [x-cloak] {
     display: none;
 }

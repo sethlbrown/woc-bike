@@ -14,7 +14,7 @@
     "browser-sync": "^2.29.3",
     "browsersync": "0.0.1-security",
     "cross-env": "7.0.3",
-    "cross-spawn": "7.0.3",
+    "cross-spawn": "7.0.6",
     "cssnano": "5.1.12",
     "gulp": "^5.0.0",
     "gulp-postcss": "9.0.1",

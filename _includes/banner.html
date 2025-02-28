@@ -6,65 +6,79 @@ Get the file extension to check for WebP support
 {% assign banner_without_ext = page.banner | remove: banner_extension | remove: '.' %}
 
 <style>
-    /* Modern approach using @supports and WebP format */
+    /* Base banner image */
     #banner {
         background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
         url('/assets/img/{{ page.banner }}');
     }
 
-    /* WebP versions for browsers that support it */
-    @supports (background-image: url('/assets/img/{{ banner_without_ext }}webp')) {
-        #banner {
+    /* WebP support styling */
+    @media (min-width: 976px) {
+        #banner.webp-support {
             background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
             url('/assets/img/{{ banner_without_ext }}webp');
         }
-        
-        @media (max-width: 480px) {
-            #banner {
-                background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-                url('/assets/img/600/{{ banner_without_ext }}webp');
-            }
+    }
+    
+    @media (max-width: 480px) {
+        #banner {
+            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
+            url('/assets/img/600/{{ page.banner }}');
         }
         
-        @media (min-width: 481px) and (max-width: 800px) {
-            #banner {
-                background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-                url('/assets/img/800/{{ banner_without_ext }}webp');
-            }
-        }
-        
-        @media (min-width: 801px) and (max-width: 975px) {
-            #banner {
-                background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-                url('/assets/img/975/{{ banner_without_ext }}webp');
-            }
+        #banner.webp-support {
+            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
+            url('/assets/img/600/{{ banner_without_ext }}webp');
         }
     }
     
-    /* Fallback for browsers that don't support WebP */
-    @supports not (background-image: url('/assets/img/{{ banner_without_ext }}webp')) {
-        @media (max-width: 480px) {
-            #banner {
-                background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-                url('/assets/img/600/{{page.banner}}');
-            }
+    @media (min-width: 481px) and (max-width: 800px) {
+        #banner {
+            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
+            url('/assets/img/800/{{ page.banner }}');
         }
         
-        @media (min-width: 481px) and (max-width: 800px) {
-            #banner {
-                background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-                url('/assets/img/800/{{page.banner}}');
-            }
+        #banner.webp-support {
+            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
+            url('/assets/img/800/{{ banner_without_ext }}webp');
+        }
+    }
+    
+    @media (min-width: 801px) and (max-width: 975px) {
+        #banner {
+            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
+            url('/assets/img/975/{{ page.banner }}');
         }
         
-        @media (min-width: 801px) and (max-width: 975px) {
-            #banner {
-                background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-                url('/assets/img/975/{{page.banner}}');
-            }
+        #banner.webp-support {
+            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
+            url('/assets/img/975/{{ banner_without_ext }}webp');
         }
     }
 </style>
+
+<!-- Script to detect WebP support and add class -->
+<script>
+    // Feature detection for WebP
+    function checkWebpSupport() {
+        var elem = document.createElement('canvas');
+        if (!!(elem.getContext && elem.getContext('2d'))) {
+            // Was able to create a canvas element
+            return elem.toDataURL('image/webp').indexOf('data:image/webp') == 0;
+        }
+        return false;
+    }
+    
+    // Apply WebP class if supported
+    document.addEventListener('DOMContentLoaded', function() {
+        if (checkWebpSupport()) {
+            var banner = document.getElementById('banner');
+            if (banner) {
+                banner.classList.add('webp-support');
+            }
+        }
+    });
+</script>
 
 <div id="banner" class="bg-cover bg-center bg-no-repeat h-64 items-center flex justify-start mx-auto max-w-7xl">
     <div class="h-18 font-bold px-20 text-white text-4xl sm:text-5xl">

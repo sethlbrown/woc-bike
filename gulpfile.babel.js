@@ -4,6 +4,8 @@ import spawn from "cross-spawn";
 import cssnano from "cssnano";
 import { dest, series, src, task, watch, parallel } from "gulp";
 import postcss from "gulp-postcss";
+import sourcemaps from "gulp-sourcemaps";
+import terser from "gulp-terser";
 import atimport from "postcss-import";
 import tailwindcss from "tailwindcss";
 // We'll use a different approach for WebP conversion since gulp-webp is ESM
@@ -46,23 +48,59 @@ task("buildJekyll", () => {
 task("processStyles", () => {
   browserSync.notify("Compiling styles...");
 
-  return src(PRE_BUILD_STYLESHEET)
-    .pipe(
-      postcss([
-        atimport(),
-        tailwindcss(TAILWIND_CONFIG),
-        ...(isDevelopmentBuild ? [] : [autoprefixer(), cssnano()]),
-      ])
-    )
-    .pipe(dest(POST_BUILD_STYLESHEET));
+  if (isDevelopmentBuild) {
+    return src(PRE_BUILD_STYLESHEET)
+      .pipe(sourcemaps.init())
+      .pipe(
+        postcss([
+          atimport(),
+          tailwindcss(TAILWIND_CONFIG)
+        ])
+      )
+      .pipe(sourcemaps.write('.'))
+      .pipe(dest(POST_BUILD_STYLESHEET));
+  } else {
+    return src(PRE_BUILD_STYLESHEET)
+      .pipe(
+        postcss([
+          atimport(),
+          tailwindcss(TAILWIND_CONFIG),
+          autoprefixer(),
+          cssnano()
+        ])
+      )
+      .pipe(dest(POST_BUILD_STYLESHEET));
+  }
 });
 
 task("processScripts", () => {
   browserSync.notify("Processing scripts...");
   
-  // Create js directory if it doesn't exist
-  return src(PRE_BUILD_JS)
-    .pipe(dest(POST_BUILD_JS));
+  if (isDevelopmentBuild) {
+    // Development mode: generate sourcemaps
+    return src(PRE_BUILD_JS)
+      .pipe(sourcemaps.init())
+      .pipe(sourcemaps.write('.'))
+      .pipe(dest(POST_BUILD_JS));
+  } else {
+    // Production mode: minify JS
+    return src(PRE_BUILD_JS)
+      .pipe(terser({
+        // Terser options
+        compress: {
+          drop_console: true,    // Remove console.log statements
+          drop_debugger: true    // Remove debugger statements
+        },
+        mangle: {
+          toplevel: true         // Mangle top-level variables
+        },
+        output: {
+          beautify: false,       // Minified output
+          comments: false        // Remove comments
+        }
+      }))
+      .pipe(dest(POST_BUILD_JS));
+  }
 });
 
 // Images task - we'll handle WebP conversion using Jekyll's responsive_image plugin instead

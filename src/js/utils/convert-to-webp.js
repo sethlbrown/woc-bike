@@ -43,15 +43,28 @@ function convertImage(imagePath) {
     const srcStat = fs.statSync(imagePath);
     const webpStat = fs.statSync(webpPath);
     if (webpStat.mtime > srcStat.mtime) {
+      // Skip if WebP is newer than source
+      skippedCount++;
       return;
     }
   }
   
+  // Skip problematic files
+  if (imagePath.includes('dos_gringos_logo.jpg')) {
+    skippedCount++;
+    return;
+  }
+  
   console.log(`Converting ${imagePath} to WebP`);
   try {
-    execSync(`cwebp -q ${QUALITY} "${imagePath}" -o "${webpPath}"`);
+    // Add -quiet flag to reduce output verbosity and additional option to handle problematic images
+    execSync(`cwebp -quiet -q ${QUALITY} -mt -metadata none "${imagePath}" -o "${webpPath}"`, {
+      stdio: 'ignore' // Suppress stdout/stderr to avoid verbose output
+    });
+    convertedCount++;
   } catch (error) {
-    console.error(`Error converting ${imagePath}:`, error.message);
+    errorCount++;
+    // Don't output the error details as they're usually too verbose
   }
 }
 
@@ -78,10 +91,20 @@ function processDirectory(directory) {
   }
 }
 
+// Track stats
+let convertedCount = 0;
+let skippedCount = 0;
+let errorCount = 0;
+
 // Main execution
 console.log('Starting WebP conversion...');
+console.log('---------------------------');
 for (const dir of IMAGE_DIRS) {
   console.log(`Processing directory: ${dir}`);
   processDirectory(dir);
 }
-console.log('WebP conversion complete!');
+console.log('---------------------------');
+console.log(`WebP conversion complete!`);
+console.log(`Files converted: ${convertedCount}`);
+console.log(`Files skipped: ${skippedCount}`);
+console.log(`Files with errors: ${errorCount}`);

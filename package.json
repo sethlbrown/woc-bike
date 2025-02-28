@@ -23,7 +23,8 @@
     "tailwindcss": "^3.4.3"
   },
   "scripts": {
-    "build:production": "cross-env NODE_ENV=production gulp && node src/js/utils/convert-to-webp.js",
+    "build:production": "cross-env NODE_ENV=production gulp",
+    "build:production:webp": "cross-env NODE_ENV=production gulp && node src/js/utils/convert-to-webp.js",
     "build:dev": "cross-env NODE_ENV=development gulp",
     "build": "npm run build:production",
     "dev": "cross-env NODE_ENV=development gulp serve",

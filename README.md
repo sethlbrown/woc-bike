@@ -41,6 +41,21 @@ A starter kit for using [Tailwind](https://tailwindcss.com) with [Jekyll](https:
 - `npm run build:dev` to compile the site with development settings
 - `npm run build:production` or `npm run build` to compile the site for production
 
+## Image Optimization
+
+This site uses WebP images for better performance. The WebP versions of images should be generated locally and committed to the repository:
+
+1. **Adding new images**:
+   - Add original JPG/PNG images to the `/assets/img/` directory
+   - Run `npm run webp` to generate WebP versions
+   - Commit both original and WebP versions to git
+
+2. **Build scripts**:
+   - `npm run build:production` - Standard production build (used in CI/CD)
+   - `npm run build:production:webp` - Production build + WebP conversion (only use locally when adding new images)
+
+This approach ensures that WebP conversion happens once locally rather than on every CI/CD build, improving build times and consistency.
+
 ## Deploy Production (Firebase)
 
 This site is currently hosted on Google's Firebase Hosting.

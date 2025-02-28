@@ -58,7 +58,7 @@ module.exports = {
         },
       },
       backgroundImage: {
-        aspens: 'url("/assets/img/aspens.png")',
+        aspens: 'url("/assets/img/aspens.webp"), url("/assets/img/aspens.png")',
       },
     }
   },

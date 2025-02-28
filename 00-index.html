@@ -26,11 +26,43 @@ published: true
   <!-- Header -->
   <div class="relative bg-gray-200 pb-8">
     <div class="absolute inset-0">
-      <img
-        class="h-full w-full object-cover"
-        src="/assets/img/1600/shop_time_background_image.webp"
-        alt=""
-      />
+      <picture>
+        <source 
+          media="(max-width: 400px)" 
+          srcset="/assets/img/400/shop_time_background_image.webp" 
+          type="image/webp"
+        />
+        <source 
+          media="(max-width: 600px)" 
+          srcset="/assets/img/600/shop_time_background_image.webp" 
+          type="image/webp"
+        />
+        <source 
+          media="(max-width: 800px)" 
+          srcset="/assets/img/800/shop_time_background_image.webp" 
+          type="image/webp"
+        />
+        <source 
+          srcset="/assets/img/1600/shop_time_background_image.webp" 
+          type="image/webp"
+        />
+        <img
+          class="h-full w-full object-cover"
+          src="/assets/img/1600/shop_time_background_image.webp"
+          srcset="/assets/img/400/shop_time_background_image.webp 400w,
+                  /assets/img/600/shop_time_background_image.webp 600w,
+                  /assets/img/800/shop_time_background_image.webp 800w,
+                  /assets/img/1600/shop_time_background_image.webp 1600w"
+          sizes="(max-width: 400px) 400px,
+                 (max-width: 600px) 600px,
+                 (max-width: 800px) 800px,
+                 1600px"
+          alt="Bike shop interior"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
       <div
         class="absolute inset-0 bg-gray-200 mix-blend-multiply"
         aria-hidden="true"

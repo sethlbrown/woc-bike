@@ -8,10 +8,12 @@
   </div>
   <div class="h-full w-full bg-aspens bg-teal-700 bg-blend-multiply">
     <div class="mx-auto flex flex-col py-10 px-4 md:p-20 lg:flex-row">
-      <picture>
-        <source type="image/webp" srcset="{{site.url}}/assets/img/donation_photo.webp" />
-        <img src="{{site.url}}/assets/img/donation_photo.jpg" alt="Robby working with a student" class="w-full lg:w-1/2" loading="lazy" decoding="async" />
-      </picture>
+      <div class="w-full lg:w-1/2">
+        <picture class="w-full">
+          <source type="image/webp" srcset="{{site.url}}/assets/img/donation_photo.webp" />
+          <img src="{{site.url}}/assets/img/donation_photo.jpg" alt="Robby working with a student" class="w-full" loading="lazy" decoding="async" />
+        </picture>
+      </div>
       <div
         class="order-first float-right flex flex-grow flex-col items-start justify-center border-b-2 border-black bg-white px-4 py-8 text-xl md:order-2 md:border-0 lg:w-1/2">
         <h2 class="block py-4 text-3xl font-bold text-black">Help out!</h2>

@@ -36,9 +36,11 @@
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   {% endif %}
   
-  <!-- DNS prefetch for external resources -->
+  <!-- DNS prefetch and preconnect for external resources -->
   <link rel="dns-prefetch" href="https://cdn.usefathom.com">
   <link rel="dns-prefetch" href="https://www.google.com">
+  <link rel="dns-prefetch" href="https://www.gstatic.com">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
   
   <!-- Meta theme color for mobile browsers -->
   <meta name="theme-color" content="#25A2AA">

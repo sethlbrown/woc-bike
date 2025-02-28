@@ -1,8 +1,7 @@
 <!-- Firebase Initialization -->
 <script type="module">
-  // Import the functions you need from Firebase
+  // Import Firebase app (required)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js";
 
   // Firebase configuration
   const firebaseConfig = {
@@ -19,8 +18,12 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   
-  // Enable analytics if not in development environment
+  // Enable analytics if not in development environment (after slight delay)
   {% if jekyll.environment != 'development' %}
-  const analytics = getAnalytics(app);
+  // Delay analytics loading slightly to prioritize main content rendering
+  setTimeout(async () => {
+    const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js");
+    const analytics = getAnalytics(app);
+  }, 1000);
   {% endif %}
 </script>

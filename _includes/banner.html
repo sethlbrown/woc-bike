@@ -3,7 +3,8 @@ Get the file extension to check for WebP support
 {% endcomment %}
 {% assign banner_parts = page.banner | split: '.' %}
 {% assign banner_extension = banner_parts | last %}
-{% assign banner_without_ext = page.banner | remove: banner_extension | remove: '.' %}
+{% assign banner_without_ext = page.banner | split: '.' | reverse | shift | reverse | join: '.' %}
+{% comment %}This ensures we keep the path but remove just the extension{% endcomment %}
 
 <style>
     /* Base banner image */
@@ -16,7 +17,7 @@ Get the file extension to check for WebP support
     @media (min-width: 976px) {
         #banner.webp-support {
             background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/{{ banner_without_ext }}webp');
+            url('/assets/img/{{ banner_without_ext }}.webp');
         }
     }
     
@@ -28,7 +29,7 @@ Get the file extension to check for WebP support
         
         #banner.webp-support {
             background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/600/{{ banner_without_ext }}webp');
+            url('/assets/img/600/{{ banner_without_ext }}.webp');
         }
     }
     
@@ -40,7 +41,7 @@ Get the file extension to check for WebP support
         
         #banner.webp-support {
             background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/800/{{ banner_without_ext }}webp');
+            url('/assets/img/800/{{ banner_without_ext }}.webp');
         }
     }
     
@@ -52,7 +53,7 @@ Get the file extension to check for WebP support
         
         #banner.webp-support {
             background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/975/{{ banner_without_ext }}webp');
+            url('/assets/img/975/{{ banner_without_ext }}.webp');
         }
     }
 </style>

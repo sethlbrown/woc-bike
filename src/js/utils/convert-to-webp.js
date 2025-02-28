@@ -1,8 +1,16 @@
 #!/usr/bin/env node
 
 /**
- * This script converts JPG and PNG images to WebP format
- * It preserves the directory structure and keeps original files
+ * WebP Conversion Utility
+ * 
+ * This script converts JPG and PNG images to WebP format throughout the codebase.
+ * It preserves the directory structure and keeps original files.
+ * 
+ * Used by the following npm scripts:
+ * - npm run webp: Standalone WebP conversion
+ * - npm run build:production:webp: Production build with WebP conversion
+ * 
+ * Path reference: /src/js/utils/convert-to-webp.js
  */
 
 const fs = require('fs');

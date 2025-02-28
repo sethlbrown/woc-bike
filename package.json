@@ -9,7 +9,6 @@
     "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.20",
     "browser-sync": "^3.0.3",
-    "browsersync": "0.0.1-security",
     "cross-env": "7.0.3",
     "cross-spawn": "^7.0.6",
     "cssnano": "^7.0.6",

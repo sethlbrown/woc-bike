@@ -15,7 +15,6 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-responsive-image
-  - jekyll-feed
   - jekyll-redirect-from
 
 responsive_image:

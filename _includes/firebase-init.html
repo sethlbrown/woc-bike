@@ -1,9 +1,9 @@
-<!-- Firebase Initialization -->
+<!-- Firebase core initialization (no analytics) -->
 <script type="module">
-  // Import Firebase app (required)
+  // Import Firebase app only (no analytics)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
 
-  // Firebase configuration
+  // Firebase configuration (without measurement ID for analytics)
   const firebaseConfig = {
     apiKey: "{{ site.data.firebase_config.api_key }}",
     authDomain: "{{ site.data.firebase_config.auth_domain }}",
@@ -11,19 +11,11 @@
     projectId: "{{ site.data.firebase_config.project_id }}",
     storageBucket: "{{ site.data.firebase_config.storage_bucket }}",
     messagingSenderId: "{{ site.data.firebase_config.messaging_sender_id }}",
-    appId: "{{ site.data.firebase_config.app_id }}",
-    measurementId: "{{ site.data.firebase_config.measurement_id }}"
+    appId: "{{ site.data.firebase_config.app_id }}"
+    // measurementId removed - using Fathom analytics instead
   };
 
-  // Initialize Firebase
+  // Initialize Firebase (core only)
   const app = initializeApp(firebaseConfig);
-  
-  // Enable analytics if not in development environment (after slight delay)
-  {% if jekyll.environment != 'development' %}
-  // Delay analytics loading slightly to prioritize main content rendering
-  setTimeout(async () => {
-    const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/9.8.4/firebase-analytics.js");
-    const analytics = getAnalytics(app);
-  }, 1000);
-  {% endif %}
+  // Firebase Analytics removed to improve performance - using Fathom instead
 </script>

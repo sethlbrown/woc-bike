@@ -5,27 +5,30 @@
                 <!-- WebP format for modern browsers -->
                 <source 
                     type="image/webp" 
-                    sizes="(min-width: 1280px) 1280px, 100vw"
+                    sizes="(max-width: 400px) 400px, (max-width: 600px) 600px, (max-width: 800px) 800px, (max-width: 1280px) 1280px, 100vw"
                     srcset="/assets/img/home_banner_bike_project_kid.webp 1280w,
                             /assets/img/975/home_banner_bike_project_kid.webp 975w,
                             /assets/img/800/home_banner_bike_project_kid.webp 800w,
                             /assets/img/600/home_banner_bike_project_kid.webp 600w,
-                            /assets/img/400/home_banner_bike_project_kid.webp 400w,
-                            /assets/img/300/home_banner_bike_project_kid.webp 300w">
+                            /assets/img/400/home_banner_bike_project_kid_optimized.webp 400w,
+                            /assets/img/300/home_banner_bike_project_kid_optimized.webp 300w,
+                            /assets/img/150/home_banner_bike_project_kid_optimized.webp 150w">
                 
                 <!-- Fallback to JPG for browsers that don't support WebP -->
                 <img class="h-full w-full object-cover" 
                     src="/assets/img/home_banner_bike_project_kid.jpg"
                     alt="Young person working at the bike project" 
-                    loading="eager" <!-- Important: this is a hero image, load it eagerly -->
-                    fetchpriority="high" <!-- This is a high priority image -->
-                    sizes="(min-width: 1280px) 1280px, 100vw"
+                    loading="eager"
+                    fetchpriority="high" 
+                    decoding="async"
+                    sizes="(max-width: 400px) 400px, (max-width: 600px) 600px, (max-width: 800px) 800px, (max-width: 1280px) 1280px, 100vw"
                     srcset="/assets/img/home_banner_bike_project_kid.jpg 1280w,
                             /assets/img/975/home_banner_bike_project_kid.jpg 975w,
                             /assets/img/800/home_banner_bike_project_kid.jpg 800w,
                             /assets/img/600/home_banner_bike_project_kid.jpg 600w,
                             /assets/img/400/home_banner_bike_project_kid.jpg 400w,
-                            /assets/img/300/home_banner_bike_project_kid.jpg 300w">
+                            /assets/img/300/home_banner_bike_project_kid.jpg 300w,
+                            /assets/img/150/home_banner_bike_project_kid.jpg 150w">
             </picture>
             <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-100 mix-blend-multiply"></div>
         </div>

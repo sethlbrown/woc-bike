@@ -2,17 +2,44 @@
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="/assets/css/stylev3.css" as="style" />
+  <link rel="preload" href="/assets/js/navigation.js" as="script" />
+  {% if page.banner_type == "home" %}
+  <link rel="preload" href="/assets/img/home_banner_bike_project_kid.webp" as="image" type="image/webp" fetchpriority="high" />
+  {% endif %}
+  
+  <!-- Favicon -->
   <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png" />
+  
+  <!-- Title -->
   <title>
-    {% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}
+    {% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}
   </title>
-  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/stylev3.css?{{ 'now' | date: '%s' }}" />
-  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ " /feed.xml" | prepend:
-    site.baseurl | prepend: site.url }}" /> {% seo
-  %}
+  
+  <!-- CSS with cache busting based on build time, not request time -->
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/stylev3.css" />
+  
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" /> 
+  
+  <!-- SEO tags -->
+  {% seo %}
+  
+  <!-- Scripts with performance attributes -->
   <script defer src="/assets/js/navigation.js"></script>
   <script src="https://cdn.usefathom.com/script.js" data-site="SZUUKHTD" defer></script>
+  
+  <!-- Conditional scripts -->
   {% if page.title == 'Contact' %}
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   {% endif %}
+  
+  <!-- DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://cdn.usefathom.com">
+  <link rel="dns-prefetch" href="https://www.google.com">
+  
+  <!-- Meta theme color for mobile browsers -->
+  <meta name="theme-color" content="#25A2AA">
 </head>

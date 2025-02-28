@@ -1,10 +1,15 @@
 module.exports = {
-  content: [`_site/**/*.html`],
+  content: [
+    './_includes/**/*.html',
+    './_layouts/**/*.html',
+    './*.{html,md}',
+    './assets/js/**/*.js'
+  ],
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Avenir\\ Next'],
-        'body': ['Avenir\\ Next'],
+        'sans': ['Avenir\\ Next', 'Helvetica', 'Arial', 'sans-serif'],
+        'body': ['Avenir\\ Next', 'Helvetica', 'Arial', 'sans-serif'],
       },
       spacing: {
         '0': '0px',
@@ -63,4 +68,9 @@ module.exports = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio')
   ],
+  // Optimize for production
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
 }

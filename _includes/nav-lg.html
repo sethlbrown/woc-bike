@@ -1,27 +1,23 @@
 <!-- navigation on larger view ports -->
 <div class="hidden lg:block lg:ml-6 flex-grow">
   <div class="ml-4 flex items-center h-16">
-    {% assign sorted_pages = site.pages | sort:"name" %} {% for p in
-    sorted_pages %} {% unless p.exclude %} {% if p.title %}
+    {% assign sorted_pages = site.pages | sort:"name" %} {% assign nav_items =
+    sorted_pages | where_exp:"item","item.exclude != true" |
+    where_exp:"item","item.title != nil" %} {% for p in nav_items %}
     <div
-      class="flex items-center h-16 lg:border-t-4 lg:border-teal-400 lg:border-solid lg:border-opacity-0 hover:border-opacity-100 hover:bg-gray-200 transition duration-150 ease-in-out"
+      class="flex items-center h-16 border-l border-gray-200{% if forloop.last %} border-r border-gray-200{% endif %}"
     >
-      {% if p.title == 'Calendar' %}
-      <a
-        href="/#open-shop-time"
-        class="px-4 text-base font-bold leading-5 xl:text-lg text-gray-800 focus:text-black focus:outline-none lg:mt-0"
+      <div
+        class="w-full h-full flex items-center border-t-4 border-teal-400 border-solid border-opacity-0 hover:border-opacity-100 hover:bg-gray-200 transition duration-150 ease-in-out"
       >
-        Shop Hours</a
-      >
-      {% else %}
-      <a
-        href="{{ p.url | prepend: site.baseurl }}"
-        class="px-4 text-base font-bold leading-5 xl:text-lg text-gray-800 focus:text-black focus:outline-none lg:mt-0 {% if p.url == page.url %}active{% endif %}"
-      >
-        {{p.title}}</a
-      >
-      {% endif %}
+        <a
+          href="{{ p.url | prepend: site.baseurl }}"
+          class="px-4 text-base font-bold leading-5 xl:text-lg text-gray-800 focus:text-black focus:outline-none {% if p.url == page.url %}active{% endif %}"
+        >
+          {{p.title}}</a
+        >
+      </div>
     </div>
-    {% endif %} {% endunless %} {% endfor %}
+    {% endfor %}
   </div>
 </div>

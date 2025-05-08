@@ -187,22 +187,33 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
         Accept: "application/json",
       },
     })
-      .then((response) => {
-        if (response.ok) {
+      .then(async (response) => {
+        // Treat 2xx and 302 as success
+        if (
+          (response.status >= 200 && response.status < 300) ||
+          response.status === 302
+        ) {
           status.innerHTML = "Thanks for your submission!";
           fathom.trackEvent("contact form submitted");
           form.reset();
         } else {
-          response.json().then((data) => {
+          // Try to parse JSON, fallback to generic thank you if not JSON or empty
+          try {
+            const data = await response.json();
             if (Object.hasOwn(data, "errors")) {
               status.innerHTML = data["errors"]
                 .map((error) => error["message"])
                 .join(", ");
             } else {
-              status.innerHTML =
-                "Oops! There was a problem submitting your form";
+              status.innerHTML = "Thanks for your submission!";
+              fathom.trackEvent("contact form submitted");
+              form.reset();
             }
-          });
+          } catch (e) {
+            status.innerHTML = "Thanks for your submission!";
+            fathom.trackEvent("contact form submitted");
+            form.reset();
+          }
         }
       })
       .catch((error) => {

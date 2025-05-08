@@ -4,7 +4,6 @@
 
 - **Jekyll**: Static site generator (Markdown, Liquid templates)
 - **Tailwind CSS**: Utility-first CSS framework
-- **Alpine.js**: Lightweight JavaScript for interactivity
 - **Gulp**: Task runner for asset pipeline (Tailwind, Autoprefixer, minification, Browsersync)
 - **Node.js & npm**: For JS dependencies and build scripts
 - **Ruby & Bundler**: For Jekyll and gem dependencies

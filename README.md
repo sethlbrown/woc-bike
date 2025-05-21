@@ -1,6 +1,6 @@
 # Carbondale Bike Project
 
-## Built on Jekyll Starter Tailwind (with Alpinejs)
+## Built on Jekyll Starter Tailwind
 
 A starter kit for using [Tailwind](https://tailwindcss.com) with [Jekyll](https://jekyllrb.com/) that includes:
 
@@ -46,6 +46,7 @@ A starter kit for using [Tailwind](https://tailwindcss.com) with [Jekyll](https:
 This site uses WebP images for better performance. The WebP versions of images should be generated locally and committed to the repository:
 
 1. **Adding new images**:
+
    - Add original JPG/PNG images to the `/assets/img/` directory
    - Run `npm run webp` to generate WebP versions
    - Commit both original and WebP versions to git

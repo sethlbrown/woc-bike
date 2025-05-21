@@ -28,6 +28,5 @@
 
 - Jekyll, Bundler, Ruby
 - Tailwind CSS, Autoprefixer
-- Alpine.js
 - Gulp, Browsersync
 - Firebase CLI (for deployment)

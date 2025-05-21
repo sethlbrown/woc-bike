@@ -3,8 +3,8 @@
 ## System Architecture
 
 - Static site generated with Jekyll, using Liquid templates and Markdown content.
-- Tailwind CSS for utility-first styling; custom CSS is minimal.
-- Alpine.js available for lightweight interactivity (not heavily used).
+- Tailwind CSS for styling
+- Minimal JavaScript for interactivity
 - Gulp used for asset pipeline: compiles Tailwind, minifies CSS, runs Jekyll, and serves with Browsersync.
 - Hosted on Firebase Hosting for fast, global delivery.
 
@@ -29,3 +29,16 @@
 - Footer includes contact info, social links, and legal.
 - Donation components are included where needed (homepage, donate page, etc.).
 - Stories and news are presented as content blocks within main sections.
+
+## UI Components
+
+### Progress Bar
+
+- Used in the Kickstand Club section to show donation progress
+- Features:
+  - Background track in teal-900
+  - White progress indicator
+  - Crosshair marker that moves with progress
+  - Percentage-based width calculation (current/total \* 100)
+  - Responsive design that maintains proportions
+  - Accessible text display of current progress

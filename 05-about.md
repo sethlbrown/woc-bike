@@ -13,13 +13,13 @@ published: true
 
 ## What We Offer
 
-- Work stands & tools for those wishing to repair/maintain their bicycle (recommended donation of $10/hr
+- Work stands & tools for those wishing to repair/maintain their bicycle (recommended donation of $10/hr)
 - Education, assistance, and instruction on how to repair and maintain your bike
 - Plenty of bicycle frames so that you can build a complete bike from our donated inventory
 - An extensive supply of used parts
 - A new home for a bike or parts you no longer want (tax receipts available)
 
-## Our Mission
+## What We Do
 
 The Carbondale Bike Project is a volunteer-run community shop. We provide a safe space where anyone can learn bicycle repair skills. Our shop has plenty of donated bikes, parts, and knowledgeable volunteers ready to help.
 
@@ -66,7 +66,7 @@ When the pandemic hit in 2020, bicycle popularity surged. We shifted to building
 
 In late 2021, Aaron Taylor stepped down as director. With help from the Third Street Center, we formed our own non-profit and became the Carbondale Bike Project. Today, we operate entirely through volunteer efforts.
 
-In 2024 we managed to repair & resell 102 bikes out of our shop in the 3rd Street Center and through online sales. In cooperation with [Navajo YES](https://www.navajoyes.org) we were able to get 57 bikes and 12 large containers of parts to various parts of the Navajo Reservation. Through a partnership with [LaPlaza](https://www.laplazapalisade.org) we have been able to move 48 bikes from our program on to theirs so that migrant workers have transportation in and around the local orchards of Palisade, CO. Another important partnership for us has been working with [Bicycles For Humanity](https://bicycles-for-humanity.org/en-us) and in 2024 we were able to give them 129 that have been passed on to recipients throughout Africa. Through the generous donations of those of you who have donated to us, we estimate that in 2024 we were able to keep 350 out of the landfill. That translates to roughly 10,000 lbs of metal, plastic, & rubber that was saved as a result of our combined community effort!
+In 2024, we managed to repair and resell 102 bikes out of our shop in the 3rd Street Center and through online sales. In cooperation with [Navajo YES](https://www.navajoyes.org) we were able to get 57 bikes and 12 large containers of parts to various parts of the Navajo Reservation. Through a partnership with [LaPlaza](https://www.laplazapalisade.org) we have been able to move 48 bikes from our program on to theirs so that migrant workers have transportation in and around the local orchards of Palisade, CO. Another important partnership for us has been working with [Bicycles For Humanity](https://bicycles-for-humanity.org/en-us) and in 2024 we were able to give them 129 that have been passed on to recipients throughout Africa. Through the generous donations of those of you who have donated to us, we estimate that in 2024 we were able to keep 350 out of the landfill. That translates to roughly 10,000 lbs of metal, plastic, and rubber that was saved as a result of our combined community effort!
 
 ## Leadership & Support
 

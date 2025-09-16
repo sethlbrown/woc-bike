@@ -1,0 +1,45 @@
+# Analytics Rules and Implementation Notes
+
+## Current State
+- As of 2025-09-16, all Fathom Analytics code has been removed from the site.
+- No client-side analytics are currently loaded or tracking events.
+
+## Previous Implementation (Fathom)
+- Loader script was included in `/_includes/head.html`:
+  - `<script src="https://cdn.usefathom.com/script.js" data-site="SZUUKHTD" defer></script>`
+  - Optional DNS hint: `<link rel="dns-prefetch" href="https://cdn.usefathom.com">`
+- Event tracking calls were used in two places:
+  - Donate buttons: `onclick="fathom.trackEvent('donate button');"`
+    - Found in `/_includes/donate-button.html` and `00-index.html` (Kickstand Club button)
+  - Contact form submission: `fathom.trackEvent("contact form submitted");`
+    - Found in `30-contact.html` success paths (direct success, JSON fallback, catch)
+
+## Files that previously contained Fathom code
+- `/_includes/head.html` (loader, DNS prefetch)
+- `/_includes/donate-button.html` (donate click event)
+- `/00-index.html` (donate click event in Kickstand Club form button)
+- `/30-contact.html` (form submission events)
+- `/_includes/firebase-init.html` contained comments referencing Fathom (now cleaned to neutral wording)
+
+## How to Re-enable Fathom (if needed later)
+1. Add loader to `/_includes/head.html` (near other scripts):
+   - `<script src="https://cdn.usefathom.com/script.js" data-site="SZUUKHTD" defer></script>`
+   - Optionally add `<link rel="dns-prefetch" href="https://cdn.usefathom.com">`
+2. Reintroduce event calls where desired:
+   - Donate clicks:
+     - In `/_includes/donate-button.html` add: `onclick="fathom.trackEvent('donate button');"`
+     - In `/00-index.html` PayPal/Kickstand Club button add same `onclick`
+   - Contact form success events inside `then(...)` branches in `/30-contact.html`:
+     - After setting success status and before `form.reset();`: `fathom.trackEvent("contact form submitted");`
+3. Optional: centralize tracking
+   - Prefer binding events via JS (e.g., a small `/assets/js/analytics.js`) and `addEventListener` instead of inline `onclick` to reduce inline JS and improve maintainability.
+
+## Considerations
+- Privacy: Fathom is privacy-focused but still counts as analytics; ensure policy links are accurate if re-enabled.
+- Performance: The script was loaded `defer`; impact is low, but keep critical path small.
+- Accessibility: Avoid making analytics a blocker for form submission UX.
+
+## Event Map (previous)
+- `donate button`: Click on donate CTAs
+- `contact form submitted`: Successful contact form submission
+

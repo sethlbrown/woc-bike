@@ -12,10 +12,10 @@
     storageBucket: "{{ site.data.firebase_config.storage_bucket }}",
     messagingSenderId: "{{ site.data.firebase_config.messaging_sender_id }}",
     appId: "{{ site.data.firebase_config.app_id }}"
-    // measurementId removed - using Fathom analytics instead
+    // measurementId removed - no analytics tracking
   };
 
   // Initialize Firebase (core only)
   const app = initializeApp(firebaseConfig);
-  // Firebase Analytics removed to improve performance - using Fathom instead
+  // Firebase Analytics removed to improve performance - 
 </script>

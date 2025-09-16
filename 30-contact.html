@@ -194,7 +194,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
           response.status === 302
         ) {
           status.innerHTML = "Thanks for your submission!";
-          fathom.trackEvent("contact form submitted");
+          
           form.reset();
         } else {
           // Try to parse JSON, fallback to generic thank you if not JSON or empty
@@ -206,12 +206,12 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 .join(", ");
             } else {
               status.innerHTML = "Thanks for your submission!";
-              fathom.trackEvent("contact form submitted");
+              
               form.reset();
             }
           } catch (e) {
             status.innerHTML = "Thanks for your submission!";
-            fathom.trackEvent("contact form submitted");
+            
             form.reset();
           }
         }

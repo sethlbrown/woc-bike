@@ -156,3 +156,25 @@ flowchart TD
 The format is flexible - focus on capturing valuable insights that help me work more effectively with you and the project. Think of .cursor/rules as a living document that grows smarter as we work together.
 
 REMEMBER: After every memory reset, I begin completely fresh. The Memory Bank is my only link to previous work. It must be maintained with precision and clarity, as my effectiveness depends entirely on its accuracy.
+
+## Recent Changes (2025-09)
+- Ruby updates applied in isolated branches with build verification after each:
+  - Updated `nokogiri` to 1.17.2
+  - Updated `jekyll` to 4.4.1 plus ecosystem libs (kramdown, rouge, i18n, rexml, listen, ffi, public_suffix, webrick, rake)
+  - Core libs updated (`mini_portile2`, `racc`)
+  - Each batch built locally via `bundle exec jekyll build`, merged to `main`, and deployed via GitHub Actions
+- NPM updates applied in single-purpose branches with PRs and CI:
+  - Batch 1: PostCSS core (`postcss` 8.5.6, `autoprefixer` 10.4.21, `postcss-import` 16.1.1)
+  - Batch 2: Tailwind ecosystem (kept `tailwindcss` on 3.4.17; plugins and prettier plugin updated)
+  - Batch 3: Gulp toolchain (`gulp` 5.0.1, gulp plugins, `cross-spawn`)
+  - Batch 4: `browser-sync` 3.0.4 (verified live reload)
+  - Batch 5: Babel (`@babel/register` 7.28.3, `@babel/preset-env` 7.28.3)
+  - Batch 6: `cssnano` 7.1.1
+  - Batch 7: Removed `cross-env`; scripts use native POSIX env vars. Builds verified on macOS + Ubuntu (GitHub Actions)
+- Analytics:
+  - Removed Fathom script and all `fathom.trackEvent` calls across the site. See `analytics.mdc` for how to re-enable if needed.
+
+## Process Notes
+- Strategy: One branch and PR per batch; verify local dev/prod builds, then merge after CI success.
+- Tailwind v4: Deferred. Requires a dedicated migration plan (config/content changes, plugin compatibility).
+- See `dev-workflow.mdc` for local dev server, build scripts, and CI/PR practices.

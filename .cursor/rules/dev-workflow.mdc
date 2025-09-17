@@ -1,0 +1,47 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Dev Workflow
+
+## Local Development
+- Start dev server:
+  - `npm run dev`
+  - BrowserSync access URLs (typical):
+    - Local: `http://localhost:4000`
+    - External: your LAN IP:4000
+    - UI: `http://localhost:3001`
+- What it does:
+  - Builds Jekyll to `./_site`
+  - Processes styles (Tailwind/PostCSS) and scripts
+  - Serves `./_site` with live reload and file watching
+
+## Quick Tests
+- Live reload test:
+  - Edit a small text in `00-index.html`
+  - Confirm automatic browser reload
+  - Revert the change
+- Build tests:
+  - Dev build: `npm run build:dev`
+  - Prod build: `npm run build`
+
+## Environment Variables
+- POSIX-compatible scripts (macOS/Ubuntu):
+  - `NODE_ENV=development gulp`
+  - `NODE_ENV=production gulp`
+- `cross-env` was removed since all environments are POSIX (macOS locally, Ubuntu on CI)
+
+## Branching and PR Flow
+- One batch per branch (e.g., `chore/npm-update-<batch>`)
+- Steps per batch:
+  1. Create branch
+  2. Make minimal, focused changes
+  3. Run `npm ci && npm run build:dev && npm run build`
+  4. Commit and push
+  5. Open PR; let GitHub Actions validate build/deploy
+  6. Merge when green; verify production
+
+## Notes
+- Tailwind remains on v3.x for stability. Plan a separate migration for v4.
+- Fathom analytics removed; re-enable instructions in `analytics.mdc`.

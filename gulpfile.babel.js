@@ -7,7 +7,7 @@ import postcss from "gulp-postcss";
 import sourcemaps from "gulp-sourcemaps";
 import terser from "gulp-terser";
 import atimport from "postcss-import";
-import tailwindcss from "tailwindcss";
+// Tailwind v4 now configured via postcss.config.js
 // We'll use a different approach for WebP conversion since gulp-webp is ESM
 
 const SITE_ROOT = "./_site";
@@ -53,8 +53,7 @@ task("processStyles", () => {
       .pipe(sourcemaps.init())
       .pipe(
         postcss([
-          atimport(),
-          tailwindcss(TAILWIND_CONFIG)
+          atimport()
         ])
       )
       .pipe(sourcemaps.write('.'))
@@ -63,10 +62,7 @@ task("processStyles", () => {
     return src(PRE_BUILD_STYLESHEET)
       .pipe(
         postcss([
-          atimport(),
-          tailwindcss(TAILWIND_CONFIG),
-          autoprefixer(),
-          cssnano()
+          atimport()
         ])
       )
       .pipe(dest(POST_BUILD_STYLESHEET));

@@ -2,6 +2,11 @@
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
+@source "./_includes/**/*.html";
+@source "./_layouts/**/*.html";
+@source "./*.{html,md}";
+@source "./assets/js/**/*.js";
+
 @theme {
   /* Font families */
   --font-sans: 'Avenir Next', Helvetica, Arial, sans-serif;

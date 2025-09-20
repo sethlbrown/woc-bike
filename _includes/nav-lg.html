@@ -1,5 +1,5 @@
 <!-- navigation on larger view ports -->
-<div class="hidden lg:block lg:ml-6 flex-grow">
+<div class="hidden lg:block lg:ml-6 grow">
   <div class="ml-4 flex items-center h-16">
     {% assign sorted_pages = site.pages | sort:"name" %} {% assign nav_items =
     sorted_pages | where_exp:"item","item.exclude != true" |

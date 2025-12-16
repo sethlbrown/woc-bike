@@ -30,6 +30,13 @@
 - Donation components are included where needed (homepage, donate page, etc.).
 - Stories and news are presented as content blocks within main sections.
 
+## Development Workflow
+
+- Feature branches follow `feature-[feature-description]` naming convention
+- Always start from clean `main` branch with latest remote changes
+- Verify clean build before creating feature branch
+- See `.cursor/rules/dev-workflow.mdc` for complete workflow details
+
 ## UI Components
 
 ### Progress Bar

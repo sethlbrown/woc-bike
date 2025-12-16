@@ -3,9 +3,11 @@ description:
 globs:
 alwaysApply: false
 ---
+
 # Dev Workflow
 
 ## Local Development
+
 - Start dev server:
   - `npm run dev`
   - BrowserSync access URLs (typical):
@@ -18,6 +20,7 @@ alwaysApply: false
   - Serves `./_site` with live reload and file watching
 
 ## Quick Tests
+
 - Live reload test:
   - Edit a small text in `00-index.html`
   - Confirm automatic browser reload
@@ -27,21 +30,54 @@ alwaysApply: false
   - Prod build: `npm run build`
 
 ## Environment Variables
+
 - POSIX-compatible scripts (macOS/Ubuntu):
   - `NODE_ENV=development gulp`
   - `NODE_ENV=production gulp`
 - `cross-env` was removed since all environments are POSIX (macOS locally, Ubuntu on CI)
 
+## Feature Branch Workflow
+
+For each new feature request, follow this workflow:
+
+1. **Check out clean main branch:**
+
+   ```bash
+   git checkout main
+   ```
+
+2. **Pull latest remote changes:**
+
+   ```bash
+   git pull origin main
+   ```
+
+3. **Verify clean build:**
+
+   ```bash
+   npm ci && npm run build:dev && npm run build
+   ```
+
+   Ensure the build completes successfully before proceeding.
+
+4. **Create feature branch:**
+   ```bash
+   git checkout -b feature-[feature-description]
+   ```
+   Example: `feature-google-sheets-integration`, `feature-honeypot-field`, `feature-form-validation`
+
 ## Branching and PR Flow
-- One batch per branch (e.g., `chore/npm-update-<batch>`)
-- Steps per batch:
-  1. Create branch
+
+- One feature per branch using `feature-[description]` naming convention
+- Steps per feature:
+  1. Follow Feature Branch Workflow above
   2. Make minimal, focused changes
-  3. Run `npm ci && npm run build:dev && npm run build`
+  3. Run `npm ci && npm run build:dev && npm run build` to verify
   4. Commit and push
   5. Open PR; let GitHub Actions validate build/deploy
   6. Merge when green; verify production
 
 ## Notes
+
 - Tailwind remains on v3.x for stability. Plan a separate migration for v4.
 - Fathom analytics removed; re-enable instructions in `analytics.mdc`.

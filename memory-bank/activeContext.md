@@ -8,6 +8,7 @@
 
 ## Recent Changes
 
+- Established standardized feature branch workflow (see `.cursor/rules/dev-workflow.mdc`)
 - Refactored the homepage to feature a two-column 'Latest Stories' and donation section.
 - Removed drop shadow from the PayPal iframe for a cleaner look.
 - Rolled back previous UX changes to the Kickstarter/donation section.

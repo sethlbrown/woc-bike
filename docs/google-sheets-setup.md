@@ -2,6 +2,14 @@
 
 This guide walks you through setting up a Google Apps Script webhook to receive form submissions from the contact form and automatically write them to a Google Sheet.
 
+## ⚠️ Security Warning
+
+**CRITICAL:** The webhook URL you create in Step 3 is a sensitive credential. Anyone with this URL can submit data to your Google Sheet.
+
+- **NEVER commit the webhook URL to version control**
+- **NEVER hardcode the URL in your HTML/JavaScript files**
+- Store it securely using environment variables or Jekyll data files (see "Storing the Webhook URL Securely" section below)
+
 ## Prerequisites
 
 - A Google account
@@ -12,6 +20,7 @@ This guide walks you through setting up a Google Apps Script webhook to receive 
 1. Go to [Google Sheets](https://sheets.google.com) and create a new spreadsheet
 2. Name it something like "Contact Form Submissions" or "CBP Contact Form"
 3. In the first row, add these column headers:
+
    - **Timestamp** (Column A)
    - **Name** (Column B)
    - **Email** (Column C)
@@ -31,7 +40,7 @@ This guide walks you through setting up a Google Apps Script webhook to receive 
 ```javascript
 /**
  * Web App to receive form submissions and write to Google Sheet
- * 
+ *
  * @param {Object} e - Event object containing form data
  * @returns {Object} JSON response
  */
@@ -39,55 +48,49 @@ function doPost(e) {
   try {
     // Parse the incoming JSON data
     const data = JSON.parse(e.postData.contents);
-    
+
     // Get the active spreadsheet (the one this script is bound to)
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    
+
     // Get current timestamp
     const timestamp = new Date();
-    
+
     // Extract form fields (handle both camelCase and kebab-case field names)
-    const name = data.name || data['name'] || '';
-    const email = data.email || data['email'] || '';
-    const phone = data.phone || data['phone-number'] || data['phone'] || '';
-    const message = data.message || data['message'] || '';
-    
+    const name = data.name || data["name"] || "";
+    const email = data.email || data["email"] || "";
+    const phone = data.phone || data["phone-number"] || data["phone"] || "";
+    const message = data.message || data["message"] || "";
+
     // Validate required fields
     if (!name || !email || !message) {
-      return ContentService
-        .createTextOutput(JSON.stringify({
+      return ContentService.createTextOutput(
+        JSON.stringify({
           success: false,
-          error: 'Missing required fields: name, email, and message are required'
-        }))
-        .setMimeType(ContentService.MimeType.JSON);
+          error:
+            "Missing required fields: name, email, and message are required",
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
     }
-    
+
     // Append the row to the sheet
     // Format: [Timestamp, Name, Email, Phone, Message]
-    sheet.appendRow([
-      timestamp,
-      name,
-      email,
-      phone,
-      message
-    ]);
-    
+    sheet.appendRow([timestamp, name, email, phone, message]);
+
     // Return success response
-    return ContentService
-      .createTextOutput(JSON.stringify({
+    return ContentService.createTextOutput(
+      JSON.stringify({
         success: true,
-        message: 'Form submission received successfully'
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-      
+        message: "Form submission received successfully",
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
     // Return error response
-    return ContentService
-      .createTextOutput(JSON.stringify({
+    return ContentService.createTextOutput(
+      JSON.stringify({
         success: false,
-        error: error.toString()
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
+        error: error.toString(),
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -97,18 +100,18 @@ function doPost(e) {
  */
 function testSubmission() {
   const testData = {
-    name: 'Test User',
-    email: 'test@example.com',
-    phone: '555-1234',
-    message: 'This is a test submission'
+    name: "Test User",
+    email: "test@example.com",
+    phone: "555-1234",
+    message: "This is a test submission",
   };
-  
+
   const mockEvent = {
     postData: {
-      contents: JSON.stringify(testData)
-    }
+      contents: JSON.stringify(testData),
+    },
   };
-  
+
   const result = doPost(mockEvent);
   Logger.log(result.getContent());
 }
@@ -125,8 +128,10 @@ function testSubmission() {
    - **Execute as:** Me (your email address)
    - **Who has access:** Anyone (this allows your website to submit to it)
 4. Click **Deploy**
-5. **Important:** Copy the **Web App URL** - this is your webhook endpoint
+5. **⚠️ SECURITY:** Copy the **Web App URL** - this is your webhook endpoint
    - It will look like: `https://script.google.com/macros/s/[SCRIPT_ID]/exec`
+   - **DO NOT commit this URL to your repository**
+   - Store it securely using one of the methods in the "Storing the Webhook URL Securely" section below
    - You'll need this URL for Step 2 of the migration (updating the form handler)
 
 ## Step 4: Authorize the Script (First Time Only)
@@ -157,6 +162,7 @@ curl -X POST \
 ```
 
 Or test directly in the Apps Script editor:
+
 1. Open the script editor
 2. Select the `testSubmission` function from the dropdown
 3. Click **Run** (▶️)
@@ -165,21 +171,81 @@ Or test directly in the Apps Script editor:
 ## Troubleshooting
 
 ### Script returns 401 Unauthorized
+
 - Make sure you've authorized the script (Step 4)
 - Check that "Who has access" is set to "Anyone"
 
 ### Data not appearing in Sheet
+
 - Verify the sheet name matches what the script expects
 - Check that column headers are in the first row
 - Look at the Apps Script execution log: **View** → **Executions**
 
 ### CORS errors in browser
+
 - Google Apps Script web apps handle CORS automatically
 - If you see CORS errors, check that you're using the correct Web App URL (not the editor URL)
+
+## Storing the Webhook URL Securely
+
+**Never hardcode the webhook URL in your source files.** Use one of these secure methods:
+
+### Option 1: Jekyll Data File (Recommended for Jekyll sites)
+
+1. Create a data file: `_data/webhook_config.yml` (add this file to `.gitignore`)
+2. Add the webhook URL:
+   ```yaml
+   webhook_url: "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
+   ```
+3. In your HTML template, reference it:
+   ```html
+   <form
+     action="{{ site.data.webhook_config.webhook_url }}"
+     method="POST"
+   ></form>
+   ```
+4. For local development, create `_data/webhook_config.yml` with a placeholder
+5. In CI/CD (GitHub Actions), inject the real URL from secrets:
+   ```yaml
+   - name: Create Webhook Config
+     run: |
+       cat > _data/webhook_config.yml << EOL
+       webhook_url: '${{ secrets.WEBHOOK_URL }}'
+       EOL
+   ```
+
+### Option 2: Environment Variable (For client-side JavaScript)
+
+If you need to use the URL in client-side JavaScript:
+
+1. Store the URL in a Jekyll data file (as above) and inject it into a JavaScript variable:
+   ```html
+   <script>
+     const WEBHOOK_URL = "{{ site.data.webhook_config.webhook_url }}";
+   </script>
+   ```
+2. Use the variable in your form submission code:
+   ```javascript
+   fetch(WEBHOOK_URL, { ... })
+   ```
+
+### Option 3: GitHub Secrets (For CI/CD)
+
+1. Add `WEBHOOK_URL` to your GitHub repository secrets (Settings → Secrets and variables → Actions)
+2. Use it in your GitHub Actions workflow to inject into config files during build
+
+### Adding to .gitignore
+
+Make sure to add the local config file to `.gitignore`:
+
+```
+_data/webhook_config.yml
+```
 
 ## Security Considerations
 
 - The webhook URL is public, but it only writes to your specific Google Sheet
+- **Anyone with the URL can submit data** - this is why keeping it private is important
 - Consider adding rate limiting or additional validation if you expect high traffic
 - The current implementation accepts submissions from anyone with the URL
 - For additional security, you could add a simple token check (see Advanced section below)
@@ -192,18 +258,18 @@ If you want to add an extra layer of security, you can modify the script to requ
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
-    
+
     // Check for security token (set this in your form submission)
-    const expectedToken = 'YOUR_SECRET_TOKEN_HERE'; // Change this!
+    const expectedToken = "YOUR_SECRET_TOKEN_HERE"; // Change this!
     if (data.token !== expectedToken) {
-      return ContentService
-        .createTextOutput(JSON.stringify({
+      return ContentService.createTextOutput(
+        JSON.stringify({
           success: false,
-          error: 'Unauthorized'
-        }))
-        .setMimeType(ContentService.MimeType.JSON);
+          error: "Unauthorized",
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
     }
-    
+
     // ... rest of the code
   } catch (error) {
     // ... error handling
@@ -216,8 +282,11 @@ Then include the token in your form submission (Step 2 will handle this).
 ## Next Steps
 
 Once you have the Web App URL:
-1. Proceed to **Step 2: Form Handler Update + Honeypot Field**
-2. The webhook URL will be used to replace the Formspree endpoint in `30-contact.html`
+
+1. **Store the URL securely** using one of the methods above (do not commit it to the repository)
+2. Proceed to **Step 2: Form Handler Update + Honeypot Field**
+3. The webhook URL will be used to replace the Formspree endpoint in `30-contact.html`
+4. Make sure to reference the URL from your secure storage method, not hardcoded
 
 ## Notes
 
@@ -226,4 +295,3 @@ Once you have the Web App URL:
 - For 1-3 submissions per month, this is more than sufficient
 - Submissions are written in real-time to your Google Sheet
 - You can set up email notifications in Google Sheets if desired (Tools → Notification rules)
-

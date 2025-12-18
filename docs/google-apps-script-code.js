@@ -4,6 +4,15 @@
  * This script receives POST requests from the contact form and writes
  * submissions to a Google Sheet.
  * 
+ * ⚠️ SECURITY WARNING:
+ * The Web App URL generated when you deploy this script is a sensitive credential.
+ * Anyone with this URL can submit data to your Google Sheet.
+ * 
+ * - NEVER commit the Web App URL to version control
+ * - NEVER hardcode the URL in your HTML/JavaScript files
+ * - Store it securely using environment variables or Jekyll data files
+ * - See docs/google-sheets-setup.md for secure storage methods
+ * 
  * Setup Instructions:
  * 1. Create a Google Sheet with headers: Timestamp, Name, Email, Phone, Message
  * 2. Open Extensions → Apps Script in your Google Sheet
@@ -11,7 +20,8 @@
  * 4. Save the project
  * 5. Deploy as Web App (Deploy → New deployment → Web app)
  * 6. Set "Who has access" to "Anyone"
- * 7. Copy the Web App URL for use in the form handler
+ * 7. Copy the Web App URL and store it securely (see security warning above)
+ * 8. Use the stored URL in your form handler (do not hardcode it)
  */
 
 /**

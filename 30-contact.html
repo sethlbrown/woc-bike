@@ -298,8 +298,8 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     // Convert FormData to JSON object for Google Sheets webhook
     var data = {};
     formData.forEach((value, key) => {
-      // Skip honeypot field
-      if (key !== "website-url") {
+      // Skip honeypot field and reCAPTCHA token (not needed for Google Sheets)
+      if (key !== "website-url" && key !== "g-recaptcha-response") {
         data[key] = value;
       }
     });

@@ -1,0 +1,4 @@
+# This file will be populated by GitHub Actions during build
+# It will not contain actual values in the repository
+webhook_url: 'WEBHOOK_URL_PLACEHOLDER'
+

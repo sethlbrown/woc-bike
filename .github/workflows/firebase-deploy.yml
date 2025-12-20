@@ -55,6 +55,13 @@ jobs:
           measurement_id: '${{ secrets.FIREBASE_MEASUREMENT_ID }}'
           EOL
 
+      - name: Update Webhook Config
+        run: |
+          # Create webhook config file with actual webhook URL
+          cat > _data/webhook_config.yml << EOL
+          webhook_url: '${{ secrets.WEBHOOK_URL }}'
+          EOL
+
       - name: Build site
         run: |
           npm run build:production

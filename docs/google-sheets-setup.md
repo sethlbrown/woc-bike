@@ -188,59 +188,51 @@ Or test directly in the Apps Script editor:
 
 ## Storing the Webhook URL Securely
 
-**Never hardcode the webhook URL in your source files.** Use one of these secure methods:
+**Never hardcode the webhook URL in your source files.** This project uses GitHub Secrets with Jekyll data files, following the same pattern as Firebase configuration.
 
-### Option 1: Jekyll Data File (Recommended for Jekyll sites)
+### Setup (Already Configured)
 
-1. Create a data file: `_data/webhook_config.yml` (add this file to `.gitignore`)
-2. Add the webhook URL:
-   ```yaml
-   webhook_url: "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
-   ```
-3. In your HTML template, reference it:
-   ```html
-   <form
-     action="{{ site.data.webhook_config.webhook_url }}"
-     method="POST"
-   ></form>
-   ```
-4. For local development, create `_data/webhook_config.yml` with a placeholder
-5. In CI/CD (GitHub Actions), inject the real URL from secrets:
-   ```yaml
-   - name: Create Webhook Config
-     run: |
-       cat > _data/webhook_config.yml << EOL
-       webhook_url: '${{ secrets.WEBHOOK_URL }}'
-       EOL
-   ```
+The project is already set up to use GitHub Secrets:
 
-### Option 2: Environment Variable (For client-side JavaScript)
+1. **Placeholder file exists:** `_data/webhook_config.yml` (with placeholder value)
+2. **GitHub Actions workflow** (`.github/workflows/firebase-deploy.yml`) is configured to populate it from secrets
+3. **Next step:** Add the `WEBHOOK_URL` secret to your GitHub repository
 
-If you need to use the URL in client-side JavaScript:
+### Adding the GitHub Secret
 
-1. Store the URL in a Jekyll data file (as above) and inject it into a JavaScript variable:
-   ```html
-   <script>
-     const WEBHOOK_URL = "{{ site.data.webhook_config.webhook_url }}";
-   </script>
-   ```
-2. Use the variable in your form submission code:
-   ```javascript
-   fetch(WEBHOOK_URL, { ... })
-   ```
+1. Go to your GitHub repository
+2. Navigate to **Settings** → **Secrets and variables** → **Actions**
+3. Click **New repository secret**
+4. Name: `WEBHOOK_URL`
+5. Value: Your Google Apps Script Web App URL (from Step 3 above)
+6. Click **Add secret**
 
-### Option 3: GitHub Secrets (For CI/CD)
+The workflow will automatically inject this into `_data/webhook_config.yml` during the build process.
 
-1. Add `WEBHOOK_URL` to your GitHub repository secrets (Settings → Secrets and variables → Actions)
-2. Use it in your GitHub Actions workflow to inject into config files during build
+### Using the Webhook URL in Your Code
 
-### Adding to .gitignore
-
-Make sure to add the local config file to `.gitignore`:
-
+**In HTML templates (Jekyll/Liquid):**
+```html
+<form
+  action="{{ site.data.webhook_config.webhook_url }}"
+  method="POST"
+></form>
 ```
-_data/webhook_config.yml
+
+**In client-side JavaScript:**
+```html
+<script>
+  const WEBHOOK_URL = "{{ site.data.webhook_config.webhook_url }}";
+</script>
+<script>
+  // Use in your form handler
+  fetch(WEBHOOK_URL, { ... })
+</script>
 ```
+
+### Local Development
+
+For local development, the placeholder value will be used. This is fine for testing the form structure, but submissions won't actually reach your Google Sheet until deployed with the real secret.
 
 ## Security Considerations
 

@@ -135,13 +135,30 @@ function testSubmission() {
     message: 'This is a test submission'
   };
   
-  const mockEvent = {
+  // Test with JSON format
+  const mockEventJson = {
     postData: {
-      contents: JSON.stringify(testData)
+      contents: JSON.stringify(testData),
+      type: 'application/json'
     }
   };
   
-  const result = doPost(mockEvent);
-  Logger.log(result.getContent());
+  Logger.log('Testing JSON format:');
+  const resultJson = doPost(mockEventJson);
+  Logger.log(resultJson.getContent());
+  
+  // Test with form-encoded format
+  const mockEventForm = {
+    parameter: {
+      name: 'Test User Form',
+      email: 'testform@example.com',
+      'phone-number': '555-5678',
+      message: 'This is a form-encoded test submission'
+    }
+  };
+  
+  Logger.log('Testing form-encoded format:');
+  const resultForm = doPost(mockEventForm);
+  Logger.log(resultForm.getContent());
 }
 

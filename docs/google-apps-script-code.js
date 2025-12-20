@@ -94,6 +94,9 @@ function doPost(e) {
       message
     ]);
     
+    // Refresh the sheet reference to ensure the new row is available
+    SpreadsheetApp.flush();
+    
     // Sort sheet by timestamp (newest first - Z to A)
     sortSheetByTimestamp(sheet);
     
@@ -127,18 +130,50 @@ function doPost(e) {
  */
 function sortSheetByTimestamp(sheet) {
   try {
-    // Get the data range (assumes header row is in row 1)
-    const lastRow = sheet.getLastRow();
-    if (lastRow <= 1) return; // No data to sort (only header row)
+    // Re-get the sheet to ensure we have the latest data
+    const activeSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    if (!activeSheet) {
+      Logger.log('Error: Could not get active sheet for sorting');
+      return;
+    }
+    
+    // Get the data range (assumes header row is in row 1 or 2)
+    const lastRow = activeSheet.getLastRow();
+    if (lastRow <= 1) {
+      Logger.log('No data to sort (only header row or empty)');
+      return; // No data to sort (only header row)
+    }
+    
+    // Check if B1 has an email (indicating headers are in row 2)
+    const b1Value = activeSheet.getRange('B1').getValue();
+    const hasEmailInB1 = b1Value && b1Value.toString().trim() !== '' && b1Value.toString().includes('@');
+    const headerRow = hasEmailInB1 ? 2 : 1;
+    const dataStartRow = hasEmailInB1 ? 3 : 2;
+    
+    // Only sort if we have data rows
+    if (lastRow < dataStartRow) {
+      Logger.log('Not enough rows to sort. Last row: ' + lastRow + ', Data start: ' + dataStartRow);
+      return;
+    }
     
     // Get the data range (skip header row)
-    const dataRange = sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn());
+    const numDataRows = lastRow - headerRow;
+    const numColumns = activeSheet.getLastColumn();
+    
+    if (numDataRows <= 0) {
+      Logger.log('No data rows to sort');
+      return;
+    }
+    
+    const dataRange = activeSheet.getRange(dataStartRow, 1, numDataRows, numColumns);
     
     // Sort by column A (Timestamp) in descending order (Z to A)
     dataRange.sort([{column: 1, ascending: false}]);
+    Logger.log('Sheet sorted successfully. Rows sorted: ' + numDataRows);
   } catch (error) {
     // Log error but don't fail the submission
     Logger.log('Error sorting sheet: ' + error.toString());
+    Logger.log('Error details: ' + JSON.stringify(error));
   }
 }
 

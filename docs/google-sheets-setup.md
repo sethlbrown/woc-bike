@@ -39,6 +39,16 @@ This guide walks you through setting up a Google Apps Script webhook to receive 
 
 ```javascript
 /**
+ * Handle CORS preflight requests (OPTIONS)
+ * Required for cross-origin requests from web browsers
+ * 
+ * @returns {Object} Empty response to satisfy preflight
+ */
+function doOptions() {
+  return ContentService.createTextOutput('').setMimeType(ContentService.MimeType.TEXT);
+}
+
+/**
  * Web App to receive form submissions and write to Google Sheet
  *
  * @param {Object} e - Event object containing form data

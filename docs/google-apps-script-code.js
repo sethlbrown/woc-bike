@@ -25,10 +25,20 @@
  */
 
 /**
+ * Handle CORS preflight requests (OPTIONS)
+ * Required for cross-origin requests from web browsers
+ * 
+ * @returns {Object} Empty response to satisfy preflight
+ */
+function doOptions() {
+  return ContentService.createTextOutput('').setMimeType(ContentService.MimeType.TEXT);
+}
+
+/**
  * Main handler for POST requests from the contact form
  * 
  * Note: Google Apps Script web apps automatically handle CORS when deployed
- * with "Who has access" set to "Anyone". No manual CORS headers needed.
+ * with "Who has access" set to "Anyone". The doOptions() function handles preflight.
  * 
  * @param {Object} e - Event object containing form data in e.postData.contents
  * @returns {Object} JSON response with success status

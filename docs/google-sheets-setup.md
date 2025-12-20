@@ -44,6 +44,22 @@ This guide walks you through setting up a Google Apps Script webhook to receive 
  * @param {Object} e - Event object containing form data
  * @returns {Object} JSON response
  */
+/**
+ * Handle CORS preflight requests (OPTIONS)
+ * Required for cross-origin requests from web browsers
+ */
+function doOptions() {
+  return ContentService
+    .createTextOutput('')
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '3600'
+    });
+}
+
 function doPost(e) {
   try {
     // Parse the incoming JSON data
@@ -69,28 +85,40 @@ function doPost(e) {
           error:
             "Missing required fields: name, email, and message are required",
         })
-      ).setMimeType(ContentService.MimeType.JSON);
+      )
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeaders({
+        'Access-Control-Allow-Origin': '*'
+      });
     }
 
     // Append the row to the sheet
     // Format: [Timestamp, Name, Email, Phone, Message]
     sheet.appendRow([timestamp, name, email, phone, message]);
 
-    // Return success response
+    // Return success response with CORS headers
     return ContentService.createTextOutput(
       JSON.stringify({
         success: true,
         message: "Form submission received successfully",
       })
-    ).setMimeType(ContentService.MimeType.JSON);
+    )
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*'
+    });
   } catch (error) {
-    // Return error response
+    // Return error response with CORS headers
     return ContentService.createTextOutput(
       JSON.stringify({
         success: false,
         error: error.toString(),
       })
-    ).setMimeType(ContentService.MimeType.JSON);
+    )
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*'
+    });
   }
 }
 

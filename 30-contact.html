@@ -295,17 +295,17 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     // Get form data
     var formData = new FormData(event.target);
     
-    // Convert FormData to JSON object for Google Sheets webhook
-    var data = {};
+    // Build URL-encoded form data (avoids CORS preflight)
+    var params = new URLSearchParams();
     formData.forEach((value, key) => {
       // Skip honeypot field and reCAPTCHA token (not needed for Google Sheets)
       if (key !== "website-url" && key !== "g-recaptcha-response") {
-        data[key] = value;
+        params.append(key, value);
       }
     });
     
     // Debug logging (remove in production if desired)
-    console.log("Submitting form data:", data);
+    console.log("Submitting form data:", Object.fromEntries(params));
     console.log("Webhook URL:", WEBHOOK_URL);
     
     // Validate webhook URL is set
@@ -315,25 +315,24 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       return;
     }
     
-    // Submit to Google Sheets webhook
+    // Submit to Google Sheets webhook using form-encoded data (avoids CORS preflight)
     fetch(WEBHOOK_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify(data),
+      body: params.toString(),
       redirect: "follow", // Follow redirects (Google Apps Script may redirect)
     })
       .then(async (response) => {
         // Google Apps Script may return 200 with HTML redirect, or actual JSON
-        const contentType = response.headers.get("content-type");
-        const isJson = contentType && contentType.includes("application/json");
-        
+        // Form-encoded submissions often return HTML redirect pages
         if (response.status >= 200 && response.status < 300) {
-          if (isJson) {
+          try {
+            const text = await response.text();
+            // Try to parse as JSON first
             try {
-              const result = await response.json();
+              const result = JSON.parse(text);
               if (result.success) {
                 status.innerHTML = "Thanks for your submission!";
                 form.reset();
@@ -342,33 +341,35 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 console.error("Server error:", result);
               }
             } catch (e) {
-              console.error("JSON parse error:", e);
-              status.innerHTML = "Thanks for your submission!";
-              form.reset();
+              // Not JSON - likely a redirect page, treat as success
+              if (text.includes("googleusercontent") || text.includes("script.google.com") || text.includes("Moved Temporarily")) {
+                status.innerHTML = "Thanks for your submission!";
+                form.reset();
+              } else {
+                // Unknown response, but status is 2xx, treat as success
+                status.innerHTML = "Thanks for your submission!";
+                form.reset();
+              }
             }
-          } else {
-            // Non-JSON response but status is 2xx - might be a redirect page
-            // Check if it's a Google redirect
-            const text = await response.text();
-            if (text.includes("googleusercontent") || text.includes("script.google.com")) {
-              // Likely a redirect page, treat as success
-              status.innerHTML = "Thanks for your submission!";
-              form.reset();
-            } else {
-              status.innerHTML = "Thanks for your submission!";
-              form.reset();
-            }
+          } catch (e) {
+            console.error("Response parse error:", e);
+            status.innerHTML = "Thanks for your submission!";
+            form.reset();
           }
         } else {
           // Error status code
           try {
-            const errorData = await response.json();
-            status.innerHTML = errorData.error || "Oops! There was a problem submitting your form";
-            console.error("Server error response:", errorData);
-          } catch (e) {
             const errorText = await response.text();
+            try {
+              const errorData = JSON.parse(errorText);
+              status.innerHTML = errorData.error || "Oops! There was a problem submitting your form";
+            } catch (e) {
+              status.innerHTML = "Oops! There was a problem submitting your form";
+            }
+            console.error("Error response:", response.status, errorText);
+          } catch (e) {
             status.innerHTML = "Oops! There was a problem submitting your form";
-            console.error("Error response (non-JSON):", response.status, errorText);
+            console.error("Error reading response:", e);
           }
         }
       })

@@ -45,8 +45,32 @@ function doOptions() {
  */
 function doPost(e) {
   try {
-    // Parse the incoming JSON data
-    const data = JSON.parse(e.postData.contents);
+    // Parse incoming data - handle both JSON and form-encoded
+    var data = {};
+    if (e.postData && e.postData.contents) {
+      var contentType = e.postData.type || '';
+      if (contentType.indexOf('application/json') !== -1) {
+        // JSON data
+        data = JSON.parse(e.postData.contents);
+      } else {
+        // Form-encoded data (application/x-www-form-urlencoded)
+        var params = e.parameter || {};
+        data = {
+          name: params.name || '',
+          email: params.email || '',
+          phone: params.phone || params['phone-number'] || '',
+          message: params.message || ''
+        };
+      }
+    } else if (e.parameter) {
+      // Direct parameter access (form-encoded)
+      data = {
+        name: e.parameter.name || '',
+        email: e.parameter.email || '',
+        phone: e.parameter.phone || e.parameter['phone-number'] || '',
+        message: e.parameter.message || ''
+      };
+    }
     
     // Get the active spreadsheet (the one this script is bound to)
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();

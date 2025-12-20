@@ -145,7 +145,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                   autocomplete="name"
                   required
                   minlength="2"
-                  class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
+                  class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
                 />
                 <p
                   id="name-error"
@@ -183,7 +183,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 id="email"
                 autocomplete="email"
                 required
-                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
+                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
               />
               <p
                 id="email-error"
@@ -219,11 +219,10 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 name="phone-number"
                 id="phone-number"
                 autocomplete="tel"
-                pattern="[0-9\s\-\+\(\)]+"
-                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
+                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
               />
               <p
-                id="phone-error"
+                id="phone-number-error"
                 class="mt-1 text-sm text-red-600 hidden"
                 role="alert"
               ></p>
@@ -257,7 +256,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 rows="4"
                 required
                 minlength="10"
-                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
               ></textarea>
               <p
                 id="message-error"
@@ -355,8 +354,9 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
         // Phone is optional, but if provided, must be valid
         if (value && value.trim().length > 0) {
           const phoneRegex = /^[\d\s\-\+\(\)]+$/;
-          if (!phoneRegex.test(value) || value.replace(/\D/g, "").length < 10) {
-            return "Please enter a valid phone number";
+          const digitsOnly = value.replace(/\D/g, "");
+          if (!phoneRegex.test(value) || digitsOnly.length < 10) {
+            return "Please enter a valid phone number (at least 10 digits)";
           }
         }
         return null;
@@ -372,19 +372,18 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     },
   };
 
-  // Show error for a field (only if field has been touched)
+  // Show error for a field
   function showError(fieldId, message) {
     const field = document.getElementById(fieldId);
     const errorElement = document.getElementById(fieldId + "-error");
 
     if (field && errorElement) {
-      // Only show visual error (red ring and message) if field has been touched
-      if (isFieldTouched(fieldId)) {
-        field.classList.add("ring-red-500");
-        field.classList.remove("ring-gray-300");
-        errorElement.textContent = message;
-        errorElement.classList.remove("hidden");
-      }
+      // Add red ring styling
+      field.classList.remove("ring-gray-300");
+      field.classList.add("ring-red-500");
+      // Show error message
+      errorElement.textContent = message;
+      errorElement.classList.remove("hidden");
     }
   }
 
@@ -451,17 +450,16 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       // Validate on blur (when user leaves field)
       field.addEventListener("blur", () => {
         markFieldTouched(fieldId);
-        validateField(fieldId);
+        validateField(fieldId, true); // Force show error on blur
         updateSubmitButton();
       });
 
       // Clear error on input (as user types)
       field.addEventListener("input", () => {
         markFieldTouched(fieldId);
-        clearError(fieldId);
         // Re-validate after a short delay to avoid too frequent validation
         setTimeout(() => {
-          validateField(fieldId);
+          validateField(fieldId, true); // Show error as user types if invalid
           updateSubmitButton();
         }, 300);
       });

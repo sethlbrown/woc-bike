@@ -304,6 +304,17 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       }
     });
     
+    // Debug logging (remove in production if desired)
+    console.log("Submitting form data:", data);
+    console.log("Webhook URL:", WEBHOOK_URL);
+    
+    // Validate webhook URL is set
+    if (!WEBHOOK_URL || WEBHOOK_URL === "WEBHOOK_URL_PLACEHOLDER" || WEBHOOK_URL.includes("PLACEHOLDER")) {
+      status.innerHTML = "Error: Webhook URL not configured. Please check GitHub Secrets.";
+      console.error("Webhook URL not set:", WEBHOOK_URL);
+      return;
+    }
+    
     // Submit to Google Sheets webhook
     fetch(WEBHOOK_URL, {
       method: "POST",
@@ -312,35 +323,60 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
         Accept: "application/json",
       },
       body: JSON.stringify(data),
+      redirect: "follow", // Follow redirects (Google Apps Script may redirect)
     })
       .then(async (response) => {
+        // Google Apps Script may return 200 with HTML redirect, or actual JSON
+        const contentType = response.headers.get("content-type");
+        const isJson = contentType && contentType.includes("application/json");
+        
         if (response.status >= 200 && response.status < 300) {
-          try {
-            const result = await response.json();
-            if (result.success) {
+          if (isJson) {
+            try {
+              const result = await response.json();
+              if (result.success) {
+                status.innerHTML = "Thanks for your submission!";
+                form.reset();
+              } else {
+                status.innerHTML = result.error || "Oops! There was a problem submitting your form";
+                console.error("Server error:", result);
+              }
+            } catch (e) {
+              console.error("JSON parse error:", e);
+              status.innerHTML = "Thanks for your submission!";
+              form.reset();
+            }
+          } else {
+            // Non-JSON response but status is 2xx - might be a redirect page
+            // Check if it's a Google redirect
+            const text = await response.text();
+            if (text.includes("googleusercontent") || text.includes("script.google.com")) {
+              // Likely a redirect page, treat as success
               status.innerHTML = "Thanks for your submission!";
               form.reset();
             } else {
-              status.innerHTML = result.error || "Oops! There was a problem submitting your form";
+              status.innerHTML = "Thanks for your submission!";
+              form.reset();
             }
-          } catch (e) {
-            // If response isn't JSON, still treat as success if status is 2xx
-            status.innerHTML = "Thanks for your submission!";
-            form.reset();
           }
         } else {
-          // Try to parse error response
+          // Error status code
           try {
             const errorData = await response.json();
             status.innerHTML = errorData.error || "Oops! There was a problem submitting your form";
+            console.error("Server error response:", errorData);
           } catch (e) {
+            const errorText = await response.text();
             status.innerHTML = "Oops! There was a problem submitting your form";
+            console.error("Error response (non-JSON):", response.status, errorText);
           }
         }
       })
       .catch((error) => {
         status.innerHTML = "Oops! There was a problem submitting your form";
         console.error("Form submission error:", error);
+        console.error("Webhook URL:", WEBHOOK_URL);
+        console.error("Form data:", data);
       });
   }
   form.addEventListener("submit", handleSubmit);

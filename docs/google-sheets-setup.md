@@ -44,22 +44,6 @@ This guide walks you through setting up a Google Apps Script webhook to receive 
  * @param {Object} e - Event object containing form data
  * @returns {Object} JSON response
  */
-/**
- * Handle CORS preflight requests (OPTIONS)
- * Required for cross-origin requests from web browsers
- */
-function doOptions() {
-  return ContentService
-    .createTextOutput('')
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '3600'
-    });
-}
-
 function doPost(e) {
   try {
     // Parse the incoming JSON data
@@ -85,40 +69,28 @@ function doPost(e) {
           error:
             "Missing required fields: name, email, and message are required",
         })
-      )
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({
-        'Access-Control-Allow-Origin': '*'
-      });
+      ).setMimeType(ContentService.MimeType.JSON);
     }
 
     // Append the row to the sheet
     // Format: [Timestamp, Name, Email, Phone, Message]
     sheet.appendRow([timestamp, name, email, phone, message]);
 
-    // Return success response with CORS headers
+    // Return success response
     return ContentService.createTextOutput(
       JSON.stringify({
         success: true,
         message: "Form submission received successfully",
       })
-    )
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*'
-    });
+    ).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
-    // Return error response with CORS headers
+    // Return error response
     return ContentService.createTextOutput(
       JSON.stringify({
         success: false,
         error: error.toString(),
       })
-    )
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*'
-    });
+    ).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
@@ -154,13 +126,15 @@ function testSubmission() {
 3. Configure the deployment:
    - **Description:** "Contact Form Webhook v1" (or similar)
    - **Execute as:** Me (your email address)
-   - **Who has access:** Anyone (this allows your website to submit to it)
+   - **Who has access:** **Anyone** ⚠️ **CRITICAL:** This setting enables CORS automatically. Without it, you'll get CORS errors.
 4. Click **Deploy**
 5. **⚠️ SECURITY:** Copy the **Web App URL** - this is your webhook endpoint
    - It will look like: `https://script.google.com/macros/s/[SCRIPT_ID]/exec`
    - **DO NOT commit this URL to your repository**
    - Store it securely using one of the methods in the "Storing the Webhook URL Securely" section below
    - You'll need this URL for Step 2 of the migration (updating the form handler)
+
+**Important:** Google Apps Script automatically handles CORS when "Who has access" is set to "Anyone". No manual CORS headers are needed in the code.
 
 ## Step 4: Authorize the Script (First Time Only)
 

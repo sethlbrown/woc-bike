@@ -25,28 +25,13 @@
  */
 
 /**
- * Handle CORS preflight requests (OPTIONS)
- * Required for cross-origin requests from web browsers
- * 
- * @returns {Object} Response with CORS headers
- */
-function doOptions() {
-  return ContentService
-    .createTextOutput('')
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '3600'
-    });
-}
-
-/**
  * Main handler for POST requests from the contact form
  * 
+ * Note: Google Apps Script web apps automatically handle CORS when deployed
+ * with "Who has access" set to "Anyone". No manual CORS headers needed.
+ * 
  * @param {Object} e - Event object containing form data in e.postData.contents
- * @returns {Object} JSON response with success status and CORS headers
+ * @returns {Object} JSON response with success status
  */
 function doPost(e) {
   try {
@@ -72,10 +57,7 @@ function doPost(e) {
           success: false,
           error: 'Missing required fields: name, email, and message are required'
         }))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeaders({
-          'Access-Control-Allow-Origin': '*'
-        });
+        .setMimeType(ContentService.MimeType.JSON);
     }
     
     // Append the row to the sheet
@@ -88,28 +70,22 @@ function doPost(e) {
       message
     ]);
     
-    // Return success response with CORS headers
+    // Return success response
     return ContentService
       .createTextOutput(JSON.stringify({
         success: true,
         message: 'Form submission received successfully'
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({
-        'Access-Control-Allow-Origin': '*'
-      });
+      .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
-    // Return error response with CORS headers
+    // Return error response
     return ContentService
       .createTextOutput(JSON.stringify({
         success: false,
         error: error.toString()
       }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({
-        'Access-Control-Allow-Origin': '*'
-      });
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 

@@ -45,45 +45,21 @@ function doOptions() {
  */
 function doPost(e) {
   try {
-    // Parse incoming data - handle both JSON and form-encoded
+    // Parse incoming JSON data (sent as text/plain to avoid CORS preflight)
     var data = {};
     
-    // Check e.parameter first (form-encoded data from URL-encoded POST)
-    if (e.parameter && Object.keys(e.parameter).length > 0) {
-      // Form-encoded data (application/x-www-form-urlencoded)
+    if (e.postData && e.postData.contents) {
+      // Parse JSON from postData contents
+      // Content-Type will be text/plain, but body contains JSON string
+      data = JSON.parse(e.postData.contents);
+    } else if (e.parameter && Object.keys(e.parameter).length > 0) {
+      // Fallback: handle form-encoded data if needed
       data = {
         name: e.parameter.name || '',
         email: e.parameter.email || '',
         phone: e.parameter.phone || e.parameter['phone-number'] || '',
         message: e.parameter.message || ''
       };
-    } else if (e.postData && e.postData.contents) {
-      // We have postData contents - determine format
-      var contentType = e.postData.type || '';
-      var contents = e.postData.contents.trim();
-      
-      // Check if it's JSON (by content type or by looking at the content)
-      if (contentType.indexOf('application/json') !== -1 || 
-          (contents.startsWith('{') || contents.startsWith('['))) {
-        // JSON data
-        data = JSON.parse(e.postData.contents);
-      } else {
-        // Form-encoded string in postData contents
-        var params = {};
-        var pairs = e.postData.contents.split('&');
-        for (var i = 0; i < pairs.length; i++) {
-          var pair = pairs[i].split('=');
-          var key = decodeURIComponent(pair[0] || '');
-          var value = decodeURIComponent(pair[1] || '');
-          if (key) params[key] = value;
-        }
-        data = {
-          name: params.name || '',
-          email: params.email || '',
-          phone: params.phone || params['phone-number'] || '',
-          message: params.message || ''
-        };
-      }
     }
     
     // Get the active spreadsheet (the one this script is bound to)

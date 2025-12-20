@@ -295,17 +295,17 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     // Get form data
     var formData = new FormData(event.target);
     
-    // Build URL-encoded form data (avoids CORS preflight)
-    var params = new URLSearchParams();
+    // Convert FormData to JSON object
+    var data = {};
     formData.forEach((value, key) => {
       // Skip honeypot field and reCAPTCHA token (not needed for Google Sheets)
       if (key !== "website-url" && key !== "g-recaptcha-response") {
-        params.append(key, value);
+        data[key] = value;
       }
     });
     
     // Debug logging (remove in production if desired)
-    console.log("Submitting form data:", Object.fromEntries(params));
+    console.log("Submitting form data:", data);
     console.log("Webhook URL:", WEBHOOK_URL);
     
     // Validate webhook URL is set
@@ -315,13 +315,14 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       return;
     }
     
-    // Submit to Google Sheets webhook using form-encoded data (avoids CORS preflight)
+    // Submit to Google Sheets webhook using text/plain to avoid CORS preflight
+    // Using text/plain makes it a "simple request" that doesn't trigger OPTIONS preflight
     fetch(WEBHOOK_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "text/plain;charset=utf-8",
       },
-      body: params.toString(),
+      body: JSON.stringify(data),
       redirect: "follow", // Follow redirects (Google Apps Script may redirect)
     })
       .then(async (response) => {

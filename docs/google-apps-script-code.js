@@ -98,7 +98,9 @@ function doPost(e) {
     SpreadsheetApp.flush();
     
     // Sort sheet by timestamp (newest first - Z to A)
-    sortSheetByTimestamp(sheet);
+    // Pass the spreadsheet object instead of just the sheet
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    sortSheetByTimestamp(spreadsheet);
     
     // Send email notification if enabled
     sendEmailNotification(name, email, phone, message, timestamp);
@@ -126,19 +128,29 @@ function doPost(e) {
  * Sort the sheet by timestamp column (newest first - Z to A)
  * This ensures new submissions appear at the top of the sheet
  * 
- * @param {Sheet} sheet - The Google Sheet to sort
+ * @param {Spreadsheet} spreadsheet - The Google Spreadsheet (optional, will get active if not provided)
  */
-function sortSheetByTimestamp(sheet) {
+function sortSheetByTimestamp(spreadsheet) {
   try {
-    // Re-get the sheet to ensure we have the latest data
-    const activeSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    // Get the spreadsheet and active sheet
+    const ss = spreadsheet || SpreadsheetApp.getActiveSpreadsheet();
+    if (!ss) {
+      Logger.log('Error: Could not get active spreadsheet for sorting');
+      return;
+    }
+    
+    const activeSheet = ss.getActiveSheet();
     if (!activeSheet) {
       Logger.log('Error: Could not get active sheet for sorting');
       return;
     }
     
+    Logger.log('Starting sort. Sheet name: ' + activeSheet.getName());
+    
     // Get the data range (assumes header row is in row 1 or 2)
     const lastRow = activeSheet.getLastRow();
+    Logger.log('Last row: ' + lastRow);
+    
     if (lastRow <= 1) {
       Logger.log('No data to sort (only header row or empty)');
       return; // No data to sort (only header row)
@@ -150,6 +162,8 @@ function sortSheetByTimestamp(sheet) {
     const headerRow = hasEmailInB1 ? 2 : 1;
     const dataStartRow = hasEmailInB1 ? 3 : 2;
     
+    Logger.log('Header row: ' + headerRow + ', Data start row: ' + dataStartRow);
+    
     // Only sort if we have data rows
     if (lastRow < dataStartRow) {
       Logger.log('Not enough rows to sort. Last row: ' + lastRow + ', Data start: ' + dataStartRow);
@@ -159,6 +173,8 @@ function sortSheetByTimestamp(sheet) {
     // Get the data range (skip header row)
     const numDataRows = lastRow - headerRow;
     const numColumns = activeSheet.getLastColumn();
+    
+    Logger.log('Data rows: ' + numDataRows + ', Columns: ' + numColumns);
     
     if (numDataRows <= 0) {
       Logger.log('No data rows to sort');
@@ -173,7 +189,7 @@ function sortSheetByTimestamp(sheet) {
   } catch (error) {
     // Log error but don't fail the submission
     Logger.log('Error sorting sheet: ' + error.toString());
-    Logger.log('Error details: ' + JSON.stringify(error));
+    Logger.log('Error stack: ' + (error.stack || 'No stack trace'));
   }
 }
 

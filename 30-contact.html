@@ -113,7 +113,15 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     >
       <div class="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
         <!-- Honeypot field - hidden from users but visible to bots -->
-        <div style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+        <div
+          style="
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+          "
+          aria-hidden="true"
+        >
           <label for="website-url">Website URL (leave blank)</label>
           <input
             type="text"
@@ -139,7 +147,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                   minlength="2"
                   class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
                 />
-                <p id="name-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
+                <p
+                  id="name-error"
+                  class="mt-1 text-sm text-red-600 hidden"
+                  role="alert"
+                ></p>
               </div>
             </label>
           </div>
@@ -173,7 +185,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 required
                 class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
               />
-              <p id="email-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
+              <p
+                id="email-error"
+                class="mt-1 text-sm text-red-600 hidden"
+                role="alert"
+              ></p>
             </div>
           </div>
           <div>
@@ -206,7 +222,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 pattern="[0-9\s\-\+\(\)]+"
                 class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
               />
-              <p id="phone-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
+              <p
+                id="phone-error"
+                class="mt-1 text-sm text-red-600 hidden"
+                role="alert"
+              ></p>
             </div>
           </div>
           <div>
@@ -239,7 +259,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 minlength="10"
                 class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
               ></textarea>
-              <p id="message-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
+              <p
+                id="message-error"
+                class="mt-1 text-sm text-red-600 hidden"
+                role="alert"
+              ></p>
             </div>
           </div>
           <p id="my-form-status"></p>
@@ -287,9 +311,22 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
 <script>
   // Get webhook URL from Jekyll data
   const WEBHOOK_URL = "{{ site.data.webhook_config.webhook_url }}";
-  
+
   var form = document.getElementById("contact-form");
   var submitButton = document.getElementById("submit-button");
+
+  // Track which fields have been touched (user has interacted with them)
+  var touchedFields = {};
+
+  // Mark a field as touched
+  function markFieldTouched(fieldId) {
+    touchedFields[fieldId] = true;
+  }
+
+  // Check if a field has been touched
+  function isFieldTouched(fieldId) {
+    return touchedFields[fieldId] === true;
+  }
 
   // Validation rules
   const validators = {
@@ -299,7 +336,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
           return "Name must be at least 2 characters";
         }
         return null;
-      }
+      },
     },
     email: {
       validate: (value) => {
@@ -311,19 +348,19 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
           return "Please enter a valid email address";
         }
         return null;
-      }
+      },
     },
     "phone-number": {
       validate: (value) => {
         // Phone is optional, but if provided, must be valid
         if (value && value.trim().length > 0) {
           const phoneRegex = /^[\d\s\-\+\(\)]+$/;
-          if (!phoneRegex.test(value) || value.replace(/\D/g, '').length < 10) {
+          if (!phoneRegex.test(value) || value.replace(/\D/g, "").length < 10) {
             return "Please enter a valid phone number";
           }
         }
         return null;
-      }
+      },
     },
     message: {
       validate: (value) => {
@@ -331,20 +368,23 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
           return "Message must be at least 10 characters";
         }
         return null;
-      }
-    }
+      },
+    },
   };
 
-  // Show error for a field
+  // Show error for a field (only if field has been touched)
   function showError(fieldId, message) {
     const field = document.getElementById(fieldId);
     const errorElement = document.getElementById(fieldId + "-error");
-    
+
     if (field && errorElement) {
-      field.classList.add("ring-red-500");
-      field.classList.remove("ring-gray-300");
-      errorElement.textContent = message;
-      errorElement.classList.remove("hidden");
+      // Only show visual error (red ring and message) if field has been touched
+      if (isFieldTouched(fieldId)) {
+        field.classList.add("ring-red-500");
+        field.classList.remove("ring-gray-300");
+        errorElement.textContent = message;
+        errorElement.classList.remove("hidden");
+      }
     }
   }
 
@@ -352,7 +392,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
   function clearError(fieldId) {
     const field = document.getElementById(fieldId);
     const errorElement = document.getElementById(fieldId + "-error");
-    
+
     if (field && errorElement) {
       field.classList.remove("ring-red-500");
       field.classList.add("ring-gray-300");
@@ -362,16 +402,19 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
   }
 
   // Validate a single field
-  function validateField(fieldId) {
+  function validateField(fieldId, forceShowError = false) {
     const field = document.getElementById(fieldId);
     if (!field) return true;
-    
+
     const validator = validators[fieldId];
     if (!validator) return true;
-    
+
     const error = validator.validate(field.value);
     if (error) {
-      showError(fieldId, error);
+      // Show error if field is touched or if we're forcing it (e.g., on form submit)
+      if (forceShowError || isFieldTouched(fieldId)) {
+        showError(fieldId, error);
+      }
       return false;
     } else {
       clearError(fieldId);
@@ -379,35 +422,42 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     }
   }
 
-  // Validate entire form
-  function validateForm() {
+  // Validate entire form (force show errors on submit)
+  function validateForm(forceShowErrors = false) {
     let isValid = true;
-    Object.keys(validators).forEach(fieldId => {
-      if (!validateField(fieldId)) {
+    Object.keys(validators).forEach((fieldId) => {
+      if (!validateField(fieldId, forceShowErrors)) {
         isValid = false;
       }
     });
     return isValid;
   }
 
-  // Update submit button state
+  // Update submit button state (don't force show errors for button state)
   function updateSubmitButton() {
-    const isValid = validateForm();
+    const isValid = validateForm(false);
     submitButton.disabled = !isValid;
   }
 
   // Add event listeners for real-time validation
-  Object.keys(validators).forEach(fieldId => {
+  Object.keys(validators).forEach((fieldId) => {
     const field = document.getElementById(fieldId);
     if (field) {
+      // Mark field as touched when user interacts with it
+      field.addEventListener("focus", () => {
+        markFieldTouched(fieldId);
+      });
+
       // Validate on blur (when user leaves field)
       field.addEventListener("blur", () => {
+        markFieldTouched(fieldId);
         validateField(fieldId);
         updateSubmitButton();
       });
-      
+
       // Clear error on input (as user types)
       field.addEventListener("input", () => {
+        markFieldTouched(fieldId);
         clearError(fieldId);
         // Re-validate after a short delay to avoid too frequent validation
         setTimeout(() => {
@@ -418,27 +468,33 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     }
   });
 
-  // Initial validation state
+  // Initial validation state (don't show errors on page load)
   updateSubmitButton();
 
   async function handleSubmit(event) {
     event.preventDefault();
     var status = document.getElementById("my-form-status");
-    
-    // Validate form before submission
-    if (!validateForm()) {
-      status.innerHTML = '<span class="text-red-600">Please fix the errors above before submitting.</span>';
+
+    // Mark all fields as touched when form is submitted
+    Object.keys(validators).forEach((fieldId) => {
+      markFieldTouched(fieldId);
+    });
+
+    // Validate form before submission (force show errors)
+    if (!validateForm(true)) {
+      status.innerHTML =
+        '<span class="text-red-600">Please fix the errors above before submitting.</span>';
       // Focus on first invalid field
-      const firstInvalidField = Object.keys(validators).find(fieldId => {
+      const firstInvalidField = Object.keys(validators).find((fieldId) => {
         const field = document.getElementById(fieldId);
-        return field && !validateField(fieldId);
+        return field && !validateField(fieldId, true);
       });
       if (firstInvalidField) {
         document.getElementById(firstInvalidField).focus();
       }
       return;
     }
-    
+
     // Check honeypot field - if filled, it's a bot
     var honeypot = document.getElementById("website-url").value;
     if (honeypot) {
@@ -448,10 +504,10 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       updateSubmitButton();
       return;
     }
-    
+
     // Get form data
     var formData = new FormData(event.target);
-    
+
     // Convert FormData to JSON object
     var data = {};
     formData.forEach((value, key) => {
@@ -460,18 +516,23 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
         data[key] = value;
       }
     });
-    
+
     // Debug logging (remove in production if desired)
     console.log("Submitting form data:", data);
     console.log("Webhook URL:", WEBHOOK_URL);
-    
+
     // Validate webhook URL is set
-    if (!WEBHOOK_URL || WEBHOOK_URL === "WEBHOOK_URL_PLACEHOLDER" || WEBHOOK_URL.includes("PLACEHOLDER")) {
-      status.innerHTML = "Error: Webhook URL not configured. Please check GitHub Secrets.";
+    if (
+      !WEBHOOK_URL ||
+      WEBHOOK_URL === "WEBHOOK_URL_PLACEHOLDER" ||
+      WEBHOOK_URL.includes("PLACEHOLDER")
+    ) {
+      status.innerHTML =
+        "Error: Webhook URL not configured. Please check GitHub Secrets.";
       console.error("Webhook URL not set:", WEBHOOK_URL);
       return;
     }
-    
+
     // Submit to Google Sheets webhook using text/plain to avoid CORS preflight
     // Using text/plain makes it a "simple request" that doesn't trigger OPTIONS preflight
     fetch(WEBHOOK_URL, {
@@ -492,36 +553,54 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
             try {
               const result = JSON.parse(text);
               if (result.success) {
-                status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
+                status.innerHTML =
+                  '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
                 form.reset();
                 updateSubmitButton();
                 // Clear all errors
-                Object.keys(validators).forEach(fieldId => clearError(fieldId));
+                Object.keys(validators).forEach((fieldId) =>
+                  clearError(fieldId)
+                );
               } else {
-                status.innerHTML = '<span class="text-red-600">' + (result.error || "Oops! There was a problem submitting your form") + '</span>';
+                status.innerHTML =
+                  '<span class="text-red-600">' +
+                  (result.error ||
+                    "Oops! There was a problem submitting your form") +
+                  "</span>";
                 console.error("Server error:", result);
               }
             } catch (e) {
               // Not JSON - likely a redirect page, treat as success
-              if (text.includes("googleusercontent") || text.includes("script.google.com") || text.includes("Moved Temporarily")) {
-                status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
+              if (
+                text.includes("googleusercontent") ||
+                text.includes("script.google.com") ||
+                text.includes("Moved Temporarily")
+              ) {
+                status.innerHTML =
+                  '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
                 form.reset();
                 updateSubmitButton();
-                Object.keys(validators).forEach(fieldId => clearError(fieldId));
+                Object.keys(validators).forEach((fieldId) =>
+                  clearError(fieldId)
+                );
               } else {
                 // Unknown response, but status is 2xx, treat as success
-                status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
+                status.innerHTML =
+                  '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
                 form.reset();
                 updateSubmitButton();
-                Object.keys(validators).forEach(fieldId => clearError(fieldId));
+                Object.keys(validators).forEach((fieldId) =>
+                  clearError(fieldId)
+                );
               }
             }
           } catch (e) {
             console.error("Response parse error:", e);
-            status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
+            status.innerHTML =
+              '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
             form.reset();
             updateSubmitButton();
-            Object.keys(validators).forEach(fieldId => clearError(fieldId));
+            Object.keys(validators).forEach((fieldId) => clearError(fieldId));
           }
         } else {
           // Error status code
@@ -529,9 +608,12 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
             const errorText = await response.text();
             try {
               const errorData = JSON.parse(errorText);
-              status.innerHTML = errorData.error || "Oops! There was a problem submitting your form";
+              status.innerHTML =
+                errorData.error ||
+                "Oops! There was a problem submitting your form";
             } catch (e) {
-              status.innerHTML = "Oops! There was a problem submitting your form";
+              status.innerHTML =
+                "Oops! There was a problem submitting your form";
             }
             console.error("Error response:", response.status, errorText);
           } catch (e) {

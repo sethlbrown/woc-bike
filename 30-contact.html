@@ -135,8 +135,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                   name="name"
                   id="name"
                   autocomplete="name"
-                  class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
+                  required
+                  minlength="2"
+                  class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
                 />
+                <p id="name-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
               </div>
             </label>
           </div>
@@ -167,8 +170,10 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 name="email"
                 id="email"
                 autocomplete="email"
-                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
+                required
+                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
               />
+              <p id="email-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
             </div>
           </div>
           <div>
@@ -198,8 +203,10 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 name="phone-number"
                 id="phone-number"
                 autocomplete="tel"
-                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
+                pattern="[0-9\s\-\+\(\)]+"
+                class="round-md block w-full border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
               />
+              <p id="phone-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
             </div>
           </div>
           <div>
@@ -228,8 +235,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
                 name="message"
                 id="message"
                 rows="4"
-                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200"
+                required
+                minlength="10"
+                class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-200 invalid:ring-red-500"
               ></textarea>
+              <p id="message-error" class="mt-1 text-sm text-red-600 hidden" role="alert"></p>
             </div>
           </div>
           <p id="my-form-status"></p>
@@ -241,7 +251,8 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
         <div class="mt-8 flex justify-end">
           <button
             type="submit"
-            class="shadow h-16 shrink w-48 flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-semibold text-white bg-teal-700 hover:bg-gray-900 focus:outline-none focus:ring-gray transition duration-150 ease-in-out"
+            id="submit-button"
+            class="shadow h-16 shrink w-48 flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-semibold text-white bg-teal-700 hover:bg-gray-900 focus:outline-none focus:ring-gray transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Submit
             <div class="px-2">
@@ -278,10 +289,155 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
   const WEBHOOK_URL = "{{ site.data.webhook_config.webhook_url }}";
   
   var form = document.getElementById("contact-form");
+  var submitButton = document.getElementById("submit-button");
+
+  // Validation rules
+  const validators = {
+    name: {
+      validate: (value) => {
+        if (!value || value.trim().length < 2) {
+          return "Name must be at least 2 characters";
+        }
+        return null;
+      }
+    },
+    email: {
+      validate: (value) => {
+        if (!value) {
+          return "Email is required";
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          return "Please enter a valid email address";
+        }
+        return null;
+      }
+    },
+    "phone-number": {
+      validate: (value) => {
+        // Phone is optional, but if provided, must be valid
+        if (value && value.trim().length > 0) {
+          const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+          if (!phoneRegex.test(value) || value.replace(/\D/g, '').length < 10) {
+            return "Please enter a valid phone number";
+          }
+        }
+        return null;
+      }
+    },
+    message: {
+      validate: (value) => {
+        if (!value || value.trim().length < 10) {
+          return "Message must be at least 10 characters";
+        }
+        return null;
+      }
+    }
+  };
+
+  // Show error for a field
+  function showError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(fieldId + "-error");
+    
+    if (field && errorElement) {
+      field.classList.add("ring-red-500");
+      field.classList.remove("ring-gray-300");
+      errorElement.textContent = message;
+      errorElement.classList.remove("hidden");
+    }
+  }
+
+  // Clear error for a field
+  function clearError(fieldId) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(fieldId + "-error");
+    
+    if (field && errorElement) {
+      field.classList.remove("ring-red-500");
+      field.classList.add("ring-gray-300");
+      errorElement.classList.add("hidden");
+      errorElement.textContent = "";
+    }
+  }
+
+  // Validate a single field
+  function validateField(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return true;
+    
+    const validator = validators[fieldId];
+    if (!validator) return true;
+    
+    const error = validator.validate(field.value);
+    if (error) {
+      showError(fieldId, error);
+      return false;
+    } else {
+      clearError(fieldId);
+      return true;
+    }
+  }
+
+  // Validate entire form
+  function validateForm() {
+    let isValid = true;
+    Object.keys(validators).forEach(fieldId => {
+      if (!validateField(fieldId)) {
+        isValid = false;
+      }
+    });
+    return isValid;
+  }
+
+  // Update submit button state
+  function updateSubmitButton() {
+    const isValid = validateForm();
+    submitButton.disabled = !isValid;
+  }
+
+  // Add event listeners for real-time validation
+  Object.keys(validators).forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      // Validate on blur (when user leaves field)
+      field.addEventListener("blur", () => {
+        validateField(fieldId);
+        updateSubmitButton();
+      });
+      
+      // Clear error on input (as user types)
+      field.addEventListener("input", () => {
+        clearError(fieldId);
+        // Re-validate after a short delay to avoid too frequent validation
+        setTimeout(() => {
+          validateField(fieldId);
+          updateSubmitButton();
+        }, 300);
+      });
+    }
+  });
+
+  // Initial validation state
+  updateSubmitButton();
 
   async function handleSubmit(event) {
     event.preventDefault();
     var status = document.getElementById("my-form-status");
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      status.innerHTML = '<span class="text-red-600">Please fix the errors above before submitting.</span>';
+      // Focus on first invalid field
+      const firstInvalidField = Object.keys(validators).find(fieldId => {
+        const field = document.getElementById(fieldId);
+        return field && !validateField(fieldId);
+      });
+      if (firstInvalidField) {
+        document.getElementById(firstInvalidField).focus();
+      }
+      return;
+    }
     
     // Check honeypot field - if filled, it's a bot
     var honeypot = document.getElementById("website-url").value;
@@ -289,6 +445,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       // Silently reject bot submissions
       status.innerHTML = "";
       form.reset();
+      updateSubmitButton();
       return;
     }
     
@@ -335,27 +492,36 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
             try {
               const result = JSON.parse(text);
               if (result.success) {
-                status.innerHTML = "Thanks for your submission!";
+                status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
                 form.reset();
+                updateSubmitButton();
+                // Clear all errors
+                Object.keys(validators).forEach(fieldId => clearError(fieldId));
               } else {
-                status.innerHTML = result.error || "Oops! There was a problem submitting your form";
+                status.innerHTML = '<span class="text-red-600">' + (result.error || "Oops! There was a problem submitting your form") + '</span>';
                 console.error("Server error:", result);
               }
             } catch (e) {
               // Not JSON - likely a redirect page, treat as success
               if (text.includes("googleusercontent") || text.includes("script.google.com") || text.includes("Moved Temporarily")) {
-                status.innerHTML = "Thanks for your submission!";
+                status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
                 form.reset();
+                updateSubmitButton();
+                Object.keys(validators).forEach(fieldId => clearError(fieldId));
               } else {
                 // Unknown response, but status is 2xx, treat as success
-                status.innerHTML = "Thanks for your submission!";
+                status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
                 form.reset();
+                updateSubmitButton();
+                Object.keys(validators).forEach(fieldId => clearError(fieldId));
               }
             }
           } catch (e) {
             console.error("Response parse error:", e);
-            status.innerHTML = "Thanks for your submission!";
+            status.innerHTML = '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
             form.reset();
+            updateSubmitButton();
+            Object.keys(validators).forEach(fieldId => clearError(fieldId));
           }
         } else {
           // Error status code

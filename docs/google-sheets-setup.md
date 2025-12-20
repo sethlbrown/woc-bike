@@ -19,17 +19,23 @@ This guide walks you through setting up a Google Apps Script webhook to receive 
 
 1. Go to [Google Sheets](https://sheets.google.com) and create a new spreadsheet
 2. Name it something like "Contact Form Submissions" or "CBP Contact Form"
-3. In the first row, add these column headers:
+3. **Set up email notification (optional):**
+   - In cell **B1**, enter your email address where you want to receive notifications
+   - Leave B1 empty if you don't want email notifications
+   - You can change this anytime without redeploying the script
+4. In row 2 (or row 1 if B1 is empty), add these column headers:
 
    - **Timestamp** (Column A)
-   - **Name** (Column B)
+   - **Name** (Column B) - Note: If using email notifications, headers start in row 2
    - **Email** (Column C)
    - **Phone** (Column D)
    - **Message** (Column E)
 
-4. **Important:** Note the Sheet ID from the URL:
+5. **Important:** Note the Sheet ID from the URL:
    - The URL will look like: `https://docs.google.com/spreadsheets/d/[SHEET_ID]/edit`
    - Copy the `[SHEET_ID]` part - you'll need it for the Apps Script
+
+**Note:** If you put your email in cell B1, the headers should be in row 2. If B1 is empty, headers can be in row 1.
 
 ## Step 2: Create the Google Apps Script
 
@@ -157,7 +163,39 @@ function testSubmission() {
    - View and manage your Google Sheets
    - This is safe since it's your own script
 
-## Step 5: Test the Webhook
+## Step 5: Configure Email Notifications (Optional)
+
+The script can send email notifications when new submissions arrive.
+
+### Setup Email Notifications
+
+1. In your Google Sheet, go to **cell B1**
+2. Enter your email address (e.g., `your-email@gmail.com`)
+3. Leave B1 empty if you don't want email notifications
+4. You can change this anytime without redeploying the script
+
+### How It Works
+
+- When a new form submission arrives, the script checks cell B1
+- If B1 contains a valid email address, it sends a notification email
+- The email includes:
+  - Submitter's name, email, phone, and message
+  - Submission timestamp
+  - Reply-to is set to the submitter's email for easy response
+
+### Alternative: Hardcode Email Address
+
+If you prefer to hardcode the email address in the script:
+
+1. Open the Apps Script editor
+2. Find the `sendEmailNotification` function
+3. Uncomment the line: `// const notificationEmail = 'your-email@gmail.com';`
+4. Replace `'your-email@gmail.com'` with your actual email
+5. Save and redeploy
+
+**Note:** The cell B1 method is recommended as it's easier to change without redeploying.
+
+## Step 6: Test the Webhook
 
 You can test the webhook using curl or a tool like Postman:
 
@@ -179,6 +217,8 @@ Or test directly in the Apps Script editor:
 2. Select the `testSubmission` function from the dropdown
 3. Click **Run** (▶️)
 4. Check your Google Sheet - you should see a new row with the test data
+5. Verify the new row appears at the top (sorted by timestamp)
+6. If email notifications are configured, check your inbox for the notification
 
 ## Troubleshooting
 
@@ -190,8 +230,22 @@ Or test directly in the Apps Script editor:
 ### Data not appearing in Sheet
 
 - Verify the sheet name matches what the script expects
-- Check that column headers are in the first row
+- Check that column headers are in the correct row (row 1 if B1 is empty, row 2 if B1 has email)
 - Look at the Apps Script execution log: **View** → **Executions**
+
+### New submissions not appearing at top
+
+- The sheet should automatically sort by timestamp (newest first) after each submission
+- If sorting isn't working, check the execution log for errors
+- Verify the Timestamp column (Column A) contains valid dates
+
+### Email notifications not working
+
+- Check that cell B1 contains a valid email address
+- Verify the email address format is correct
+- Check the Apps Script execution log: **View** → **Executions** for email errors
+- Make sure the script has permission to send emails (you'll be prompted on first send)
+- Check your spam folder
 
 ### CORS errors in browser
 

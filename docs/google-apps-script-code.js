@@ -47,14 +47,36 @@ function doPost(e) {
   try {
     // Parse incoming data - handle both JSON and form-encoded
     var data = {};
-    if (e.postData && e.postData.contents) {
+    
+    // Check e.parameter first (form-encoded data from URL-encoded POST)
+    if (e.parameter && Object.keys(e.parameter).length > 0) {
+      // Form-encoded data (application/x-www-form-urlencoded)
+      data = {
+        name: e.parameter.name || '',
+        email: e.parameter.email || '',
+        phone: e.parameter.phone || e.parameter['phone-number'] || '',
+        message: e.parameter.message || ''
+      };
+    } else if (e.postData && e.postData.contents) {
+      // We have postData contents - determine format
       var contentType = e.postData.type || '';
-      if (contentType.indexOf('application/json') !== -1) {
+      var contents = e.postData.contents.trim();
+      
+      // Check if it's JSON (by content type or by looking at the content)
+      if (contentType.indexOf('application/json') !== -1 || 
+          (contents.startsWith('{') || contents.startsWith('['))) {
         // JSON data
         data = JSON.parse(e.postData.contents);
       } else {
-        // Form-encoded data (application/x-www-form-urlencoded)
-        var params = e.parameter || {};
+        // Form-encoded string in postData contents
+        var params = {};
+        var pairs = e.postData.contents.split('&');
+        for (var i = 0; i < pairs.length; i++) {
+          var pair = pairs[i].split('=');
+          var key = decodeURIComponent(pair[0] || '');
+          var value = decodeURIComponent(pair[1] || '');
+          if (key) params[key] = value;
+        }
         data = {
           name: params.name || '',
           email: params.email || '',
@@ -62,14 +84,6 @@ function doPost(e) {
           message: params.message || ''
         };
       }
-    } else if (e.parameter) {
-      // Direct parameter access (form-encoded)
-      data = {
-        name: e.parameter.name || '',
-        email: e.parameter.email || '',
-        phone: e.parameter.phone || e.parameter['phone-number'] || '',
-        message: e.parameter.message || ''
-      };
     }
     
     // Get the active spreadsheet (the one this script is bound to)

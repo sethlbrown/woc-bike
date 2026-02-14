@@ -1,29 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="no-js" lang="en-US">
-{% include head.html %}
+  {% include head.html %}
 
-<body>
-  {% include hat.html %}
-  {% include header.html %}
-  
-  {% if page.banner_type == "home" %}
-    {% include home-banner.html %}
-  {% elsif page.banner == false %}
+  <body>
+    {% include hat.html %} {% include header.html %} {% if page.banner_type ==
+    "home" %} {% include home-banner.html %} {% elsif page.banner == false %}
     <!-- No banner -->
-  {% else %}
-    {% include banner.html %}
-  {% endif %}
-  
-  {{ content }}
-  
-  {% if page.title == "Home" %}
-    {% include city-market.html %}
-    {% include donate.html %}
-    {% include testimonials.html %}
-  {% endif %}
-  
-  {% include footer.html %}
-  {% include firebase-init.html %}
-</body>
+    {% else %} {% include banner.html %} {% endif %}
 
+    <main id="main">
+      {{ content }} {% if page.title == "Home" %} {% include city-market.html %}
+      {% include donate.html %} {% include testimonials.html %} {% endif %}
+    </main>
+
+    {% include footer.html %} {% include firebase-init.html %}
+  </body>
 </html>

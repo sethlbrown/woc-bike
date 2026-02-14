@@ -1,5 +1,13 @@
 # Project Status Updates
 
+## January 2026
+
+### January 2026
+
+- Updated Kickstand Club progress to show 105 bikes funded out of 120 goal
+- Progress bar and indicator updated to reflect 87.5% completion
+- Visual feedback improved to show clear progress towards the goal
+
 ## March 2024
 
 ### March 19, 2024

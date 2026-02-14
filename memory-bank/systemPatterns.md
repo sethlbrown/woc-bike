@@ -37,6 +37,28 @@
 - Verify clean build before creating feature branch
 - See `.cursor/rules/dev-workflow.mdc` for complete workflow details
 
+## Form Submission Architecture
+
+- **Contact Form (`30-contact.html`):**
+  - Client-side validation with real-time feedback
+  - Honeypot field (`website-url`) for spam protection
+  - Submits JSON data to Google Apps Script webhook
+  - Uses `text/plain` content type to bypass CORS preflight
+  - Webhook URL stored securely via GitHub Secrets → Jekyll data file (`_data/webhook_config.yml`)
+  
+- **Google Apps Script Backend:**
+  - Webhook receives POST requests from contact form
+  - Parses JSON data (sent as `text/plain` to avoid CORS)
+  - Validates required fields (name, email, message)
+  - Writes submissions to Google Sheet with timestamp
+  - Returns JSON response with success/error status
+  
+- **Security:**
+  - Webhook URL never committed to repository
+  - Injected during build via GitHub Actions
+  - Honeypot field silently rejects bot submissions
+  - Google reCAPTCHA v3 also integrated (existing)
+
 ## UI Components
 
 ### Progress Bar

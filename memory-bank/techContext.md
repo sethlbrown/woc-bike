@@ -8,6 +8,8 @@
 - **Node.js & npm**: For JS dependencies and build scripts
 - **Ruby & Bundler**: For Jekyll and gem dependencies
 - **Firebase Hosting**: Production hosting
+- **Google Apps Script**: Webhook backend for contact form submissions
+- **Google Sheets**: Storage for contact form submissions
 
 ## Development Setup
 
@@ -30,3 +32,11 @@
 - Tailwind CSS, Autoprefixer
 - Gulp, Browsersync
 - Firebase CLI (for deployment)
+
+## External Services
+
+- **Google Sheets & Apps Script**: Contact form submission backend
+  - Webhook URL stored as GitHub Secret (`WEBHOOK_URL`)
+  - Injected into `_data/webhook_config.yml` during build
+  - Form submissions write to Google Sheet with timestamps
+- **Google reCAPTCHA v3**: Spam protection (existing integration)

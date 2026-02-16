@@ -35,7 +35,10 @@ const IMAGE_DIRS = [
 const EXTENSIONS = ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG'];
 
 // Quality for WebP conversion (0-100)
-const QUALITY = 80;
+// Can be overridden with WEBP_QUALITY environment variable
+// Default: 80 (good balance of quality and file size)
+// For optimization: 70 (better compression, slight quality trade-off)
+const QUALITY = parseInt(process.env.WEBP_QUALITY) || 80;
 
 /**
  * Convert a single image to WebP
@@ -106,6 +109,7 @@ let errorCount = 0;
 
 // Main execution
 console.log('Starting WebP conversion...');
+console.log(`Quality setting: ${QUALITY}`);
 console.log('---------------------------');
 for (const dir of IMAGE_DIRS) {
   console.log(`Processing directory: ${dir}`);

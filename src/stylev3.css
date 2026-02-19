@@ -9,8 +9,8 @@
 
 @theme {
   /* Font families */
-  --font-sans: 'Avenir Next', Helvetica, Arial, sans-serif;
-  --font-body: 'Avenir Next', Helvetica, Arial, sans-serif;
+  --font-sans: "Avenir Next", Helvetica, Arial, sans-serif;
+  --font-body: "Avenir Next", Helvetica, Arial, sans-serif;
 
   /* Custom spacing scale */
   --spacing-0: 0px;
@@ -33,122 +33,116 @@
   --spacing-64: 288px;
 
   /* Custom color palette */
-  --color-teal-100: #D4ECEE; /* Teal 5 */
-  --color-teal-200: #A8DADD; /* Teal 4 */
-  --color-teal-300: #7DC7CC; /* Teal 3 */
-  --color-teal-400: #46B0B7; /* Teal 2 */
-  --color-teal-500: #25A2AA; /* Teal 1 */
-  --color-teal-600: #25A2AA;
-  --color-teal-700: #1B7C83; /* Higher contrast teal */
+  --color-teal-100: #d4ecee; /* Teal 5 */
+  --color-teal-200: #a8dadd; /* Teal 4 */
+  --color-teal-300: #7dc7cc; /* Teal 3 */
+  --color-teal-400: #46b0b7; /* Teal 2 */
+  --color-teal-500: #25a2aa; /* Teal 1 */
+  --color-teal-600: #25a2aa;
+  --color-teal-700: #1b7c83; /* Higher contrast teal */
 
-  --color-yellow-800: #867E79; /* Brown 1 */
+  --color-yellow-800: #867e79; /* Brown 1 */
   --color-green-800: #829260; /* Green 1 */
 
-  --color-gray-100: #F6F8F9; /* Gray/Light 1 */
-  --color-gray-200: #F6F8F9;
-  --color-gray-300: #D1D3D4; /* Black 5 */
-  --color-gray-500: #A3A7A9; /* Black 4 */
-  --color-gray-700: #767B7E; /* Black 3 */
-  --color-gray-800: #3C4448; /* Black 2 */
-  --color-gray-900: #1A2328; /* Black 1 */
+  --color-gray-100: #f6f8f9; /* Gray/Light 1 */
+  --color-gray-200: #f6f8f9;
+  --color-gray-300: #d1d3d4; /* Black 5 */
+  --color-gray-500: #a3a7a9; /* Black 4 */
+  --color-gray-700: #767b7e; /* Black 3 */
+  --color-gray-800: #3c4448; /* Black 2 */
+  --color-gray-900: #1a2328; /* Black 1 */
 
   /* Background images */
   --background-image-aspens: url("/assets/img/aspens.webp");
 }
 
 @layer base {
-    ul {
-        @apply list-disc;
-    }
+  ul {
+    @apply list-disc;
+  }
 
-    .prose-xl a {
-        @apply underline;
-    }
+  .prose-xl a {
+    @apply underline;
+  }
 }
 
 /* Explicit hover colors for social media icons */
 a.hover\:text-blue-500:hover svg {
-    color: #3b82f6; /* Facebook blue */
+  color: #3b82f6; /* Facebook blue */
 }
 
 a.hover\:text-red-500:hover svg {
-    color: #ef4444; /* YouTube red */
+  color: #ef4444; /* YouTube red */
 }
 
 a.hover\:text-pink-600:hover svg {
-    color: #db2777; /* Instagram pink */
-}
-
-[x-cloak] {
-    display: none;
+  color: #db2777; /* Instagram pink */
 }
 
 .scroll {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 /* iOS devices, stuff for Apple */
 @supports (-webkit-overflow-scrolling: touch) {
-    .scroll {
-        -webkit-overflow-scrolling: touch;
-    }
+  .scroll {
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .fc-scroller {
-    overflow: visible !important;
-    height: auto !important;
+  overflow: visible !important;
+  height: auto !important;
 }
 
 .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .no-scrollbar {
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .scroll-behavior-smooth {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 .snap {
-    scroll-snap-type: var(--scroll-snap-direction) var(--scroll-snap-constraint);
+  scroll-snap-type: var(--scroll-snap-direction) var(--scroll-snap-constraint);
 }
 
 .snap-y {
-    --scroll-snap-direction: y;
+  --scroll-snap-direction: y;
 }
 
 .snap-x {
-    --scroll-snap-direction: x;
+  --scroll-snap-direction: x;
 }
 
 .snap-mandatory {
-    --scroll-snap-constraint: mandatory;
+  --scroll-snap-constraint: mandatory;
 }
 
 .snap-start {
-    scroll-snap-align: start;
+  scroll-snap-align: start;
 }
 
 #arrow-left,
 #arrow-right {
-    @apply no-underline;
+  @apply no-underline;
 }
 
 .fc-header-toolbar h2 {
-    font-weight: 700;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-    --tw-text-opacity: 1;
-    color: rgb(26 35 40 / var(--tw-text-opacity));
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(26 35 40 / var(--tw-text-opacity));
 }
-
-

@@ -15,6 +15,7 @@
 - Responsive layouts using Tailwind's grid and flex utilities.
 - Donation integration via embeddable PayPal iframe and Venmo links.
 - Navigation and footer are modular includes for easy updates.
+- Firebase is initialized from Jekyll data (`_data/firebase_config`) in `_includes/firebase-init.html`; web client config is public by design and does not require GitHub Secrets.
 
 ## Design Patterns
 

@@ -3,7 +3,7 @@
   // Import Firebase app only (no analytics)
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.4/firebase-app.js";
 
-  // Firebase configuration (without measurement ID for analytics)
+  // Firebase web client config from _data (apiKey etc. are public by design; security is via Firebase rules/auth).
   const firebaseConfig = {
     apiKey: "{{ site.data.firebase_config.api_key }}",
     authDomain: "{{ site.data.firebase_config.auth_domain }}",

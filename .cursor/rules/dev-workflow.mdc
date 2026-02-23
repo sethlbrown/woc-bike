@@ -79,5 +79,5 @@ For each new feature request, follow this workflow:
 
 ## Notes
 
-- Tailwind remains on v3.x for stability. Plan a separate migration for v4.
+- Tailwind migrated to v4.
 - Fathom analytics removed; re-enable instructions in `analytics.mdc`.

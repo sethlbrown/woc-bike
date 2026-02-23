@@ -35,6 +35,9 @@
 
 ## External Services
 
+- **Firebase (Hosting + web SDK)**: Production hosting and client-side Firebase SDK initialization.
+  - Config (apiKey, projectId, etc.) is loaded from Jekyll data (`site.data.firebase_config`) and injected via `_includes/firebase-init.html`.
+  - **This config is intentionally public**: Firebase’s web client config (including `apiKey`) is designed to be exposed in the browser; it identifies the project and is not a secret. Security is enforced by Firebase Security Rules and Auth, not by hiding the config. No GitHub Secret is required for it; keeping it in a committed data file is the intended pattern for static sites.
 - **Google Sheets & Apps Script**: Contact form submission backend
   - Webhook URL stored as GitHub Secret (`WEBHOOK_URL`)
   - Injected into `_data/webhook_config.yml` during build

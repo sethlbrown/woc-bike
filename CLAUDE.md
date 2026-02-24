@@ -10,6 +10,9 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - **Node.js 20+ & npm**: JavaScript dependencies and build scripts
 - **Ruby & Bundler**: Jekyll and gem dependencies
 - **Firebase Hosting**: Production hosting platform
+- **Google Apps Script**: Webhook backend for contact form submissions
+- **Google Sheets**: Storage for contact form submissions
+- **Google reCAPTCHA v3**: Spam protection on contact form
 
 ## Build Commands
 - `npm run build:production` - Production build
@@ -42,8 +45,9 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 
 ## Key Features & Components
 - **Donation Integration**: PayPal embeddable campaign card and Venmo links
-- **Progress Tracking**: Visual progress bar for Kickstand Club (120-bike goal)
-- **Stories Section**: Latest news and community stories
+- **Progress Tracking**: Visual progress bar for Kickstand Club (120-bike goal; currently 105 bikes funded, 87.5%)
+- **Stories Section**: Latest news and community stories (two-column layout alongside donation section)
+- **Contact Form**: Submits to Google Sheets via Google Apps Script webhook; includes honeypot spam protection and client-side validation
 - **Modular Navigation**: Header and footer as reusable includes
 - **Responsive Design**: Mobile-friendly layouts with Tailwind utilities
 
@@ -65,6 +69,78 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - Donation integration styling and functionality
 - Responsive design and accessibility enhancements
 - Content updates for programs and community stories
+
+## External Services
+
+- **Firebase Hosting**: Production hosting. Web client config (`apiKey`, `projectId`, etc.) is loaded from `_data/firebase_config` and injected via `_includes/firebase-init.html`. This config is **intentionally public** — Firebase security is enforced by Firebase Security Rules and Auth, not by hiding the config. No GitHub Secret needed.
+- **Google Apps Script**: Webhook backend that receives contact form POST requests, validates required fields, and writes submissions (timestamp, name, email, phone, message) to a Google Sheet.
+- **Google Sheets**: Storage for all contact form submissions.
+- **Google reCAPTCHA v3**: Existing spam protection integration on the contact form.
+
+## Contact Form Architecture
+
+Form located in `30-contact.html`.
+
+- **Client-side validation**: Required fields (name, email, message), email format, phone format (optional), message length (max 2000 chars). Real-time feedback; errors shown only after user interacts with field.
+- **Honeypot field**: Hidden `website-url` field silently rejects bot submissions.
+- **Submission**: Sends JSON as `text/plain` content type to bypass CORS preflight.
+- **Webhook URL**: Never committed to repo. Stored as GitHub Secret (`WEBHOOK_URL`) and injected into `_data/webhook_config.yml` during GitHub Actions build.
+- **Backend**: Google Apps Script validates and writes to Google Sheet; returns JSON success/error response.
+
+## Design Patterns
+
+- **Layouts**: `base.html` and `default.html` provide main structure; content pages extend these.
+- **Includes**: Navigation, header, footer, banners, and donation components are in `_includes/` for reuse.
+- **Firebase init**: `_includes/firebase-init.html`
+- **Sections**: Container divs with consistent max-width, padding, and responsive Tailwind breakpoints.
+- **Accessibility**: Color contrast, keyboard navigation, semantic HTML.
+
+### Progress Bar Component (Kickstand Club)
+- Background track: `teal-900`
+- White progress indicator
+- Crosshair marker that moves with progress
+- Percentage-based width: `(current / total) * 100`
+- Accessible text display of current progress
+
+## Feature Branch Workflow
+
+For each new feature:
+
+1. `git checkout main`
+2. `git pull origin main`
+3. Verify build: `npm ci && npm run build:dev && npm run build`
+4. `git checkout -b feature-[description]` (e.g., `feature-google-sheets-integration`)
+5. Make minimal, focused changes
+6. Verify build again before committing
+7. Push and open PR; GitHub Actions validates build/deploy
+8. Merge when green; verify production
+
+One feature per branch. Keep changes focused.
+
+## Analytics
+
+**Fathom Analytics was removed on 2025-09-16.** No client-side analytics are currently active.
+
+### Previous Fathom implementation (for reference)
+- Loader in `_includes/head.html`: `<script src="https://cdn.usefathom.com/script.js" data-site="SZUUKHTD" defer></script>`
+- Event calls:
+  - Donate clicks: `onclick="fathom.trackEvent('donate button');"` in `_includes/donate-button.html` and `00-index.html`
+  - Form submission: `fathom.trackEvent("contact form submitted");` in `30-contact.html` success paths
+
+### To re-enable Fathom
+1. Add loader (+ optional `<link rel="dns-prefetch" href="https://cdn.usefathom.com">`) to `_includes/head.html`
+2. Add `onclick="fathom.trackEvent('donate button');"` to donate CTAs in `_includes/donate-button.html` and `00-index.html`
+3. Add `fathom.trackEvent("contact form submitted");` in `then(...)` success branches in `30-contact.html`
+4. Optionally: centralize via `/assets/js/analytics.js` with `addEventListener` instead of inline `onclick`
+
+## Current Project Status
+
+- **Kickstand Club**: 105 bikes funded out of 120-bike goal (87.5%)
+- **Contact form**: Fully migrated from Formspree to Google Sheets backend
+- **Homepage**: Two-column Latest Stories + donation layout
+- **Deployment**: Stable on Firebase Hosting
+- **Analytics**: None active (Fathom removed)
+- **CSS cache busting**: Requires manual filename/version change
 
 ## Tailwind CSS v4 Migration (September 2024)
 

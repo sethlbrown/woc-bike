@@ -1,0 +1,34 @@
+---
+layout: none
+permalink: /how-can-i-help.md
+---
+# How Can I Help
+
+## Donate Items
+
+- **Bicycles**: Give your unused bikes a second life
+- **Parts & Components**: We'll put them to good use
+- **Tools**: Help us maintain our workshop
+- **Old T-shirts**: We use them as cleaning rags
+- **Trailers**: Loan or donate for our transportation needs
+
+## Share Your Skills
+
+- **Mechanical Experience**: Help in our repair shop
+- **Community Engagement**: Volunteer at our events
+- **Grant Writing**: Support our fundraising efforts
+- **eBay Listing**: Help us sell specialty items online
+- **Social Media**: Improve our digital presence
+
+## Financial Support
+
+- **Make a Direct Donation**: https://www.venmo.com/u/carbondalebikeproject02 — Fund our operations and expansion
+- **City Market Rewards**: Sign up at https://www.citymarket.com to have a portion of your purchases support us
+
+## Spread the Word
+
+- **Connect Us**: Know someone who needs a bike? Send them our way
+- **Partner Organizations**: Help us collaborate with other non-profits
+- **Artists**: Use our parts for your creative projects
+
+Every contribution — whether time, items, skills, or money — helps us keep bikes on the road and out of landfills. Thank you for supporting our community!

@@ -1,0 +1,19 @@
+---
+layout: none
+permalink: /llms.txt
+---
+# Carbondale Bike Project
+
+> The Carbondale Bike Project is a volunteer-run community bicycle shop and education program in Carbondale, Colorado. Our mission is to increase individual, community, environmental, and global health by operating a sustainable, safe, and educational community bicycle shop and related programs.
+
+## Pages
+
+- [Home](https://carbondalebikeproject.org/index.md): Open shop hours, mission, community impact, and Kickstand Club donation progress
+- [About](https://carbondalebikeproject.org/about.md): Mission, what we offer, shop guidelines, history (2009–present), leadership, and community partners
+- [Programs](https://carbondalebikeproject.org/programs.md): Community shop time, landfill diversion, school programs, and workshops
+- [How Can I Help](https://carbondalebikeproject.org/how-can-i-help.md): Ways to donate items, share skills, give financially, and spread the word
+- [Contact](https://carbondalebikeproject.org/contact.md): Location, phone, shop hours, contact form, and donation links
+
+## Optional
+
+- [RSS Feed](https://carbondalebikeproject.org/feed.xml): Site updates feed

@@ -1,0 +1,51 @@
+---
+layout: none
+permalink: /index.md
+---
+# Carbondale Bike Project
+
+The Carbondale Bike Project is a volunteer-run community bicycle shop and education program in Carbondale, Colorado. Our mission is to increase individual, community, environmental, and global health by operating a sustainable, safe, and educational community bicycle shop and related programs.
+
+We are located at the Third Street Center in Carbondale, Colorado.
+
+## Open Shop Hours
+
+- **Tuesday**: 2:00 – 6:00 p.m. MT (no new projects after 5:00 p.m.)
+- **Thursday**: 2:00 – 6:00 p.m. MT (no new projects after 4:00 p.m.)
+- **Sunday**: noon – 6:00 p.m. MT (no new projects after 5:00 p.m.)
+
+No appointment needed. Walk-ins welcome during open hours.
+
+## What We Do
+
+We provide a safe, welcoming space where anyone can learn to repair and maintain their bicycle. We offer:
+
+- Work stands and professional tools (recommended donation: $10/hr)
+- Expert volunteer guidance on bike repair and maintenance
+- A large inventory of donated bicycle frames and parts
+- A drop-off location for bikes and parts you no longer need (tax receipts available)
+
+Nobody is turned away due to lack of funds.
+
+## Kickstand Club
+
+The Kickstand Club is our community giving program. For just $5/month or a one-time $200 donation, you can provide a bike for someone in need. We are currently working toward a goal of 120 bikes funded, with 105 bikes funded so far (87.5%).
+
+Donate via PayPal or Venmo: https://www.venmo.com/u/carbondalebikeproject02
+
+## Community Impact
+
+In 2024:
+
+- Repaired and resold 102 bikes through our shop and online sales
+- Delivered 57 bikes and 12 containers of parts to the Navajo Reservation (in partnership with Navajo YES)
+- Moved 48 bikes to migrant workers in Palisade, CO (in partnership with LaPlaza)
+- Donated 129 bikes to recipients throughout Africa (in partnership with Bicycles For Humanity)
+- Diverted approximately 350 bikes — roughly 10,000 lbs of materials — from landfills
+
+## Contact
+
+Phone: 970.340.8151
+Email: carbondalebikeproject@gmail.com
+Website: https://carbondalebikeproject.org
+Contact form: https://carbondalebikeproject.org/contact/

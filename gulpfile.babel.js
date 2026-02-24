@@ -1,14 +1,10 @@
-import autoprefixer from "autoprefixer";
 import browserSync from "browser-sync";
 import spawn from "cross-spawn";
-import cssnano from "cssnano";
 import { dest, series, src, task, watch, parallel } from "gulp";
 import postcss from "gulp-postcss";
 import sourcemaps from "gulp-sourcemaps";
 import terser from "gulp-terser";
-import atimport from "postcss-import";
 import tailwindcss from "@tailwindcss/postcss";
-// We'll use a different approach for WebP conversion since gulp-webp is ESM
 
 const SITE_ROOT = "./_site";
 const POST_BUILD_STYLESHEET = `${SITE_ROOT}/assets/css/`;

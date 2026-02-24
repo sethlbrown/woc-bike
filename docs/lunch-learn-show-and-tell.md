@@ -7,15 +7,15 @@
 
 **Talking points:**
 
-This is the Carbondale Bike Project. It's a local nonprofit. They take donated bikes, refurbish them, and get them to people who need them. As a relatively unskilled bike mechanic who could fix a flat, put a chain back together, and maybe adjust an old school brake, I learned a lot about the maintenance task of modern bicycles. Beyond derailleurs to adjust there were hydraulic brakes to drain, hidden cables, complex hub assemblies, and, worst of all, hydraulic shock systems that were often not owner serviceable. While these things make possible all kinds of biking, they’re a maintenance nightmare.
+This is the Carbondale Bike Project. It's a local nonprofit. They take donated bikes, refurbish them, and get them to people who need them. As a relatively unskilled bike mechanic who could fix a flat, put a chain back together, and maybe adjust an v-brake, I learned a lot about the maintenance of modern bicycles. Beyond derailleurs to adjust there were hydraulic brakes to drain, hidden cables, complex hub assemblies, and, worst of all, hydraulic shock systems that were often not owner serviceable. While these things enable all kinds of biking, they’re a maintenance nightmare.
 
 If this website site were a bike it would be a sleek, black Surly Steamroller: fixed gear, no suspension, and old-school cantilever brakes. This would be a bike with the minimum possible things to maintain and the ability for a volunteer to maintain at the Bike Project—a bike where I can understand and maintain every part by myself.
 
-Jen Witkowski designed this site in Figma six years ago after a very lean research phase. I built and maintain it. The original version used just Sass (for CSS) and AlpineJs for JavaScript.
+Jen Witkowski designed this site in Figma six years ago after a lean research phase. I built and maintain it. The original version used just Sass (for CSS) and AlpineJs for JavaScript.
 
 Zero budget for infrastructure. One volunteer developer — me — who touches this project maybe once a month, sometimes less. Every technology choice has to justify itself against one question: does this make the site harder for a solo volunteer to maintain?
 
-Here's the thing I want you to take away from this talk: almost every interesting decision on this project was a removal. We removed Alpine.js. We removed a paid form service. We removed analytics. The site got better in terms of performance, maintenance, and cost each time something came out. I want to show you what's left, and why what's left is enough.
+Here's the thing I want you to take away from this talk: almost every interesting decision on this project was a removal. We removed Alpine.js. We removed a paid form service. We removed the gallery when we saw it wasn’t getting page views. We removed analytics. The site got better in terms of performance, maintenance, and cost each time something came out. I want to show you what's left, and why what's left is enough.
 
 ---
 
@@ -298,6 +298,12 @@ Third: AI and the maintenance equation. The Memory Bank and Plan/Act pattern I s
 **Any questions:**
 
 **[If there's time left]**
+
+
+## Useful Articles
+- https://posthog.com/blog/github-cms
+- https://dev.to/ralphcone/new-hot-trend-locality-of-behavior-1g9k
+- https://benhoyt.com/writings/the-small-web-is-beautiful/
 
 ## Top 6 "Show, Don't Tell" Moments
 

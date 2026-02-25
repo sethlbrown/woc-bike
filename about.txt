@@ -1,6 +1,6 @@
 ---
 layout: none
-permalink: /about.md
+permalink: /about.txt
 ---
 # About the Carbondale Bike Project
 
@@ -77,3 +77,4 @@ In 2024, we managed to repair and resell 102 bikes out of our shop in the 3rd St
 ### Community Partners
 
 Aloha Mountain Cyclery, Umbrella Roofing, The Rebekah Lodge, Roaring Fork Transit Authority, Roaring Fork Cycling Club, City of Aspen, Carbondale Police Department, Bridges High School, Navajo YES, Valley Lids, Coal Basin Ranch, City Market, Carbondale Public Library, Basalt Regional Library, Carbondale Middle School, KDNK Radio, Carbondale Community School, Crystal River Elementary School, Roaring Fork High School, Ragged Mountain Sports, and The Buddy Program.
+

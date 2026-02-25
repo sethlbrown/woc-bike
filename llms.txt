@@ -8,11 +8,11 @@ permalink: /llms.txt
 
 ## Pages
 
-- [Home](https://carbondalebikeproject.org/index.md): Open shop hours, mission, community impact, and Kickstand Club donation progress
-- [About](https://carbondalebikeproject.org/about.md): Mission, what we offer, shop guidelines, history (2009–present), leadership, and community partners
-- [Programs](https://carbondalebikeproject.org/programs.md): Community shop time, landfill diversion, school programs, and workshops
-- [How Can I Help](https://carbondalebikeproject.org/how-can-i-help.md): Ways to donate items, share skills, give financially, and spread the word
-- [Contact](https://carbondalebikeproject.org/contact.md): Location, phone, shop hours, contact form, and donation links
+- [Home](https://carbondalebikeproject.org/index.txt): Open shop hours, mission, community impact, and Kickstand Club donation progress
+- [About](https://carbondalebikeproject.org/about.txt): Mission, what we offer, shop guidelines, history (2009–present), leadership, and community partners
+- [Programs](https://carbondalebikeproject.org/programs.txt): Community shop time, landfill diversion, school programs, and workshops
+- [How Can I Help](https://carbondalebikeproject.org/how-can-i-help.txt): Ways to donate items, share skills, give financially, and spread the word
+- [Contact](https://carbondalebikeproject.org/contact.txt): Location, phone, shop hours, contact form, and donation links
 
 ## Optional
 

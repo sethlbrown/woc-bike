@@ -23,9 +23,12 @@ Here's the thing I want you to take away from this talk: almost every interestin
 
 **What to show:** Switch to Cursor. Open the sidebar showing the project structure briefly.
 
+config.yml
+package.json
+
 **Talking points:**
 
-The stack is Jekyll for static site generation, Tailwind for CSS, vanilla JavaScript — not React, not Alpine, vanilla — Firebase Hosting, and GitHub Actions for CI/CD. That's it. There's no CMS. There's no database. There's no server maintenance. Notice how short that list is. That's on purpose.
+The stack is Jekyll for static site generation, Tailwind for CSS, vanilla JavaScript, Firebase Hosting, and GitHub Actions for CI/CD. That's it. There's no CMS. There's no database. There's no server maintenance. Notice how short that list is. That's on purpose.
 
 Honestly, Tailwind is probably next when I get the time, but I haven't seen AI be as good at vanilla CSS as it is at Tailwind.
 

@@ -1,6 +1,6 @@
 ---
 layout: none
-permalink: /how-can-i-help.md
+permalink: /how-can-i-help.txt
 ---
 # How Can I Help
 
@@ -32,3 +32,4 @@ permalink: /how-can-i-help.md
 - **Artists**: Use our parts for your creative projects
 
 Every contribution — whether time, items, skills, or money — helps us keep bikes on the road and out of landfills. Thank you for supporting our community!
+

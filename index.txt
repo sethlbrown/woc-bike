@@ -1,6 +1,6 @@
 ---
 layout: none
-permalink: /index.md
+permalink: /index.txt
 ---
 # Carbondale Bike Project
 
@@ -49,3 +49,4 @@ Phone: 970.340.8151
 Email: carbondalebikeproject@gmail.com
 Website: https://carbondalebikeproject.org
 Contact form: https://carbondalebikeproject.org/contact/
+

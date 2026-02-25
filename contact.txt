@@ -1,6 +1,6 @@
 ---
 layout: none
-permalink: /contact.md
+permalink: /contact.txt
 ---
 # Contact the Carbondale Bike Project
 
@@ -36,3 +36,4 @@ We accept messages about:
 
 - **Venmo**: https://www.venmo.com/u/carbondalebikeproject02
 - **PayPal Kickstand Club**: https://carbondalebikeproject.org/#kickstand-club
+

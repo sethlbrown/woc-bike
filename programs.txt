@@ -1,6 +1,6 @@
 ---
 layout: none
-permalink: /programs.md
+permalink: /programs.txt
 ---
 # Our Programs
 
@@ -44,3 +44,4 @@ We offer specialized workshops for groups wanting to learn bicycle repair skills
 - Custom programs for schools and organizations
 
 Contact us to schedule a workshop for your group!
+

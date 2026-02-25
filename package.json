@@ -1,7 +1,7 @@
 {
-  "name": "jekyll-starter-tailwind",
-  "version": "6.0.0",
-  "description": "A starter kit for using Tailwind with Jekyll",
+  "name": "woc-bike",
+  "version": "1.0.0",
+  "description": "Website for the Carbondale Bike Project",
   "main": "gulpfile.babel.js",
   "devDependencies": {
     "@babel/preset-env": "^7.28.3",
@@ -18,6 +18,9 @@
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4.1.13"
   },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.13"
+  },
   "scripts": {
     "build:production": "NODE_ENV=production gulp",
     "build:production:webp": "NODE_ENV=production gulp && node src/js/utils/convert-to-webp.js",
@@ -31,17 +34,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/taylorbryant/jekyll-starter-tailwind.git"
+    "url": "https://github.com/sethlbrown/woc-bike.git"
   },
-  "author": "Taylor Bryant",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/taylorbryant/jekyll-starter-tailwind/issues"
+    "url": "https://github.com/sethlbrown/woc-bike/issues"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@tailwindcss/postcss": "^4.1.13"
   }
 }

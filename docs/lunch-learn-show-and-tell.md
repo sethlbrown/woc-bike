@@ -21,7 +21,7 @@ Here's the thing I want you to take away from this talk: almost every interestin
 
 ## Section 2: The Stack (4 min)
 
-**What to show:** Switch to Cursor. Open the sidebar showing the project structure briefly, then open `_includes/header.html`.
+**What to show:** Switch to Cursor. Open the sidebar showing the project structure briefly.
 
 **Talking points:**
 
@@ -40,7 +40,7 @@ Before I show components, let me talk about why Jekyll specifically. Here's the 
 - `jekyll-seo-tag` — handles meta tags, Open Graph, structured data. I don't think about SEO plumbing, it just works.
 - `jekyll-responsive-image` — generates multiple image sizes at build time. That's how we get seven breakpoints for the hero banner without manually creating each one.
 - `jekyll-redirect-from` — handles URL redirects in YAML front matter instead of server config.
-- `nokogiri` — HTML/XML parser that Jekyll uses under the hood. This is actually the gem that causes the most dependency pain — it compiles native C extensions, which is where the "Saturday afternoon debugging `bundle install`" stories come from.
+- `nokogiri` — HTML/XML parser that Jekyll uses under the hood. This is actually the gem that causes the most dependency pain.
 - `webrick` — the local development server. 
 
 That's it. Seven gems. Compare that to a `package.json` for a Next.js project.

@@ -23,7 +23,7 @@
     "build:production": "eleventy && npm run build:css",
     "build:dev": "eleventy && npm run build:css",
     "build": "npm run build:production",
-    "dev": "concurrently \"postcss src/stylev3.css -o _site/assets/css/stylev3.css --watch\" \"eleventy --serve\"",
+    "dev": "mkdir -p _site/assets/css && concurrently \"postcss src/stylev3.css -o _site/assets/css/stylev3.css --watch\" \"eleventy --serve\"",
     "start": "npm run dev",
     "test": "playwright test",
     "webp": "node src/js/utils/convert-to-webp.js"

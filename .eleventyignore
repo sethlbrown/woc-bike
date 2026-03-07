@@ -1,0 +1,9 @@
+node_modules/
+_site/
+.git/
+src/js/utils/
+memory-bank/
+docs/
+.ai/
+.claude/
+.cursor/

@@ -2,7 +2,7 @@
 id: 2
 group: "eleventy-setup"
 dependencies: [1]
-status: "pending"
+status: "completed"
 created: "2026-03-06"
 skills: ["eleventy", "nodejs"]
 ---

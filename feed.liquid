@@ -20,7 +20,7 @@ eleventyExcludeFromCollections: true
     <link href="{{ site.url }}{{ post.url }}" />
     <updated>{{ post.date | dateToRfc3339 }}</updated>
     <id>{{ site.url }}{{ post.url }}</id>
-    <content type="html">{{ post.content | htmlToAbsoluteUrls: site.url }}</content>
+    <content type="html"><![CDATA[{{ post.content | htmlToAbsoluteUrls: site.url }}]]></content>
   </entry>
   {%- endif %}
   {%- endfor %}

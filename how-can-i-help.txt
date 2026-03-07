@@ -1,5 +1,5 @@
 ---
-layout: none
+layout: false
 permalink: /how-can-i-help.txt
 ---
 # How Can I Help

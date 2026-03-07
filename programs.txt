@@ -1,5 +1,5 @@
 ---
-layout: none
+layout: false
 permalink: /programs.txt
 ---
 # Our Programs

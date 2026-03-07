@@ -2,7 +2,7 @@
 id: 5
 group: "eleventy-setup"
 dependencies: [2, 4]
-status: "pending"
+status: "completed"
 created: "2026-03-06"
 skills: ["eleventy", "liquid"]
 ---

@@ -1,4 +1,5 @@
 const path = require("path");
+const yaml = require("js-yaml");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const dateToRfc3339 = require("@11ty/eleventy-plugin-rss/src/dateRfc3339.js");
 const getNewestCollectionItemDate = require("@11ty/eleventy-plugin-rss/src/getNewestCollectionItemDate.js");
@@ -6,6 +7,10 @@ const convertHtmlToAbsoluteUrls = require("@11ty/eleventy-plugin-rss/src/htmlToA
 const Image = require("@11ty/eleventy-img");
 
 module.exports = function (eleventyConfig) {
+  // YAML data file support (Eleventy v3 requires explicit registration)
+  eleventyConfig.addDataExtension("yml", (contents) => yaml.load(contents));
+  eleventyConfig.addDataExtension("yaml", (contents) => yaml.load(contents));
+
   // Plugins
   eleventyConfig.addPlugin(pluginRss);
 

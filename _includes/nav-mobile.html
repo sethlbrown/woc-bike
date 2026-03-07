@@ -1,18 +1,10 @@
 <div class="px-2 pt-2 pb-3">
-  {% assign sorted_pages = site.pages | sort:"name" %} {% for p in sorted_pages
-  %} {% unless p.exclude %} {% if p.title %} {% if p.title == 'Calendar' %}
+  {% for item in nav %}
   <a
-    href="/#open-shop-time"
+    href="{{ item.url }}"
     class="mt-2 block px-3 py-2 rounded-md text-xl font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out"
   >
-    Shop Hours
+    {{ item.title }}
   </a>
-  {% else %}
-  <a
-    href="{{ p.url | prepend: site.baseurl }}"
-    class="mt-2 block px-3 py-2 rounded-md text-xl font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus:text-white focus:bg-gray-900 transition duration-150 ease-in-out"
-  >
-    {{p.title}}
-  </a>
-  {% endif %} {% endif %} {% endunless %} {% endfor %}
+  {% endfor %}
 </div>

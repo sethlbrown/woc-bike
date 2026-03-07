@@ -1,5 +1,5 @@
 ---
-layout: none
+layout: false
 permalink: /llms.txt
 ---
 # Carbondale Bike Project

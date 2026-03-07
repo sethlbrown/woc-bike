@@ -1,0 +1,40 @@
+name: Build and Test
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update Webhook Config
+        run: |
+          cat > _data/webhook_config.yml << EOL
+          webhook_url: '${{ secrets.WEBHOOK_URL }}'
+          EOL
+
+      - name: Build site
+        run: npm run build:production
+        env:
+          NODE_ENV: production
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: npm test

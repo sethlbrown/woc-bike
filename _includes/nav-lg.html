@@ -1,9 +1,7 @@
 <!-- navigation on larger view ports -->
 <div class="hidden lg:block lg:ml-6 grow">
   <div class="ml-4 flex items-center h-16">
-    {% assign sorted_pages = site.pages | sort:"name" %} {% assign nav_items =
-    sorted_pages | where_exp:"item","item.exclude != true" |
-    where_exp:"item","item.title != nil" %} {% for p in nav_items %}
+    {% for item in nav %}
     <div
       class="flex items-center h-16 border-l border-gray-200{% if forloop.last %} border-r border-gray-200{% endif %}"
     >
@@ -11,10 +9,10 @@
         class="w-full h-full flex items-center border-t-4 border-transparent border-solid hover:border-teal-400 hover:bg-gray-200 transition duration-150 ease-in-out"
       >
         <a
-          href="{{ p.url | prepend: site.baseurl }}"
-          class="px-4 text-base font-bold leading-5 xl:text-lg text-gray-800 focus:text-black focus:outline-none {% if p.url == page.url %}active{% endif %}"
+          href="{{ item.url }}"
+          class="px-4 text-base font-bold leading-5 xl:text-lg text-gray-800 focus:text-black focus:outline-none {% if item.url == page.url %}active{% endif %}"
         >
-          {{p.title}}</a
+          {{ item.title }}</a
         >
       </div>
     </div>

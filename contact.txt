@@ -1,5 +1,5 @@
 ---
-layout: none
+layout: false
 permalink: /contact.txt
 ---
 # Contact the Carbondale Bike Project

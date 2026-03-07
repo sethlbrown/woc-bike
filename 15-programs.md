@@ -9,7 +9,7 @@ published: true
 ---
 
 ## Community Shop Time
-{% responsive_image path: "assets/img/bike_project_in_action.jpg" alt: "Kids working at the bike project" %}
+{% image "assets/img/bike_project_in_action.jpg", "Kids working at the bike project" %}
 
 Visit during open shop hours to work on your bike or build one from our donated inventory. Our mission is simple: everyone who needs a bike should have one. Use our:
 - Professional repair stands
@@ -36,7 +36,7 @@ Since 2018, we've provided bicycles and helmets to third graders who didn't have
 - Bike tune-up parties with local bike shops
 - Support for the end-of-year field trip when students ride to Rock Bottom Ranch
 
-{% responsive_image path: "assets/img/IMG_0119.jpg" alt: "Sometimes an unexpected treasure, like this Braxton Frame, comes into the shop and we restore it." %}
+{% image "assets/img/IMG_0119.jpg", "Sometimes an unexpected treasure, like this Braxton Frame, comes into the shop and we restore it." %}
 
 ## Workshops & Community Outreach
 

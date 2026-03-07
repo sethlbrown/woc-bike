@@ -483,9 +483,9 @@ graph TD
 **Parallel Tasks:**
 - ✔️ Task 005: Migrate Content Pages (depends on 002, 004)
 
-#### Phase 6: Responsive Images
+#### ✅ Phase 6: Responsive Images
 **Parallel Tasks:**
-- Task 006: Set Up Responsive Image Pipeline (depends on 002, 004, 005)
+- ✔️ Task 006: Set Up Responsive Image Pipeline (depends on 002, 004, 005)
 
 #### Phase 7: End-to-End Tests — Phase 1 PR Gate
 **Parallel Tasks:**

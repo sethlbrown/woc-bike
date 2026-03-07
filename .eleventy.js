@@ -1,7 +1,9 @@
+const path = require("path");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const dateToRfc3339 = require("@11ty/eleventy-plugin-rss/src/dateRfc3339.js");
 const getNewestCollectionItemDate = require("@11ty/eleventy-plugin-rss/src/getNewestCollectionItemDate.js");
 const convertHtmlToAbsoluteUrls = require("@11ty/eleventy-plugin-rss/src/htmlToAbsoluteUrls.js");
+const Image = require("@11ty/eleventy-img");
 
 module.exports = function (eleventyConfig) {
   // Plugins
@@ -10,21 +12,33 @@ module.exports = function (eleventyConfig) {
   // Process .txt files as Liquid templates (for LLM mirror pages)
   eleventyConfig.addExtension("txt", { key: "liquid" });
 
-  // Stub for jekyll-responsive-image tag — replaced in Task 6 with {% image %}
-  eleventyConfig.addLiquidTag("responsive_image", function (liquidEngine) {
-    return {
-      parse(tagToken) {
-        this.args = tagToken.args;
+  // Responsive image shortcode (replaces Jekyll {% responsive_image %})
+  eleventyConfig.addShortcode("image", async function (src, alt) {
+    if (!alt) throw new Error(`Missing alt text for image: ${src}`);
+
+    let metadata = await Image(src, {
+      widths: [300, 400, 600, 800, 975, 1600],
+      formats: ["webp", "jpeg"],
+      outputDir: "./_site/assets/img/",
+      urlPath: "/assets/img/",
+      filenameFormat: function (id, src, width, format) {
+        const ext = path.extname(src);
+        const name = path.basename(src, ext);
+        return `${width}/${name}.${format}`;
       },
-      render() {
-        // Extract path and alt from args string: path: "..." alt: "..."
-        const pathMatch = this.args.match(/path:\s*["']([^"']+)["']/);
-        const altMatch = this.args.match(/alt:\s*["']([^"']+)["']/);
-        const src = pathMatch ? "/" + pathMatch[1] : "";
-        const alt = altMatch ? altMatch[1] : "";
-        return Promise.resolve(`<img src="${src}" alt="${alt}" />`);
-      },
+    });
+
+    let imageAttributes = {
+      alt,
+      sizes:
+        "(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 60vw, (max-width: 1280px) 66vw, 60vw",
+      loading: "lazy",
+      decoding: "async",
+      class:
+        "w-full block sm:float-right sm:inline sm:p-4 sm:w-1/2 md:w-3/5 lg:w-2/3 xl:w-3/5",
     };
+
+    return Image.generateHTML(metadata, imageAttributes);
   });
 
   // Register RSS plugin filters for Liquid (plugin only adds Nunjucks filters)

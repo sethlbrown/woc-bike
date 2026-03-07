@@ -309,7 +309,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
 
 <script>
   // Get webhook URL from Jekyll data
-  const WEBHOOK_URL = "{{ site.data.webhook_config.webhook_url }}";
+  const WEBHOOK_URL = "{{ webhook_config.webhook_url }}";
 
   var form = document.getElementById("contact-form");
   var submitButton = document.getElementById("submit-button");

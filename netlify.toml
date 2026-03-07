@@ -1,0 +1,15 @@
+[build]
+  command = "npm run build:production"
+  publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Human setup required:
+# 1. Create a Netlify account at netlify.com (free plan)
+# 2. Connect this GitHub repository via "New site from Git"
+# 3. Netlify will auto-detect this netlify.toml and use it for builds
+# 4. After Phase 1 PR merges to main, Netlify auto-deploys production
+# 5. Switch DNS on Namecheap to Netlify's provided values (A record / CNAME)
+# 6. Netlify auto-provisions SSL via Let's Encrypt
+# 7. Decommission Firebase Hosting via Firebase console after DNS propagates

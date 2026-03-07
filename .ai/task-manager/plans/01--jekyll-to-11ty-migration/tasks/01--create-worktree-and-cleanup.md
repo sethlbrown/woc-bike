@@ -2,7 +2,7 @@
 id: 1
 group: "cleanup"
 dependencies: []
-status: "pending"
+status: "completed"
 created: "2026-03-06"
 skills: ["bash"]
 ---

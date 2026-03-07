@@ -487,9 +487,9 @@ graph TD
 **Parallel Tasks:**
 - ✔️ Task 006: Set Up Responsive Image Pipeline (depends on 002, 004, 005)
 
-#### Phase 7: End-to-End Tests — Phase 1 PR Gate
+#### ✅ Phase 7: End-to-End Tests — Phase 1 PR Gate
 **Parallel Tasks:**
-- Task 009: Add Playwright E2E Tests (depends on 004, 005, 006, 007, 008)
+- ✔️ Task 009: Add Playwright E2E Tests (depends on 004, 005, 006, 007, 008)
 
 > **Human Intervention Gate — before merging Phase 1 PR:**
 > 1. Create Netlify account and connect GitHub repo to enable branch preview deploys

@@ -2,43 +2,59 @@
 
 ## Current Work Focus
 
-- Contact form is fully migrated from Formspree to Google Sheets backend
-- Form includes honeypot spam protection and client-side validation
-- Google Apps Script webhook handles form submissions securely
+Phase 1 of the Jekyll → Eleventy migration is complete and the site is live on Netlify. Phase 2 (vanilla CSS) work is complete but stashed pending review.
 
 ## Recent Changes
 
-- **Contact Form Migration (Completed):**
-  - Migrated contact form from Formspree to Google Sheets
-  - Implemented Google Apps Script webhook for form submissions
-  - Added honeypot field (`website-url`) for bot spam protection
-  - Implemented comprehensive client-side form validation:
-    - Required field validation (name, email, message)
-    - Email format validation
-    - Phone number format validation (optional field)
-    - Message length validation (max 2000 characters)
-    - Real-time validation with visual feedback (red outlines, error messages)
-    - Validation errors only show after user interaction (touched fields)
-  - Secure webhook URL storage via GitHub Secrets and Jekyll data files
-  - Resolved CORS issues by using `text/plain` content type (bypasses preflight)
-  - Form submissions write directly to Google Sheet with timestamps
-- Updated Kickstand Club progress to show 105 bikes funded out of 120 goal (87.5% completion)
-- Established standardized feature branch workflow (see `.cursor/rules/dev-workflow.mdc`)
-- Refactored the homepage to feature a two-column 'Latest Stories' and donation section.
-- Removed drop shadow from the PayPal iframe for a cleaner look.
-- Rolled back previous UX changes to the Kickstarter/donation section.
-- General cleanup of navigation and section spacing.
+### Jekyll → Eleventy Migration (Phase 1 — Completed, March 2026)
+
+- Migrated from Jekyll + Gulp + Ruby to Eleventy v3 + npm scripts + Node 22
+- Replaced Firebase Hosting with Netlify (free plan); DNS switched on Namecheap
+- Added Playwright end-to-end tests (10 tests passing in CI)
+- Retained Tailwind CSS v4 via standalone PostCSS build step
+- Retained Google Sheets contact form backend and reCAPTCHA v2 (unchanged)
+- Key technical fixes required during migration:
+  - Added `addDataExtension("yml")` for Eleventy v3 YAML data support
+  - Added `postcss.config.js` (was missing, causing raw CSS passthrough)
+  - Added `liquidOptions: { dynamicPartials: false }` for Jekyll-compatible includes
+  - Wrapped RSS feed content in `<![CDATA[]]>` to fix XML validation error
+  - Replaced `_data/webhook_config.yml` + GitHub Actions injection with `_data/webhook_config.js` reading `process.env.WEBHOOK_URL` — works for both Netlify env vars and CI
+  - Fixed `404.html` permalink to include file extension (`/404.html`)
+  - Fixed `.txt` LLM mirror files: `layout: none` → `layout: false`, added `addExtension("txt", { key: "liquid" })`
+
+### Post-Migration Cleanup (March 2026)
+
+- Removed `_config.yml` (Jekyll config; data moved to `_data/site.js`)
+- Cleaned `.gitignore` (removed Jekyll/Firebase artifacts)
+- Cleaned `dependabot.yml` (removed stale Tailwind v2 ignore rules; reduced PR limit to 10)
+- Updated `README.md` to reflect Eleventy/Netlify stack
+- Added `test-results/` and `playwright-report/` to `.gitignore`
+
+### Phase 2 — Vanilla CSS (Stashed, Not Yet Merged)
+
+All three Phase 2 tasks are complete and stashed on `feature/phase-2-vanilla-css`:
+- **Task 010**: `src/style.css` written with CSS custom properties and all component styles
+- **Task 011**: All Tailwind classes replaced with semantic class names in all templates
+- **Task 012**: Tailwind/PostCSS deps removed, build pipeline simplified, Playwright visual snapshots added
+
+**To resume Phase 2:**
+```bash
+git checkout feature/phase-2-vanilla-css
+git stash pop
+# review, test, then commit
+```
+
+## Current State
+
+- Branch: `main` (with full Eleventy + Tailwind stack)
+- Hosting: Netlify (production), deploying from `main`
+- DNS: Namecheap → Netlify (A record `@` → `75.2.60.5`, CNAME `www` → `carbondalebikeproject.netlify.app`)
+- SSL: Netlify Let's Encrypt (auto-provisioned)
+- `WEBHOOK_URL` env var set in Netlify dashboard for contact form
 
 ## Next Steps
 
-- Monitor form submissions in Google Sheet
-- Continue refining homepage layout for clarity and engagement.
-- Review and update other key pages (programs, about) for consistency.
-- Ensure all donation and contact methods are clear and accessible.
-- Update memory bank as new patterns or decisions emerge.
-
-## Active Decisions and Considerations
-
-- Use inline SVGs for icons instead of external icon fonts for performance.
-- Prioritize accessibility and mobile responsiveness in all new changes.
-- Keep donation call-to-action visible but not overwhelming.
+- Confirm Netlify DNS verification completes and SSL is active on custom domain
+- Decide when to resume Phase 2 (vanilla CSS) from stash
+- Merge Phase 2 PR when ready → update `CLAUDE.md` to remove Tailwind references
+- Monitor contact form submissions in Google Sheet

@@ -3,3 +3,5 @@ _site
 .claude/
 assets/css
 node_modules
+test-results/
+playwright-report/

@@ -1,16 +1,5 @@
 _site
 .DS_Store
 .claude/
-.jekyll-cache
-.jekyll-metadata
 assets/css
 node_modules
-.bundle/
-vendor/
-.firebase
-.firebase/*
-.firebase-debug.log
-.firebase/hosting.X3NpdGU.cache
-firebase-debug.log
-git.backup
-.github/FIREBASE_CONFIG_BACKUP.md

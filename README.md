@@ -1,85 +1,101 @@
 # Carbondale Bike Project
 
-## Built on Jekyll Starter Tailwind
+Website for the [Carbondale Bike Project](https://carbondalebikeproject.org), a community bicycle shop and educational program in Carbondale, Colorado.
 
-A starter kit for using [Tailwind](https://tailwindcss.com) with [Jekyll](https://jekyllrb.com/) that includes:
+## Tech Stack
 
-- A barebones Jekyll starter theme
-- A Gulpfile that does the following:
-  - Compiles Tailwind
-  - Runs [Autoprefixer](https://github.com/postcss/autoprefixer)
-  - Minifies your CSS
-  - Compiles Jekyll
-  - Runs [Browsersync](https://www.browsersync.io/) for local development
-
-## What is Tailwind?
-
-> "Tailwind is a utility-first CSS framework for rapidly building custom user interfaces."
-> –[Tailwind](https://tailwindcss.com)
-
-## What is Jekyll?
-
-> "Jekyll is a simple, blog-aware, static site generator perfect for personal, project, or organization sites. Think of it like a file-based CMS, without all the complexity. Jekyll takes your content, renders Markdown and Liquid templates, and spits out a complete, static website ready to be served by Apache, Nginx or another web server."
-> –[Jekyll](https://jekyllrb.com/)
+- **[Eleventy (11ty) v3](https://www.11ty.dev/)** — static site generator with Liquid templates
+- **[Tailwind CSS v4](https://tailwindcss.com)** — utility-first CSS via PostCSS
+- **[Netlify](https://netlify.com)** — hosting and continuous deployment
+- **[Playwright](https://playwright.dev)** — end-to-end testing
+- **Node.js 22+**
 
 ## Requirements
 
-- [Bundler](http://bundler.io/)
-- [Jekyll](https://jekyllrb.com/)
-- [Node.js](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/) 22+
 - [npm](https://www.npmjs.com/)
-- [Ruby](https://www.ruby-lang.org/en/)
 
 ## Get started
 
-- `bundle install` to install Ruby gems
-- `npm ci` to install npm packages listed in `package-lock.json`
-- `npm run start` or `npm run dev` to compile the site with development settings and run BrowserSync
+```bash
+npm ci
+npm run dev
+```
 
-## Build your site
+This starts Eleventy with live reload and PostCSS watching for CSS changes simultaneously.
 
-- `npm run build:dev` to compile the site with development settings
-- `npm run build:production` or `npm run build` to compile the site for production
+## Build
 
-## Image Optimization
+```bash
+npm run build        # production build
+npm run build:dev    # development build
+```
 
-This site uses WebP images for better performance. The WebP versions of images should be generated locally and committed to the repository:
+Output goes to `_site/`.
 
-1. **Adding new images**:
+## Testing
 
-   - Add original JPG/PNG images to the `/assets/img/` directory
-   - Run `npm run webp` to generate WebP versions
-   - Commit both original and WebP versions to git
+```bash
+npm test
+```
 
-2. **Build scripts**:
-   - `npm run build:production` - Standard production build (used in CI/CD)
-   - `npm run build:production:webp` - Production build + WebP conversion (only use locally when adding new images)
+Runs Playwright end-to-end tests. Requires a production build first (`npm run build`), or the test suite will start a local server automatically via `webServer` config.
 
-This approach ensures that WebP conversion happens once locally rather than on every CI/CD build, improving build times and consistency.
+To install Playwright browsers on first run:
 
-## Deploy Production (Firebase)
+```bash
+npx playwright install --with-deps chromium
+```
 
-This site is currently hosted on Google's Firebase Hosting.
+## Project Structure
 
-https://firebase.google.com/docs/hosting/deploying
+```
+.
+├── _data/           # Global data files (site.js, nav.js, testimonials.yml, etc.)
+├── _includes/       # Liquid partials and layouts
+│   └── layouts/     # Page layout templates
+├── _site/           # Generated output (git-ignored)
+├── assets/          # Static assets (images, JS) — copied to _site as-is
+├── src/
+│   └── stylev3.css  # Tailwind CSS source (compiled to _site/assets/css/)
+├── tests/e2e/       # Playwright tests
+├── .eleventy.js     # Eleventy configuration
+├── postcss.config.js
+└── netlify.toml     # Netlify build configuration
+```
 
-`$> firebase serve --only hosting`
+## Content
 
-After you've tested the changes locally. To deploy:
+- Pages are Markdown or HTML files at the root level with Liquid front matter
+- Navigation is defined in `_data/nav.js`
+- Site metadata (title, description, URL, etc.) is in `_data/site.js`
+- Testimonials, images, and video data live in `_data/*.yml`
 
-`$> firebase deploy --only hosting`
+## Adding Images
 
-## Busting the Cache
+Images use the `{% image "path", "alt text" %}` shortcode which generates responsive WebP + JPEG at multiple sizes via `@11ty/eleventy-img`.
 
-Firebase Spark hosting caches the CSS file for 3600 seconds or 60 minutes. I've tried setting the Cache-Control header to no-cache. That doesn't work. The caching happens at the edge. I also tried appending a time stamp at build time to the style.css file but that didn't bust the cache either. Instead it's necessary to change the name of the css file in three places: rename the file to stylev{versionNumber}.css, then change the gulp file and the head.html include to reflect the new file name. This appears to be the only way to bust the cache.
+1. Add original images to `assets/img/`
+2. Use the `{% image %}` shortcode in templates
+3. Commit originals — responsive variants are generated at build time
+
+## Environment Variables
+
+The contact form submits to a Google Apps Script webhook. Set `WEBHOOK_URL` in your environment:
+
+- **Netlify**: Site configuration → Environment variables → `WEBHOOK_URL`
+- **Local dev**: `WEBHOOK_URL=https://... npm run dev`
+
+## Deployment
+
+Deploys automatically via Netlify on push to `main`. Build configuration is in `netlify.toml`.
+
+## External Services
+
+- **Contact form**: Google Apps Script webhook → Google Sheets
+- **Spam protection**: Google reCAPTCHA v2
+- **DNS**: Namecheap → Netlify
 
 ## License
 
-[MIT](https://github.com/taylorbryant/jekyll-starter-tailwind/blob/master/LICENSE.md)
-
-## How you can help
-
-Enjoying Jekyll Starter Tailwind and want to help? You can:
-
-- [Create an issue](https://github.com/taylorbryant/jekyll-starter-tailwind/issues/new) with some constructive criticism
-- [Submit a pull request](https://github.com/taylorbryant/jekyll-starter-tailwind/compare) with some improvements to the project
+[MIT](LICENSE.md)

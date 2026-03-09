@@ -6,14 +6,14 @@ status: "pending"
 created: "2026-03-06"
 skills: ["nodejs", "playwright"]
 ---
-# Remove Tailwind Dependencies and Add Playwright Visual Snapshots
+# Remove Tailwind Dependencies and Re-baseline Snapshots
 
 ## Objective
-Remove all Tailwind CSS and related dependencies from `package.json`, update the Eleventy config and build scripts for the final vanilla CSS pipeline, and extend the Playwright test suite with visual snapshot comparisons to protect against future CSS regressions.
+Remove all Tailwind CSS and related dependencies from `package.json`, update the Eleventy config and build scripts for the final vanilla CSS pipeline, and re-baseline the Playwright snapshots against the finished vanilla CSS site. By this point `snapshots.spec.js` and passing baseline PNGs already exist (from Task 10); this task replaces those baselines with final vanilla-CSS screenshots to serve as the permanent regression guard.
 
 ## Skills Required
 - `nodejs`: `package.json` dependency management, npm scripts simplification
-- `playwright`: Visual snapshot testing, `toHaveScreenshot()` usage
+- `playwright`: Re-baselining with `--update-snapshots` after Tailwind removal
 
 ## Acceptance Criteria
 - [ ] `package.json` devDependencies: `tailwindcss`, `@tailwindcss/postcss`, `@tailwindcss/forms`, `@tailwindcss/typography`, `prettier-plugin-tailwindcss`, `postcss`, `postcss-cli`, `concurrently` all removed
@@ -23,26 +23,25 @@ Remove all Tailwind CSS and related dependencies from `package.json`, update the
 - [ ] `package.json` scripts simplified: `build:production` changed to `eleventy` (no CSS build step); `dev` changed to `eleventy --serve` (no `concurrently`)
 - [ ] `npm run build:production` produces correct `_site/` with `style.css` in place
 - [ ] `npm run dev` works with Eleventy hot-reloading CSS changes via passthrough copy
-- [ ] Playwright visual snapshots added: each page photographed at 375px and 1280px widths; snapshots stored in `tests/e2e/__snapshots__/`
-- [ ] `npm test` passes including snapshot comparisons
+- [ ] Playwright snapshot baselines re-generated against the vanilla CSS site and committed to `tests/e2e/__snapshots__/`
+- [ ] `npm test` passes clean (all 10 snapshots green)
 - [ ] No Tailwind class names appear in any template (final grep verification)
 
 ## Technical Requirements
 - `npm uninstall tailwindcss @tailwindcss/postcss @tailwindcss/forms @tailwindcss/typography prettier-plugin-tailwindcss postcss postcss-cli concurrently`
 - Eleventy's passthrough copy handles CSS: `addPassthroughCopy({ "src/style.css": "assets/css/style.css" })`
-- `eleventy --serve` (Eleventy's built-in dev server) watches passthrough-copied files for changes via `addWatchTarget`
-- Visual snapshot tests use `await expect(page).toHaveScreenshot('page-name-mobile.png')` — run once to generate baselines, then commit the `.png` files to the repo
-- Snapshots committed to `tests/e2e/__snapshots__/` (include in `.gitignore` exclusion list if currently ignored; they must be committed)
+- `eleventy --serve` watches passthrough-copied files for changes via `addWatchTarget`
+- Re-baseline by running `npx playwright test tests/e2e/snapshots.spec.js --update-snapshots` — this overwrites the Tailwind PNGs with vanilla CSS PNGs; commit the updated files
+- Snapshots must remain committed to `tests/e2e/__snapshots__/` (not gitignored)
 
 ## Input Dependencies
-- Task 11: All Tailwind classes replaced in templates; `src/style.css` linked in `head.html`
+- Task 11: All Tailwind classes replaced in templates; `src/style.css` linked in `head.html`; snapshot tests passing against Tailwind baselines
 
 ## Output Artifacts
 - Updated `package.json` — Tailwind deps removed, scripts simplified
 - Updated `.eleventy.js` — CSS passthrough copy, updated watch target
 - Deleted `tailwind.config.js`, `src/stylev3.css`
-- `tests/e2e/snapshots.spec.js` — visual snapshot tests
-- `tests/e2e/__snapshots__/` — committed baseline PNG files
+- Updated `tests/e2e/__snapshots__/` — 10 re-baselined PNG files (vanilla CSS reference, permanent)
 
 ## Implementation Notes
 
@@ -81,44 +80,23 @@ eleventyConfig.addWatchTarget("src/style.css");
 }
 ```
 
-**Step 4: Add Playwright snapshot tests**
-
-Create `tests/e2e/snapshots.spec.js`:
-```javascript
-const { test, expect } = require('@playwright/test');
-
-const pages = ['/', '/about/', '/programs/', '/how-can-i-help/', '/contact/'];
-const viewports = [
-  { name: 'mobile', width: 375, height: 812 },
-  { name: 'desktop', width: 1280, height: 900 }
-];
-
-for (const pageUrl of pages) {
-  for (const viewport of viewports) {
-    const pageName = pageUrl.replace(/\//g, '-').replace(/^-|-$/g, '') || 'home';
-    test(`${pageUrl} at ${viewport.name} matches snapshot`, async ({ page }) => {
-      await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      await page.goto(pageUrl);
-      await page.waitForLoadState('networkidle');
-      await expect(page).toHaveScreenshot(`${pageName}-${viewport.name}.png`, {
-        fullPage: true,
-        maxDiffPixelRatio: 0.02 // Allow 2% pixel difference
-      });
-    });
-  }
-}
-```
-
-**Step 5: Generate baseline snapshots**
+**Step 4: Re-baseline snapshots against the vanilla CSS site**
 ```bash
-# Run with --update-snapshots flag to generate initial baselines
+# Start the vanilla CSS dev server
+npm run dev   # localhost:8080, no Tailwind
+
+# Re-generate baselines — overwrites the Tailwind PNGs with vanilla CSS PNGs
 npx playwright test tests/e2e/snapshots.spec.js --update-snapshots
-# Commit the generated .png files
+
+# Confirm all 10 pass clean
+npx playwright test tests/e2e/snapshots.spec.js
+
+# Commit the updated baselines
 git add tests/e2e/__snapshots__/
-git commit -m "test: add Playwright visual snapshot baselines"
+git commit -m "test: re-baseline Playwright snapshots to vanilla CSS"
 ```
 
-**Step 6: Final verification**
+**Step 5: Final verification**
 ```bash
 # Verify no Tailwind classes remain
 grep -rn "class=\"" _includes/ *.html *.md --include="*.html" --include="*.md" \
@@ -126,9 +104,9 @@ grep -rn "class=\"" _includes/ *.html *.md --include="*.html" --include="*.md" \
   | grep -v "node_modules" | grep -v "_site"
 # Should return no results
 
-# Full test run
+# Full test suite
 npm test
 ```
 
-**Note on snapshot stability**: Snapshots can be brittle if external resources (fonts, reCAPTCHA, PayPal widget) load differently between runs. Use `--mask` to mask dynamic regions or `page.waitForLoadState('networkidle')` to stabilize. Set `maxDiffPixelRatio: 0.02` to allow minor rendering differences.
+**Why re-baseline instead of keeping the Tailwind PNGs**: After Tailwind is removed the `style.css` pipeline is the permanent foundation. The vanilla CSS snapshots are the new ground truth for future regression detection. The Tailwind baselines captured in Task 10 served their purpose (validating fidelity in Task 11) and are now superseded.
 </details>

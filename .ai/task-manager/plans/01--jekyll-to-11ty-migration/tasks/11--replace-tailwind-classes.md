@@ -19,16 +19,17 @@ Replace every Tailwind utility class across all HTML templates, layouts, and inc
 - [ ] All Tailwind utility classes removed from every HTML file: layouts, includes, content pages
 - [ ] Each removed class replaced with an equivalent semantic class name that matches a rule in `src/style.css`
 - [ ] `_includes/head.html` updated: CSS link changed from `stylev3.css` to `style.css`; preload link updated
-- [ ] Visual output is identical to the Phase 1 (Tailwind) site at all breakpoints
 - [ ] No `bg-teal-*`, `text-gray-*`, `flex`, `grid`, `px-*`, `py-*`, `sm:`, `md:`, `lg:`, or other Tailwind utility patterns remain in any template (verify with grep)
 - [ ] `{% image %}` shortcode's hardcoded Tailwind class string updated to use semantic class
 - [ ] `30-contact.html`'s JavaScript form class manipulation (`field.classList.add("ring-red-500")` etc.) updated to use semantic class names
+- [ ] Playwright snapshot tests pass against the Task 10 baselines with ≤2% pixel difference across all 10 snapshots
 
 ## Technical Requirements
 - Work file-by-file through all `_includes/`, `_includes/layouts/`, and content pages
 - The form validation JavaScript in `30-contact.html` adds/removes CSS classes dynamically — these Tailwind class names (`ring-red-500`, `ring-gray-300`) must be replaced with semantic equivalents that match CSS rules in `src/style.css`
 - After completing all template changes, run `grep -rn "bg-\|text-\|flex\|grid-\|px-\|py-\|sm:\|md:\|lg:\|xl:\|border-\|rounded\|shadow\|ring-\|hover:" --include="*.html" --include="*.md" _includes/ _includes/layouts/ *.html` to verify no Tailwind classes remain
 - Inline `style=""` attributes (e.g., on the honeypot field) are NOT Tailwind and should be left as-is
+- **Fidelity check**: Run `npx playwright test tests/e2e/snapshots.spec.js` after switching the CSS link — snapshot diffs against the Task 10 baselines are the definitive pass/fail signal; fix any failing pages before proceeding
 
 ## Input Dependencies
 - Task 10: `src/style.css` complete with all semantic CSS rules defined
@@ -91,5 +92,5 @@ grep -rn "class=\".*\(bg-\|text-\|flex \|px-\|py-\|sm:\|md:\|lg:\|border-\|round
   _includes/ *.html *.md --include="*.html" --include="*.md"
 ```
 
-**Important**: Build and visually check each page at mobile (375px) and desktop (1280px) widths after completing template changes. The Playwright tests from Task 9 will catch functional regressions but won't catch visual differences until Task 12's snapshot tests are run.
+**Fidelity verification**: After switching the CSS `<link>` tag to `style.css`, run `npx playwright test tests/e2e/snapshots.spec.js`. The baseline PNGs from Task 10 are the ground truth — any diff above 2% means the vanilla CSS doesn't match the Tailwind output. Fix CSS rules (don't update baselines) until all 10 snapshots pass.
 </details>

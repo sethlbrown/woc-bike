@@ -4,17 +4,27 @@ group: "vanilla-css"
 dependencies: [9]
 status: "pending"
 created: "2026-03-06"
-skills: ["css"]
+skills: ["css", "playwright"]
 ---
 # Write Vanilla CSS with Custom Properties
 
 ## Objective
-Create `src/style.css` — a hand-written vanilla CSS file that replicates the visual design of the Tailwind CSS site using CSS custom properties. This is the foundation for Phase 2: the CSS must be complete before Tailwind classes are removed from templates (Task 11).
+Before touching any CSS or templates, capture Playwright visual baseline screenshots of the current Tailwind site. These screenshots are the high-fidelity reference that vanilla CSS output (Tasks 11–12) must match. Once baselines are committed, create `src/style.css` — a hand-written vanilla CSS file that replicates the visual design using CSS custom properties.
 
 ## Skills Required
+- `playwright`: Visual baseline capture using `toHaveScreenshot()` / `--update-snapshots`
 - `css`: CSS custom properties, flexbox, CSS Grid, `@media` queries, responsive design patterns
 
 ## Acceptance Criteria
+
+### Phase A: Baseline Screenshots
+- [ ] `tests/e2e/snapshots.spec.js` created with full-page screenshots of all 5 pages at 375px and 1280px widths
+- [ ] Dev server confirmed running with current Tailwind CSS (`npm run dev`) before snapshot capture
+- [ ] Snapshots generated with `--update-snapshots` against the live Tailwind site
+- [ ] 10 baseline PNG files committed to `tests/e2e/__snapshots__/` (5 pages × 2 viewports)
+- [ ] `npm test` passes clean with all snapshots matching
+
+### Phase B: Vanilla CSS
 - [ ] `src/style.css` created with all CSS custom properties (`:root`) from `src/stylev3.css`'s `@theme` block
 - [ ] Color palette custom properties defined: `--color-teal-100` through `--color-teal-700`, `--color-yellow-800`, `--color-green-800`, `--color-gray-100` through `--color-gray-900`
 - [ ] Spacing scale defined as custom properties: `--spacing-1` (4.5px) through `--spacing-64` (288px)
@@ -28,16 +38,20 @@ Create `src/style.css` — a hand-written vanilla CSS file that replicates the v
 - [ ] The three social icon hover CSS rules from current `src/stylev3.css` transferred verbatim
 
 ## Technical Requirements
-- Begin by grepping all `class="..."` attributes across all HTML files to produce a complete Tailwind class inventory before writing CSS: `grep -h 'class="' **/*.html _includes/**/*.html _layouts/**/*.html 2>/dev/null | sort -u`
+- **Baselines must be captured before any CSS or template changes** — the Tailwind site is the source of truth
+- Snapshots use `fullPage: true` and `maxDiffPixelRatio: 0.02` to allow minor rendering variance
+- Mask any dynamic/external regions (PayPal widget, reCAPTCHA badge) to prevent flaky snapshots
+- Begin CSS authoring by grepping all `class="..."` attributes to produce a complete Tailwind class inventory: `grep -rh 'class="' --include="*.html" _includes/ _includes/layouts/ *.html | sort -u`
 - Use semantic class names, not Tailwind utility names
 - Custom property names follow the existing `--color-*`, `--spacing-*` pattern from `src/stylev3.css`
 - This task produces CSS only — no template changes yet (Task 11 does that)
-- The CSS file is passthrough-copied by Eleventy once Tailwind is removed (Task 12 updates `.eleventy.js`)
 
 ## Input Dependencies
 - Task 9: Phase 1 complete — the site is working and visual design is confirmed; the complete set of UI components is known
 
 ## Output Artifacts
+- `tests/e2e/snapshots.spec.js` — visual snapshot test file
+- `tests/e2e/__snapshots__/` — 10 committed baseline PNG files (Tailwind reference)
 - `src/style.css` — complete vanilla CSS file
 - (No template changes in this task)
 
@@ -46,12 +60,79 @@ Create `src/style.css` — a hand-written vanilla CSS file that replicates the v
 <details>
 <summary>Detailed implementation guide</summary>
 
+### Phase A: Capture Tailwind Baseline Screenshots
+
+**Step 1: Create snapshot test file**
+
+Create `tests/e2e/snapshots.spec.js`:
+```javascript
+const { test, expect } = require('@playwright/test');
+
+const pages = [
+  { url: '/', name: 'home' },
+  { url: '/about/', name: 'about' },
+  { url: '/programs/', name: 'programs' },
+  { url: '/how-can-i-help/', name: 'how-can-i-help' },
+  { url: '/contact/', name: 'contact' },
+];
+
+const viewports = [
+  { name: 'mobile', width: 375, height: 812 },
+  { name: 'desktop', width: 1280, height: 900 },
+];
+
+for (const p of pages) {
+  for (const vp of viewports) {
+    test(`${p.name} at ${vp.name} matches snapshot`, async ({ page }) => {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.goto(p.url);
+      await page.waitForLoadState('networkidle');
+      await expect(page).toHaveScreenshot(`${p.name}-${vp.name}.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.02,
+        mask: [
+          // Mask external widgets that render inconsistently
+          page.locator('.paypal-campaign-card, iframe[src*="paypal"]'),
+          page.locator('.g-recaptcha, [data-sitekey]'),
+        ],
+      });
+    });
+  }
+}
+```
+
+**Step 2: Generate baselines against the current Tailwind site**
+```bash
+# Confirm Tailwind dev server is running
+npm run dev   # must be up at localhost:8080
+
+# Generate initial baselines (--update-snapshots writes the PNGs)
+npx playwright test tests/e2e/snapshots.spec.js --update-snapshots
+
+# Verify 10 files were created
+ls tests/e2e/__snapshots__/
+# home-mobile.png, home-desktop.png, about-mobile.png, ... (10 total)
+```
+
+**Step 3: Verify and commit baselines**
+```bash
+# Run once more without --update-snapshots to confirm they pass clean
+npx playwright test tests/e2e/snapshots.spec.js
+
+# Commit baselines — these are the Tailwind reference
+git add tests/e2e/snapshots.spec.js tests/e2e/__snapshots__/
+git commit -m "test: add Playwright visual baselines from Tailwind site"
+```
+
+---
+
+### Phase B: Write Vanilla CSS
+
 **Step 1: Inventory Tailwind classes**
 ```bash
-# Get all class attributes across all HTML/Liquid templates
-grep -rh 'class="' . --include="*.html" --include="*.md" \
-  --exclude-dir=node_modules --exclude-dir=_site \
+grep -rh 'class="' --include="*.html" _includes/ _includes/layouts/ *.html \
   | grep -oP 'class="[^"]*"' | sort -u > /tmp/class-inventory.txt
+cat /tmp/class-inventory.txt
 ```
 
 Use this list to identify every Tailwind utility in use and map it to a semantic CSS rule.
@@ -124,7 +205,7 @@ a.hover\:text-blue-500:hover svg { color: #3b82f6; }
 a.hover\:text-red-500:hover svg { color: #ef4444; }
 a.hover\:text-pink-600:hover svg { color: #db2777; }
 ```
-Note: These use escaped Tailwind class selectors. In Phase 2 (Task 11), these will be replaced with semantic class selectors. For now, they're included as-is for accuracy.
+Note: These use escaped Tailwind class selectors. In Phase 2 (Task 11), these will be replaced with semantic class selectors.
 
 **The CSS does not need to be applied yet** — Task 11 will replace Tailwind classes in templates and update the `<link>` tag to reference `style.css`. This task only creates the CSS file.
 </details>

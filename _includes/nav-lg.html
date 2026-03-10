@@ -1,16 +1,16 @@
 <!-- navigation on larger view ports -->
-<div class="hidden lg:block lg:ml-6 grow">
-  <div class="ml-4 flex items-center h-16">
+<div class="hidden grow lg:ml-6 lg:block">
+  <div class="ml-4 flex h-16 items-center">
     {% for item in nav %}
     <div
-      class="flex items-center h-16 border-l border-gray-200{% if forloop.last %} border-r border-gray-200{% endif %}"
+      class="border-gray-200{% if forloop.last %} border-gray-200{% endif %} flex h-16 items-center border-r border-l"
     >
       <div
-        class="w-full h-full flex items-center border-t-4 border-transparent border-solid hover:border-teal-400 hover:bg-gray-200 transition duration-150 ease-in-out"
+        class="flex h-full w-full items-center border-t-4 border-solid border-transparent transition duration-150 ease-in-out hover:border-teal-400 hover:bg-gray-200"
       >
         <a
           href="{{ item.url }}"
-          class="px-4 text-base font-bold leading-5 xl:text-lg text-gray-800 focus:text-black focus:outline-none {% if item.url == page.url %}active{% endif %}"
+          class="{% if item.url == page.url %}active{% endif %} px-4 text-base leading-5 font-bold text-gray-800 focus:text-black focus:outline-none xl:text-lg"
         >
           {{ item.title }}</a
         >

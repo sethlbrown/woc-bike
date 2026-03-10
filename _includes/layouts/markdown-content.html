@@ -3,22 +3,12 @@ layout: default
 hide_common_sections: true
 ---
 
-<article class="max-w-7xl
-  px-2
-  sm:px-4
-  lg:px-8
-  xl:px-20
-  mt-4
-  lg:mt-6
-  mx-auto
-  leading-9
-  text-gray-800
-  text-xl
-  prose-xl">
+<article
+  class="mx-auto prose-xl mt-4 max-w-7xl px-2 text-xl leading-9 text-gray-800 sm:px-4 lg:mt-6 lg:px-8 xl:px-20"
+>
   {% if title == "About" %}
   <h2>Mission:</h2>
   <p class="font-semibold">{{ site.description }}</p>
-  {% endif %}
-  {{ content }}
+  {% endif %} {{ content }}
 </article>
 <div class="mt-16 md:mt-24"></div>

@@ -1,0 +1,16 @@
+assets/
+_site/
+node_modules/
+*.config.js
+*.config.cjs
+package.json
+package-lock.json
+netlify.toml
+postcss.config.js
+tailwind.config.js
+.ai/
+memory-bank/
+docs/
+tests/
+src/stylev3.css
+feed.liquid

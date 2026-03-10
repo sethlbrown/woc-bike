@@ -1,85 +1,120 @@
-{% assign banner_parts = banner | split: '.' %}
-{% assign banner_extension = banner_parts | last %}
-{% assign banner_without_ext = banner | split: '.' | reverse | shift | reverse | join: '.' %}
+{% assign banner_parts = banner | split: '.' %} {% assign banner_extension =
+banner_parts | last %} {% assign banner_without_ext = banner | split: '.' |
+reverse | shift | reverse | join: '.' %}
 
 <style>
-    /* Base banner image */
+  /* Base banner image */
+  #banner {
+    background-image: linear-gradient(
+        90.53deg,
+        #090909 0.32%,
+        rgba(0, 0, 0, 0.3) 89.66%
+      ),
+      url("/assets/img/{{ banner }}");
+  }
+
+  /* WebP support styling */
+  @media (min-width: 976px) {
+    #banner.webp-support {
+      background-image: linear-gradient(
+          90.53deg,
+          #090909 0.32%,
+          rgba(0, 0, 0, 0.3) 89.66%
+        ),
+        url("/assets/img/{{ banner_without_ext }}.webp");
+    }
+  }
+
+  @media (max-width: 480px) {
     #banner {
-        background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-        url('/assets/img/{{ banner }}');
+      background-image: linear-gradient(
+          90.53deg,
+          #090909 0.32%,
+          rgba(0, 0, 0, 0.3) 89.66%
+        ),
+        url("/assets/img/600/{{ banner }}");
     }
 
-    /* WebP support styling */
-    @media (min-width: 976px) {
-        #banner.webp-support {
-            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/{{ banner_without_ext }}.webp');
-        }
+    #banner.webp-support {
+      background-image: linear-gradient(
+          90.53deg,
+          #090909 0.32%,
+          rgba(0, 0, 0, 0.3) 89.66%
+        ),
+        url("/assets/img/600/{{ banner_without_ext }}.webp");
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 800px) {
+    #banner {
+      background-image: linear-gradient(
+          90.53deg,
+          #090909 0.32%,
+          rgba(0, 0, 0, 0.3) 89.66%
+        ),
+        url("/assets/img/800/{{ banner }}");
     }
 
-    @media (max-width: 480px) {
-        #banner {
-            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/600/{{ banner }}');
-        }
+    #banner.webp-support {
+      background-image: linear-gradient(
+          90.53deg,
+          #090909 0.32%,
+          rgba(0, 0, 0, 0.3) 89.66%
+        ),
+        url("/assets/img/800/{{ banner_without_ext }}.webp");
+    }
+  }
 
-        #banner.webp-support {
-            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/600/{{ banner_without_ext }}.webp');
-        }
+  @media (min-width: 801px) and (max-width: 975px) {
+    #banner {
+      background-image: linear-gradient(
+          90.53deg,
+          #090909 0.32%,
+          rgba(0, 0, 0, 0.3) 89.66%
+        ),
+        url("/assets/img/975/{{ banner }}");
     }
 
-    @media (min-width: 481px) and (max-width: 800px) {
-        #banner {
-            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/800/{{ banner }}');
-        }
-
-        #banner.webp-support {
-            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/800/{{ banner_without_ext }}.webp');
-        }
+    #banner.webp-support {
+      background-image: linear-gradient(
+          90.53deg,
+          #090909 0.32%,
+          rgba(0, 0, 0, 0.3) 89.66%
+        ),
+        url("/assets/img/975/{{ banner_without_ext }}.webp");
     }
-
-    @media (min-width: 801px) and (max-width: 975px) {
-        #banner {
-            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/975/{{ banner }}');
-        }
-
-        #banner.webp-support {
-            background-image: linear-gradient(90.53deg, #090909 0.32%, rgba(0, 0, 0, 0.3) 89.66%),
-            url('/assets/img/975/{{ banner_without_ext }}.webp');
-        }
-    }
+  }
 </style>
 
 <!-- Script to detect WebP support and add class -->
 <script>
-    // Feature detection for WebP
-    function checkWebpSupport() {
-        var elem = document.createElement('canvas');
-        if (!!(elem.getContext && elem.getContext('2d'))) {
-            return elem.toDataURL('image/webp').indexOf('data:image/webp') == 0;
-        }
-        return false;
+  // Feature detection for WebP
+  function checkWebpSupport() {
+    var elem = document.createElement("canvas");
+    if (!!(elem.getContext && elem.getContext("2d"))) {
+      return elem.toDataURL("image/webp").indexOf("data:image/webp") == 0;
     }
+    return false;
+  }
 
-    // Apply WebP class if supported
-    document.addEventListener('DOMContentLoaded', function() {
-        if (checkWebpSupport()) {
-            var banner = document.getElementById('banner');
-            if (banner) {
-                banner.classList.add('webp-support');
-            }
-        }
-    });
+  // Apply WebP class if supported
+  document.addEventListener("DOMContentLoaded", function () {
+    if (checkWebpSupport()) {
+      var banner = document.getElementById("banner");
+      if (banner) {
+        banner.classList.add("webp-support");
+      }
+    }
+  });
 </script>
 
-<div id="banner" class="bg-cover bg-center bg-no-repeat h-64 items-center flex justify-start mx-auto max-w-7xl">
-    <div class="h-18 font-bold px-20 text-white text-4xl sm:text-5xl">
-        <div class="border-b border-solid border-white">
-            <h1>{{ title }}</h1>
-        </div>
+<div
+  id="banner"
+  class="mx-auto flex h-64 max-w-7xl items-center justify-start bg-cover bg-center bg-no-repeat"
+>
+  <div class="h-18 px-20 text-4xl font-bold text-white sm:text-5xl">
+    <div class="border-b border-solid border-white">
+      <h1>{{ title }}</h1>
     </div>
+  </div>
 </div>

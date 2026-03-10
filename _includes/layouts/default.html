@@ -3,14 +3,14 @@
   {% include head.html %}
 
   <body>
-    {% include hat.html %} {% include header.html %} {% if banner_type ==
-    "home" %} {% include home-banner.html %} {% elsif banner == false %}
+    {% include hat.html %} {% include header.html %} {% if banner_type == "home"
+    %} {% include home-banner.html %} {% elsif banner == false %}
     <!-- No banner -->
     {% else %} {% include banner.html %} {% endif %}
 
     <main id="main">
-      {{ content }} {% if title == "Home" %} {% include city-market.html %}
-      {% include donate.html %} {% include testimonials.html %} {% endif %}
+      {{ content }} {% if title == "Home" %} {% include city-market.html %} {%
+      include donate.html %} {% include testimonials.html %} {% endif %}
     </main>
 
     {% include footer.html %}

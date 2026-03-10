@@ -26,7 +26,8 @@
     "dev": "mkdir -p _site/assets/css && concurrently \"postcss src/stylev3.css -o _site/assets/css/stylev3.css --watch\" \"eleventy --serve\"",
     "start": "npm run dev",
     "test": "playwright test",
-    "webp": "node src/js/utils/convert-to-webp.js"
+    "webp": "node src/js/utils/convert-to-webp.js",
+    "format": "prettier --write \"_includes/**/*.html\" \"_includes/layouts/**/*.html\" \"*.html\" \"*.md\""
   },
   "repository": {
     "type": "git",

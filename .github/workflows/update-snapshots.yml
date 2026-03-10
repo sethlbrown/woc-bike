@@ -1,0 +1,42 @@
+name: Update Snapshot Baselines
+on:
+  workflow_dispatch:
+
+jobs:
+  update_snapshots:
+    name: Capture Linux Baselines
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build:production
+        env:
+          NODE_ENV: production
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Update snapshot baselines
+        run: npx playwright test tests/e2e/snapshots.spec.js --update-snapshots
+
+      - name: Commit updated baselines
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/e2e/__snapshots__/
+          git diff --staged --quiet || git commit -m "test: update Playwright snapshot baselines (Linux)"
+          git push

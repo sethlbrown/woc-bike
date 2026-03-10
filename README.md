@@ -47,6 +47,15 @@ To install Playwright browsers on first run:
 npx playwright install --with-deps chromium
 ```
 
+The test suite includes two types of tests:
+
+- **Functional tests** (`pages.spec.js`, `navigation.spec.js`, `contact.spec.js`) — safe to run locally on any platform
+- **Visual regression snapshots** (`snapshots.spec.js`) — 15 screenshots across 5 pages × 3 viewports; baselines are Linux-rendered and live in `tests/e2e/__snapshots__/`
+
+**Note:** Snapshot tests will fail locally on macOS due to font rendering differences between macOS and Linux. This is expected — snapshot testing is a CI concern. Use CI to catch visual regressions.
+
+**After an intentional visual change**, re-capture baselines on Linux by triggering the **"Update Snapshot Baselines"** workflow in GitHub Actions (Actions → Update Snapshot Baselines → Run workflow). This commits Linux-rendered PNGs back to the repo so CI passes. Do not run `--update-snapshots` locally — macOS baselines will fail in CI.
+
 ## Project Structure
 
 ```

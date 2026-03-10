@@ -155,7 +155,7 @@ For each new feature:
 4. `git checkout -b feature-[description]` (e.g., `feature-google-sheets-integration`)
 5. Make minimal, focused changes
 6. Verify build again before committing
-7. If your change is intentionally visual, update snapshot baselines first: `npx playwright test tests/e2e/snapshots.spec.js --update-snapshots`, then commit the updated PNGs alongside your code change.
+7. If your change is intentionally visual, push the code change then trigger the **"Update Snapshot Baselines"** workflow in GitHub Actions (Actions → Update Snapshot Baselines → Run workflow). This re-captures baselines on Linux to match the CI environment. Do not run `--update-snapshots` locally — macOS-rendered PNGs will fail in CI.
 8. Push and open PR; GitHub Actions validates build/deploy
 9. Merge when green; verify production
 

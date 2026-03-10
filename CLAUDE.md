@@ -1,9 +1,11 @@
 # CLAUDE.md - Working with Carbondale Bike Project Website
 
 ## Project Overview
+
 This is the website for the Carbondale Bike Project (CBP), a community bicycle shop and educational program in Carbondale, Colorado. The site supports CBP's mission to increase individual, community, environmental, and global health through sustainable cycling programs.
 
 ## Tech Stack & Architecture
+
 - **Jekyll**: Static site generator with Liquid templates and Markdown content
 - **Tailwind CSS v4.1.13**: Utility-first CSS framework for styling (upgraded Sept 2024)
 - **Gulp**: Asset pipeline (compiles Tailwind, minifies CSS, runs Jekyll, serves with Browsersync)
@@ -15,12 +17,15 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - **Google reCAPTCHA v3**: Spam protection on contact form
 
 ## Build Commands
+
 - `npm run build:production` - Production build
 - `npm run build:dev` - Development build
 - `npm run dev` - Start development server with browser-sync
 - `npm run start` - Alias for dev command
+- `npm run format` - Sort Tailwind classes in all HTML templates via Prettier
 
 ## Development Setup
+
 1. Install Ruby, Bundler, Node.js, and npm
 2. `bundle install` - Install Ruby gems
 3. `npm ci` - Install npm packages
@@ -28,6 +33,7 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 5. `npm run build:production` - Production build
 
 ## Project Structure
+
 - Jekyll-based static site with Tailwind CSS
 - Content in Markdown/HTML files at root level
 - Templates in `_includes` and `_layouts` directories
@@ -35,6 +41,7 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - `memory-bank/` - Project context and documentation
 
 ## Style Guidelines
+
 - Use Tailwind CSS for styling with utility-first approach
 - Maintain responsive design patterns (mobile-first)
 - Follow consistent HTML structure in templates
@@ -43,7 +50,17 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - Maintain clean, semantic HTML markup
 - Optimize images (WebP versions committed to repo)
 
+## Prettier / Class Sorting
+
+`prettier-plugin-tailwindcss` is configured in `.prettierrc` to sort Tailwind class attributes into the official Tailwind sort order across all HTML templates.
+
+- Config: `.prettierrc` declares the plugin; `tailwindStylesheet` points to `src/stylev3.css`
+- Scope: `.prettierignore` limits formatting to HTML template files only
+- Run: `npm run format` — sorts classes in `_includes/**/*.html` and root-level pages
+- Not wired into the build — run manually before committing template changes
+
 ## Key Features & Components
+
 - **Donation Integration**: PayPal embeddable campaign card and Venmo links
 - **Progress Tracking**: Visual progress bar for Kickstand Club (120-bike goal; currently 105 bikes funded, 87.5%)
 - **Stories Section**: Latest news and community stories (two-column layout alongside donation section)
@@ -52,6 +69,7 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - **Responsive Design**: Mobile-friendly layouts with Tailwind utilities
 
 ## Working with Content
+
 - Edit Markdown files for content changes
 - Use YAML front matter for page metadata
 - Config settings in `_config.yml`
@@ -59,12 +77,14 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - Update donation progress in relevant data files
 
 ## Technical Constraints
+
 - Static site: No server-side code or dynamic backend
 - All images must be optimized (WebP versions generated/committed)
 - Cache busting for CSS requires manual filename/version changes
 - Accessibility and performance are high priorities
 
 ## Current Focus Areas
+
 - Homepage layout and UX improvements
 - Donation integration styling and functionality
 - Responsive design and accessibility enhancements
@@ -96,11 +116,34 @@ Form located in `30-contact.html`.
 - **Accessibility**: Color contrast, keyboard navigation, semantic HTML.
 
 ### Progress Bar Component (Kickstand Club)
+
 - Background track: `teal-900`
 - White progress indicator
 - Crosshair marker that moves with progress
 - Percentage-based width: `(current / total) * 100`
 - Accessible text display of current progress
+
+## Playwright Tests
+
+End-to-end tests live in `tests/e2e/` and cover core user flows:
+
+- `pages.spec.js` — verifies all pages load without errors
+- `navigation.spec.js` — tests header and footer navigation links
+- `contact.spec.js` — validates contact form fields, validation, and submission
+
+### Visual Regression Snapshots
+
+15 snapshot tests cover all 5 pages at mobile (375px), tablet (768px), and desktop (1280px). Baseline PNGs live in `tests/e2e/__snapshots__/` and are committed to the repo. Snapshots run automatically in CI on every push to `main`.
+
+**To update baselines after an intentional visual change:**
+
+1. Make the visual change
+2. `npx playwright test tests/e2e/snapshots.spec.js --update-snapshots`
+3. Review the updated PNGs to confirm they match intent
+4. Commit the updated PNGs alongside the code change
+
+**If CI fails on font rendering (macOS vs Linux variance):**
+Re-run `--update-snapshots` on a Linux machine (or via `workflow_dispatch`) and commit the Linux-rendered PNGs as a one-time fix.
 
 ## Feature Branch Workflow
 
@@ -112,8 +155,9 @@ For each new feature:
 4. `git checkout -b feature-[description]` (e.g., `feature-google-sheets-integration`)
 5. Make minimal, focused changes
 6. Verify build again before committing
-7. Push and open PR; GitHub Actions validates build/deploy
-8. Merge when green; verify production
+7. If your change is intentionally visual, update snapshot baselines first: `npx playwright test tests/e2e/snapshots.spec.js --update-snapshots`, then commit the updated PNGs alongside your code change.
+8. Push and open PR; GitHub Actions validates build/deploy
+9. Merge when green; verify production
 
 One feature per branch. Keep changes focused.
 
@@ -122,12 +166,14 @@ One feature per branch. Keep changes focused.
 **Fathom Analytics was removed on 2025-09-16.** No client-side analytics are currently active.
 
 ### Previous Fathom implementation (for reference)
+
 - Loader in `_includes/head.html`: `<script src="https://cdn.usefathom.com/script.js" data-site="SZUUKHTD" defer></script>`
 - Event calls:
   - Donate clicks: `onclick="fathom.trackEvent('donate button');"` in `_includes/donate-button.html` and `00-index.html`
   - Form submission: `fathom.trackEvent("contact form submitted");` in `30-contact.html` success paths
 
 ### To re-enable Fathom
+
 1. Add loader (+ optional `<link rel="dns-prefetch" href="https://cdn.usefathom.com">`) to `_includes/head.html`
 2. Add `onclick="fathom.trackEvent('donate button');"` to donate CTAs in `_includes/donate-button.html` and `00-index.html`
 3. Add `fathom.trackEvent("contact form submitted");` in `then(...)` success branches in `30-contact.html`
@@ -147,6 +193,7 @@ One feature per branch. Keep changes focused.
 ### ✅ Successfully Upgraded from v3.4.17 to v4.1.13
 
 **Performance Improvements Achieved:**
+
 - Development builds: 73% faster (2.55s → 0.70s)
 - Production builds: 15% faster (1.56s → 1.32s)
 - CSS processing: 49% faster (378ms → 191ms)
@@ -154,23 +201,27 @@ One feature per branch. Keep changes focused.
 ### Key Lessons Learned
 
 **1. Always Use Official Migration Tools First**
+
 - ❌ **DON'T**: Attempt manual configuration migration
 - ✅ **DO**: Use `npx @tailwindcss/upgrade` for version upgrades
 - The official tool handles complex PostCSS integration, template updates, and configuration migration automatically
 
 **2. Tailwind v4 Architecture Changes**
+
 - **Configuration**: Moved from JavaScript (`tailwind.config.js`) to CSS-based (`@theme` blocks)
 - **CSS Imports**: Replaced `@tailwind` directives with `@import "tailwindcss"` + `@plugin` syntax
 - **PostCSS Integration**: Uses separate `@tailwindcss/postcss` package (no longer bundled)
 - **Content Detection**: Improved automatic scanning, less manual configuration needed
 
 **3. Breaking Changes to Watch For**
+
 - `border-opacity-*` utilities deprecated → use `border-transparent` or color transparency
 - Some utility class renames (e.g., `flex-grow` → `grow`, `flex-shrink` → `shrink`)
 - PostCSS-import incompatibility → remove from configuration
 - Browser support: Requires Safari 16.4+, Chrome 111+, Firefox 128+
 
 **4. Migration Strategy That Worked**
+
 1. Create dedicated upgrade branch (`upgrade/tailwind-v4`)
 2. Commit clean snapshot before starting
 3. Run official upgrade tool: `npx @tailwindcss/upgrade`
@@ -179,12 +230,14 @@ One feature per branch. Keep changes focused.
 6. Commit with detailed changelog
 
 **5. Troubleshooting PostCSS Issues**
+
 - If seeing "Missing field 'negated' on ScannerOptions.sources" error:
   - Ensure using `@tailwindcss/postcss` package (not direct tailwindcss)
   - Remove postcss-import from configuration
   - Use official upgrade tool instead of manual config
 
 **6. Custom Theme Preservation**
+
 - ✅ Custom colors, spacing, fonts preserved correctly
 - ✅ `@tailwindcss/forms` and `@tailwindcss/typography` plugins compatible
 - ✅ Responsive breakpoints and utilities work as expected
@@ -193,34 +246,37 @@ One feature per branch. Keep changes focused.
 ### Current Tailwind v4 Configuration
 
 **CSS-based theme configuration** in `src/stylev3.css`:
+
 ```css
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: 'Avenir Next', Helvetica, Arial, sans-serif;
-  --color-teal-400: #46B0B7;
-  --color-teal-500: #25A2AA;
-  --color-teal-700: #1B7C83;
+  --font-sans: "Avenir Next", Helvetica, Arial, sans-serif;
+  --color-teal-400: #46b0b7;
+  --color-teal-500: #25a2aa;
+  --color-teal-700: #1b7c83;
   --spacing-1: 4.5px;
   /* ... other custom variables */
 }
 ```
 
 **Simplified JavaScript config** in `tailwind.config.js`:
+
 ```javascript
 module.exports = {
   content: [
-    './_includes/**/*.html',
-    './_layouts/**/*.html',
-    './*.{html,md}',
-    './assets/js/**/*.js'
-  ]
-}
+    "./_includes/**/*.html",
+    "./_layouts/**/*.html",
+    "./*.{html,md}",
+    "./assets/js/**/*.js",
+  ],
+};
 ```
 
 ### Future Upgrade Considerations
+
 - Node.js 20+ required for Tailwind v4
 - Monitor plugin compatibility for future releases
 - Official upgrade tool should handle most migration complexity

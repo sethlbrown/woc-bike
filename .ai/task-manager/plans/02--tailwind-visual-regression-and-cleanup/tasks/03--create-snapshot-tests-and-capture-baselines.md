@@ -2,7 +2,7 @@
 id: 3
 group: "visual-regression"
 dependencies: [2]
-status: "in-progress"
+status: "completed"
 created: "2026-03-09"
 skills:
   - playwright

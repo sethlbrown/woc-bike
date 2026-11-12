@@ -93,44 +93,28 @@ published: true
   >
     <h2 class="sr-only" id="contact-heading">Contact us</h2>
     <div class="grid grid-cols-1 gap-y-8 md:grid-cols-3 md:gap-x-4 md:gap-y-0">
+      <!-- Hours come from _data/hours.yml. Edit that file, not this markup. -->
+      {%- for d in hours.days %}
       <div
-        class="flex flex-col rounded-sm border-l-4 border-l-gray-400 bg-white shadow-xl"
+        class="flex flex-col rounded-sm border-l-4 {% cycle 'border-l-gray-400', 'border-l-teal-700', 'border-l-yellow-700' %} bg-white shadow-xl"
       >
         <div class="relative flex-1 px-4 py-8 md:px-8">
-          <h3 class="text-xl font-medium text-gray-900">Tuesday</h3>
+          <h3 class="text-xl font-medium text-gray-900">{{ d.day }}</h3>
+          {%- if d.notice %}
+          <p class="mt-4 text-base text-gray-800">{{ d.notice }}</p>
+          {%- else %}
           <p class="mt-4 text-base text-gray-800">
-            Please note: There are no new projects or walk-ins after 4:00 p.m.
-            and workstation clean-up starts at 4:45 p.m.
+            Please note: There are no new projects or walk-ins after
+            {{ d.last_project }} and workstation clean-up starts at
+            {{ d.cleanup }}
           </p>
-          <p class="mt-4 text-base font-semibold text-black">1 - 5 p.m. MT</p>
+          <p class="mt-4 text-base font-semibold text-black">
+            {{ d.open }} - {{ d.close }} {{ hours.timezone }}
+          </p>
+          {%- endif %}
         </div>
       </div>
-
-      <div
-        class="flex flex-col rounded-sm border-l-4 border-l-teal-700 bg-white shadow-xl"
-      >
-        <div class="relative flex-1 px-4 py-8 md:px-8">
-          <h3 class="text-xl font-medium text-gray-900">Thursday</h3>
-          <p class="mt-4 text-base text-gray-800">
-            Please note: There are no new projects or walk-ins after 4:00 p.m.
-            and workstation clean-up starts at 4:45 p.m.
-          </p>
-          <p class="mt-4 text-base font-semibold text-black">1 - 5 p.m. MT</p>
-        </div>
-      </div>
-
-      <div
-        class="flex flex-col rounded-sm border-l-4 border-l-yellow-700 bg-white shadow-xl"
-      >
-        <div class="relative flex-1 px-4 py-8 md:px-8">
-          <h3 class="text-xl font-medium text-gray-900">Sunday</h3>
-          <p class="mt-4 text-base text-gray-800">
-            Please note: There are no new projects or walk-ins after 4:00 p.m.
-            and workstation clean-up starts at 4:45 p.m.
-          </p>
-          <p class="mt-4 text-base font-semibold text-black">noon - 5 p.m. MT</p>
-        </div>
-      </div>
+      {%- endfor %}
     </div>
   </section>
   <!-- Latest Stories and Kickstand Club Promo Side-by-Side -->

@@ -74,6 +74,7 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - Use YAML front matter for page metadata
 - Config settings in `_config.yml`
 - Site data in `_data` directory
+- **Shop hours and closures**: edit `_data/hours.yml` only. It drives the homepage cards, the footer, `index.txt`, and `contact.txt`. Use a day's `notice` field for one-off closures.
 - Update donation progress in relevant data files
 
 ## Technical Constraints

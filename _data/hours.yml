@@ -1,0 +1,49 @@
+# Open shop hours: the single source for every place hours appear.
+#
+# Used by:
+#   - Homepage hours cards (00-index.html)
+#   - Site footer (_includes/footer.html)
+#   - Text versions of the pages for AI tools (index.txt, contact.txt)
+#
+# Fields for each day:
+#   day           Full name, shown on the homepage cards and text pages
+#   short         Abbreviation, shown in the footer
+#   open / close  Opening and closing times. The site shows them as
+#                 "open - close", e.g. "1 - 5 p.m."
+#   last_project  No new projects or walk-ins after this time
+#   cleanup       Workstation clean-up starts at this time
+#   notice        Optional. Use for one-off closures or changes. On the
+#                 homepage it replaces that day's card text and hours.
+#                 The text pages show it too. HTML is allowed. Delete the
+#                 line (or leave it blank) to go back to regular hours.
+#                 Example:
+#                   notice: We are <strong class="font-bold">CLOSED</strong> Sunday, June 21, for Father's Day.
+#
+# Days appear on the site in the order listed here.
+
+timezone: MT
+
+days:
+  - day: Tuesday
+    short: Tues.
+    open: "1"
+    close: "5 p.m."
+    last_project: "4:00 p.m."
+    cleanup: "4:45 p.m."
+    notice:
+
+  - day: Thursday
+    short: Thurs.
+    open: "1"
+    close: "5 p.m."
+    last_project: "4:00 p.m."
+    cleanup: "4:45 p.m."
+    notice:
+
+  - day: Sunday
+    short: Sun.
+    open: "noon"
+    close: "5 p.m."
+    last_project: "4:00 p.m."
+    cleanup: "4:45 p.m."
+    notice:

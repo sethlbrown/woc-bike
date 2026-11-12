@@ -15,10 +15,9 @@ Carbondale, Colorado
 
 ## Open Shop Hours
 
-- **Tuesday**: 1:00 – 5:00 p.m. MT
-- **Thursday**: 1:00 – 5:00 p.m. MT
-- **Sunday**: noon – 5:00 p.m. MT
-
+{% for d in hours.days -%}
+- **{{ d.day }}**: {{ d.open }} – {{ d.close }} {{ hours.timezone }}{% if d.notice %}. Note: {{ d.notice | strip_html }}{% endif %}
+{% endfor %}
 No appointment needed. Walk-ins welcome.
 
 ## Contact Form

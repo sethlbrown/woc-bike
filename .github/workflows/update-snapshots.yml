@@ -5,7 +5,8 @@ on:
 jobs:
   update_snapshots:
     name: Capture Linux Baselines
-    runs-on: ubuntu-latest
+    # Keep in sync with ci.yml so baselines match the CI runner.
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:

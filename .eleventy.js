@@ -4,7 +4,8 @@ const pluginRss = require("@11ty/eleventy-plugin-rss");
 const dateToRfc3339 = require("@11ty/eleventy-plugin-rss/src/dateRfc3339.js");
 const getNewestCollectionItemDate = require("@11ty/eleventy-plugin-rss/src/getNewestCollectionItemDate.js");
 const convertHtmlToAbsoluteUrls = require("@11ty/eleventy-plugin-rss/src/htmlToAbsoluteUrls.js");
-const Image = require("@11ty/eleventy-img");
+// eleventy-img v6+ is ESM-only; require() returns the module namespace.
+const { default: Image, generateHTML } = require("@11ty/eleventy-img");
 
 module.exports = function (eleventyConfig) {
   // YAML data file support (Eleventy v3 requires explicit registration)
@@ -43,7 +44,7 @@ module.exports = function (eleventyConfig) {
         "w-full block sm:float-right sm:inline sm:p-4 sm:w-1/2 md:w-3/5 lg:w-2/3 xl:w-3/5",
     };
 
-    return Image.generateHTML(metadata, imageAttributes);
+    return generateHTML(metadata, imageAttributes);
   });
 
   // Register RSS plugin filters for Liquid (plugin only adds Nunjucks filters)

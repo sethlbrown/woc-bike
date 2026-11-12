@@ -131,6 +131,7 @@ End-to-end tests live in `tests/e2e/` and cover core user flows:
 - `pages.spec.js` — verifies all pages load without errors
 - `navigation.spec.js` — tests header and footer navigation links
 - `contact.spec.js` — validates contact form fields, validation, and submission
+- `contact-live.spec.js` — tagged `@live`; submits the real form to the production Google Sheet. Skipped by `npm test` and CI. Run manually with `WEBHOOK_URL=<apps-script-url> npm run test:live`, then find the printed marker in the sheet and delete that row. The reCAPTCHA widget is not enforced, so it doesn't block this test.
 
 ### Visual Regression Snapshots
 

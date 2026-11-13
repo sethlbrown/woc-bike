@@ -8,7 +8,7 @@
     "@11ty/eleventy-plugin-rss": "^2.0.0",
     "@playwright/test": "^1.49.0",
     "@tailwindcss/forms": "^0.4.0-alpha.2",
-    "@tailwindcss/typography": "^0.5.0-alpha.3",
+    "@tailwindcss/typography": "^0.5.20",
     "concurrently": "^9.2.5",
     "postcss": "^8.5.32",
     "postcss-cli": "^11.0.1",

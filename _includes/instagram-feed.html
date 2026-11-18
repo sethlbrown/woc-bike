@@ -1,0 +1,56 @@
+<!-- Instagram feed via Curator.io. Feed is configured in the Curator dashboard. -->
+<section
+  class="mx-auto max-w-7xl px-4 pt-8 pb-10 sm:px-6 lg:px-8"
+  aria-labelledby="instagram-heading"
+>
+  <h2
+    id="instagram-heading"
+    class="text-3xl font-bold text-gray-900 md:text-4xl lg:text-5xl"
+  >
+    From Our Instagram
+  </h2>
+  <div id="curator-feed-default-feed-layout" class="mt-6 min-h-[300px]">
+    <a href="https://curator.io" target="_blank" class="crt-logo crt-tag"
+      >Powered by Curator.io</a
+    >
+  </div>
+  <p class="mt-6 text-lg">
+    <a
+      href="https://www.instagram.com/carbondalebikeproject/"
+      class="font-bold text-teal-700 underline hover:text-blue-900"
+    >
+      Follow @carbondalebikeproject on Instagram
+    </a>
+  </p>
+</section>
+<script>
+  /* curator-feed-default-feed-layout
+     Loads Curator's script only when the feed nears the viewport, to keep it
+     off the critical path and save monthly feed views on Curator's plan. */
+  (function () {
+    var src =
+      "https://cdn.curator.io/published/664e8db9-268d-42bd-a362-27e204e41f22.js";
+    var feed = document.getElementById("curator-feed-default-feed-layout");
+    function load() {
+      var i = document.createElement("script");
+      i.async = true;
+      i.charset = "UTF-8";
+      i.src = src;
+      document.body.appendChild(i);
+    }
+    if (!feed || !("IntersectionObserver" in window)) {
+      load();
+      return;
+    }
+    var io = new IntersectionObserver(
+      function (entries) {
+        if (entries[0].isIntersecting) {
+          io.disconnect();
+          load();
+        }
+      },
+      { rootMargin: "400px" },
+    );
+    io.observe(feed);
+  })();
+</script>

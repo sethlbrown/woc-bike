@@ -24,6 +24,19 @@ test("homepage renders Kickstand Club and donation sections", async ({ page }) =
   ).toBeVisible();
 });
 
+test("homepage renders Instagram feed section", async ({ page }) => {
+  // Keep CI independent of the third-party Curator.io service.
+  await page.route(/curator\.io/, (route) => route.abort());
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", { name: "From Our Instagram" })
+  ).toBeVisible();
+  await expect(page.locator("#curator-feed-default-feed-layout")).toBeAttached();
+  await expect(
+    page.getByRole("link", { name: /Follow @carbondalebikeproject/ })
+  ).toBeVisible();
+});
+
 test("programs page renders responsive images", async ({ page }) => {
   await page.goto("/programs/");
   const images = page.locator("picture img");

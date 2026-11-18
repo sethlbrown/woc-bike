@@ -37,6 +37,8 @@ for (const p of pages) {
   for (const vp of viewports) {
     test(`${p.name} at ${vp.name} matches snapshot`, async ({ page }) => {
       await page.setViewportSize({ width: vp.width, height: vp.height });
+      // Block the Curator.io Instagram feed: live posts change daily.
+      await page.route(/curator\.io/, (route) => route.abort());
       await page.goto(p.url);
       await page.waitForLoadState("networkidle");
 
@@ -62,6 +64,7 @@ for (const p of pages) {
           // Mask external widgets that render inconsistently
           page.locator("iframe[src*='paypal'], .paypal-campaign-card"),
           page.locator(".g-recaptcha, [data-sitekey]"),
+          page.locator("#curator-feed-default-feed-layout"),
           // Mask testimonial region (random content; height stabilised above)
           page.locator("#testimonial_quote, #testimonial_author"),
         ],

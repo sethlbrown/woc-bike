@@ -53,9 +53,19 @@ The script rejects any submission without a valid reCAPTCHA v2 token. Tokens are
 2. Add `RECAPTCHA_SECRET` with the reCAPTCHA v2 **secret** key that pairs with the site key in `30-contact.html` (from the reCAPTCHA admin console). Never commit it.
 3. Optional: add `LIVE_TEST_TOKEN` with a long random string. The `@live` Playwright test and the `testSubmission` function use it to skip the checkbox. Leave it unset to disable that bypass.
 
-The verification call uses `UrlFetchApp`, which needs the "connect to an external service" permission. The first time you run or redeploy after adding it, Google asks you to re-authorize the script (see Step 4).
+The verification call uses `UrlFetchApp`, which needs the "connect to an external service" permission. Running other functions may not trigger the prompt, so after pasting the code, select **`authorizeExternalRequests`** in the function dropdown and click **Run**, then allow access. If you skip this, live submissions fail with "You do not have permission to call UrlFetchApp."
 
-**Rollout order matters.** Deploy the website change that sends the token *before* deploying this script. An updated script behind an old page rejects every submission.
+### Accepted hostnames and Netlify previews
+
+The script also checks the hostname Google reports for each solved checkbox. It accepts `carbondalebikeproject.org`, `www.carbondalebikeproject.org`, and any `<name>--carbondalebikeproject.netlify.app` (deploy previews and branch deploys). Edit `ALLOWED_HOSTNAMES` / `NETLIFY_SITE_SUFFIX` at the top of the script if the domain or Netlify site name changes. `localhost` is not accepted; use `LIVE_TEST_TOKEN` for local testing.
+
+Because the script does this check, **"Verify the origin of reCAPTCHA solutions"** can be turned off in the reCAPTCHA admin console (key settings). The widget then loads on every preview without adding domains. Turn it off only after the script with the hostname check is deployed. Preview submissions write real rows to the production sheet and send the B1 email.
+
+### Error responses
+
+Failures return `success: false` with a `code` (`missing_fields`, `recaptcha`, `server_error`). The contact page shows its own wording for each code and never displays the `error` text, so raw exceptions stay in the **Executions** log.
+
+**Rollout order matters.** The page must send `recaptchaToken` before the script requires it (done in PR #216). Script updates that only add fields to the response, such as `code`, can go out before or after the page.
 
 ## Step 3: Deploy as Web App
 

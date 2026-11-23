@@ -465,11 +465,34 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     Object.keys(validators).forEach((fieldId) => clearError(fieldId));
   }
 
+  var CONTACT_EMAIL = "carbondalebikeproject@gmail.com";
+
+  // Visitor-facing wording for the error codes the webhook returns. The
+  // webhook's own error text is never shown, so a server exception can't leak
+  // onto the page.
+  var ERROR_MESSAGES = {
+    missing_fields: "Please fill in your name, email, and message.",
+    recaptcha: "Please check the “I'm not a robot” box and try again.",
+  };
+
+  // With no message, shows a generic apology with the email address as a
+  // fallback way to reach us.
   function showFailure(status, message) {
     const span = document.createElement("span");
     span.className = "text-red-600";
-    span.textContent =
-      message || "Oops! There was a problem submitting your form";
+    if (message) {
+      span.textContent = message;
+    } else {
+      const link = document.createElement("a");
+      link.href = "mailto:" + CONTACT_EMAIL;
+      link.className = "underline";
+      link.textContent = CONTACT_EMAIL;
+      span.append(
+        "Sorry, something went wrong sending your message. Please try again in a moment, or email us at ",
+        link,
+        ".",
+      );
+    }
     status.replaceChildren(span);
   }
 
@@ -573,11 +596,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       WEBHOOK_URL === "WEBHOOK_URL_PLACEHOLDER" ||
       WEBHOOK_URL.includes("PLACEHOLDER")
     ) {
-      showFailure(
-        status,
-        "Error: Webhook URL not configured. Please check GitHub Secrets.",
+      showFailure(status);
+      console.error(
+        "Webhook URL not set. Check the WEBHOOK_URL build variable:",
+        WEBHOOK_URL,
       );
-      console.error("Webhook URL not set:", WEBHOOK_URL);
       return;
     }
 
@@ -608,7 +631,9 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
         // A 2xx without a JSON body has always been treated as success.
         showSuccess(status);
       } else {
-        showFailure(status, result && result.error);
+        // Unknown or missing codes (including raw errors from an older
+        // script) fall back to the generic message.
+        showFailure(status, result && ERROR_MESSAGES[result.code]);
         console.error("Error response:", response.status, text);
       }
     } catch (error) {

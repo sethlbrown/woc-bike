@@ -22,7 +22,59 @@
  * 6. Set "Who has access" to "Anyone"
  * 7. Copy the Web App URL and store it securely (see security warning above)
  * 8. Use the stored URL in your form handler (do not hardcode it)
+ *
+ * reCAPTCHA verification (required):
+ * 9. Project Settings (gear icon) → Script Properties → add:
+ *      RECAPTCHA_SECRET = the reCAPTCHA v2 *secret* key for the site key
+ *                         used in 30-contact.html (from the reCAPTCHA admin
+ *                         console). Never commit it.
+ *      LIVE_TEST_TOKEN  = (optional) a long random string. Lets the @live
+ *                         Playwright test submit without solving the
+ *                         checkbox. Leave unset to disable that bypass.
+ * 10. Deploy → Manage deployments → edit the existing deployment → Version:
+ *     New version → Deploy. Editing the existing deployment keeps the same
+ *     Web App URL, so the WEBHOOK_URL secret does not change.
+ *
+ * Every submission must carry a reCAPTCHA token. Tokens are single-use, so a
+ * repeated POST of the same submission is rejected by Google's siteverify.
  */
+
+/**
+ * Check a reCAPTCHA v2 token with Google.
+ *
+ * @param {string} token - The g-recaptcha-response value sent by the form
+ * @returns {boolean} True if Google says the token is valid
+ */
+function verifyRecaptcha(token) {
+  if (!token) {
+    return false;
+  }
+
+  const props = PropertiesService.getScriptProperties();
+
+  const liveTestToken = props.getProperty('LIVE_TEST_TOKEN');
+  if (liveTestToken && token === liveTestToken) {
+    return true;
+  }
+
+  const secret = props.getProperty('RECAPTCHA_SECRET');
+  if (!secret) {
+    // Fail closed: without the secret nothing can be verified.
+    console.error('RECAPTCHA_SECRET script property is not set');
+    return false;
+  }
+
+  const response = UrlFetchApp.fetch('https://www.google.com/recaptcha/api/siteverify', {
+    method: 'post',
+    payload: { secret: secret, response: token },
+    muteHttpExceptions: true
+  });
+  const result = JSON.parse(response.getContentText());
+  if (!result.success) {
+    console.warn('reCAPTCHA rejected: ' + JSON.stringify(result['error-codes'] || []));
+  }
+  return result.success === true;
+}
 
 /**
  * Handle CORS preflight requests (OPTIONS)
@@ -83,7 +135,17 @@ function doPost(e) {
         }))
         .setMimeType(ContentService.MimeType.JSON);
     }
-    
+
+    // Reject submissions without a valid, unused reCAPTCHA token
+    if (!verifyRecaptcha(data.recaptchaToken)) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          success: false,
+          error: 'Please check the "I\'m not a robot" box and try again.'
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     // Append the row to the sheet
     // Format: [Timestamp, Name, Email, Phone, Message]
     sheet.appendRow([
@@ -118,11 +180,13 @@ function doPost(e) {
  * Run this from the Apps Script editor to test locally
  */
 function testSubmission() {
+  // Needs the LIVE_TEST_TOKEN script property; otherwise reCAPTCHA rejects it.
   const testData = {
     name: 'Test User',
     email: 'test@example.com',
     phone: '555-1234',
-    message: 'This is a test submission'
+    message: 'This is a test submission',
+    recaptchaToken: PropertiesService.getScriptProperties().getProperty('LIVE_TEST_TOKEN')
   };
   
   // Test with JSON format

@@ -277,7 +277,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
             id="submit-button"
             class="focus:ring-gray flex h-16 w-48 shrink items-center justify-center border border-transparent bg-teal-700 px-8 py-3 text-base leading-6 font-semibold text-white shadow transition duration-150 ease-in-out hover:bg-gray-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Submit
+            <span id="submit-label">Submit</span>
             <div class="px-2">
               <svg
                 width="18"
@@ -313,6 +313,11 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
 
   var form = document.getElementById("contact-form");
   var submitButton = document.getElementById("submit-button");
+  var submitLabel = document.getElementById("submit-label");
+
+  // True while a submission is in flight. Blocks repeat clicks and Enter
+  // presses from sending the same message more than once.
+  var isSubmitting = false;
 
   // Track which fields have been touched (user has interacted with them)
   var touchedFields = {};
@@ -435,7 +440,37 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
   // Update submit button state (don't force show errors for button state)
   function updateSubmitButton() {
     const isValid = validateForm(false);
-    submitButton.disabled = !isValid;
+    submitButton.disabled = isSubmitting || !isValid;
+  }
+
+  function setSubmitting(submitting) {
+    isSubmitting = submitting;
+    submitLabel.textContent = submitting ? "Sending…" : "Submit";
+    submitButton.setAttribute("aria-busy", submitting ? "true" : "false");
+    updateSubmitButton();
+  }
+
+  // reCAPTCHA v2 tokens are single-use, so the checkbox must be cleared after
+  // every attempt. The user ticks it again before resubmitting.
+  function resetRecaptcha() {
+    if (window.grecaptcha && typeof window.grecaptcha.reset === "function") {
+      window.grecaptcha.reset();
+    }
+  }
+
+  function showSuccess(status) {
+    status.innerHTML =
+      '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
+    form.reset();
+    Object.keys(validators).forEach((fieldId) => clearError(fieldId));
+  }
+
+  function showFailure(status, message) {
+    const span = document.createElement("span");
+    span.className = "text-red-600";
+    span.textContent =
+      message || "Oops! There was a problem submitting your form";
+    status.replaceChildren(span);
   }
 
   // Add event listeners for real-time validation
@@ -471,6 +506,12 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    // Ignore repeat submits while one is already in flight.
+    if (isSubmitting) {
+      return;
+    }
+
     var status = document.getElementById("my-form-status");
 
     // Mark all fields as touched when form is submitted
@@ -480,8 +521,7 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
 
     // Validate form before submission (force show errors)
     if (!validateForm(true)) {
-      status.innerHTML =
-        '<span class="text-red-600">Please fix the errors above before submitting.</span>';
+      showFailure(status, "Please fix the errors above before submitting.");
       // Focus on first invalid field
       const firstInvalidField = Object.keys(validators).find((fieldId) => {
         const field = document.getElementById(fieldId);
@@ -506,18 +546,26 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
     // Get form data
     var formData = new FormData(event.target);
 
-    // Convert FormData to JSON object
+    // The reCAPTCHA widget writes its token into a hidden
+    // "g-recaptcha-response" field once the checkbox is ticked.
+    var recaptchaToken = formData.get("g-recaptcha-response") || "";
+    if (!recaptchaToken) {
+      showFailure(
+        status,
+        "Please check the “I'm not a robot” box before submitting.",
+      );
+      return;
+    }
+
+    // Convert FormData to JSON object. The token goes to the webhook, which
+    // verifies it with Google; it is not written to the sheet.
     var data = {};
     formData.forEach((value, key) => {
-      // Skip honeypot field and reCAPTCHA token (not needed for Google Sheets)
       if (key !== "website-url" && key !== "g-recaptcha-response") {
         data[key] = value;
       }
     });
-
-    // Debug logging (remove in production if desired)
-    console.log("Submitting form data:", data);
-    console.log("Webhook URL:", WEBHOOK_URL);
+    data.recaptchaToken = recaptchaToken;
 
     // Validate webhook URL is set
     if (
@@ -525,107 +573,51 @@ canonical_url: "https://carbondalebikeproject.org/contact/"
       WEBHOOK_URL === "WEBHOOK_URL_PLACEHOLDER" ||
       WEBHOOK_URL.includes("PLACEHOLDER")
     ) {
-      status.innerHTML =
-        "Error: Webhook URL not configured. Please check GitHub Secrets.";
+      showFailure(
+        status,
+        "Error: Webhook URL not configured. Please check GitHub Secrets.",
+      );
       console.error("Webhook URL not set:", WEBHOOK_URL);
       return;
     }
 
-    // Submit to Google Sheets webhook using text/plain to avoid CORS preflight
-    // Using text/plain makes it a "simple request" that doesn't trigger OPTIONS preflight
-    fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
-      body: JSON.stringify(data),
-      redirect: "follow", // Follow redirects (Google Apps Script may redirect)
-    })
-      .then(async (response) => {
-        // Google Apps Script may return 200 with HTML redirect, or actual JSON
-        // Form-encoded submissions often return HTML redirect pages
-        if (response.status >= 200 && response.status < 300) {
-          try {
-            const text = await response.text();
-            // Try to parse as JSON first
-            try {
-              const result = JSON.parse(text);
-              if (result.success) {
-                status.innerHTML =
-                  '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
-                form.reset();
-                updateSubmitButton();
-                // Clear all errors
-                Object.keys(validators).forEach((fieldId) =>
-                  clearError(fieldId),
-                );
-              } else {
-                status.innerHTML =
-                  '<span class="text-red-600">' +
-                  (result.error ||
-                    "Oops! There was a problem submitting your form") +
-                  "</span>";
-                console.error("Server error:", result);
-              }
-            } catch (e) {
-              // Not JSON - likely a redirect page, treat as success
-              if (
-                text.includes("googleusercontent") ||
-                text.includes("script.google.com") ||
-                text.includes("Moved Temporarily")
-              ) {
-                status.innerHTML =
-                  '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
-                form.reset();
-                updateSubmitButton();
-                Object.keys(validators).forEach((fieldId) =>
-                  clearError(fieldId),
-                );
-              } else {
-                // Unknown response, but status is 2xx, treat as success
-                status.innerHTML =
-                  '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
-                form.reset();
-                updateSubmitButton();
-                Object.keys(validators).forEach((fieldId) =>
-                  clearError(fieldId),
-                );
-              }
-            }
-          } catch (e) {
-            console.error("Response parse error:", e);
-            status.innerHTML =
-              '<span class="text-green-600 font-semibold">Thanks for your submission!</span>';
-            form.reset();
-            updateSubmitButton();
-            Object.keys(validators).forEach((fieldId) => clearError(fieldId));
-          }
-        } else {
-          // Error status code
-          try {
-            const errorText = await response.text();
-            try {
-              const errorData = JSON.parse(errorText);
-              status.innerHTML =
-                errorData.error ||
-                "Oops! There was a problem submitting your form";
-            } catch (e) {
-              status.innerHTML =
-                "Oops! There was a problem submitting your form";
-            }
-            console.error("Error response:", response.status, errorText);
-          } catch (e) {
-            status.innerHTML = "Oops! There was a problem submitting your form";
-            console.error("Error reading response:", e);
-          }
-        }
-      })
-      .catch((error) => {
-        status.innerHTML = "Oops! There was a problem submitting your form";
-        console.error("Form submission error:", error);
-        console.error("Webhook URL:", WEBHOOK_URL);
-        console.error("Form data:", data);
+    setSubmitting(true);
+    status.innerHTML = "";
+
+    try {
+      // Submit to Google Sheets webhook using text/plain to avoid CORS preflight
+      // Using text/plain makes it a "simple request" that doesn't trigger OPTIONS preflight
+      const response = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(data),
+        redirect: "follow", // Apps Script answers with a redirect to the JSON body
       });
+      const text = await response.text();
+
+      let result = null;
+      try {
+        result = JSON.parse(text);
+      } catch (e) {
+        // Not JSON (e.g. an HTML redirect page)
+      }
+
+      if (response.ok && (!result || result.success)) {
+        // A 2xx without a JSON body has always been treated as success.
+        showSuccess(status);
+      } else {
+        showFailure(status, result && result.error);
+        console.error("Error response:", response.status, text);
+      }
+    } catch (error) {
+      showFailure(status);
+      console.error("Form submission error:", error);
+    } finally {
+      resetRecaptcha();
+      setSubmitting(false);
+    }
   }
   form.addEventListener("submit", handleSubmit);
 </script>

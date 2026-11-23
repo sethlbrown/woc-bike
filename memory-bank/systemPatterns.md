@@ -38,7 +38,8 @@
 
 - **Security**:
   - `WEBHOOK_URL` never committed; set as Netlify env var and GitHub Secret
-  - Honeypot + reCAPTCHA v2 for spam protection (no server-side token verification)
+  - Honeypot + reCAPTCHA v2 for spam protection (token verified server-side in Apps Script)
+  - In-flight guard disables the submit button while a request is pending
 
 ## Development Workflow
 

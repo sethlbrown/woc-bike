@@ -43,5 +43,5 @@ All work done on `feature/phase-2-vanilla-css`, stashed:
 ## Known Issues
 
 - Netlify DNS verification pending (may take up to 24h after DNS change)
-- reCAPTCHA v2 has no server-side verification — client-side friction only
+- reCAPTCHA v2 token verified server-side in Apps Script (`RECAPTCHA_SECRET` script property)
 - CSS cache busting: Tailwind output filename is fixed (`stylev3.css`); change requires filename update in `head.html` and build script (resolved automatically in Phase 2 with vanilla CSS passthrough)

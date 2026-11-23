@@ -61,7 +61,7 @@
 
 - **Netlify**: Hosting. `netlify.toml` configures build command and publish dir. Auto-deploys on push to `main`.
 - **Google Apps Script + Google Sheets**: Contact form backend. Webhook URL never committed; injected via env var.
-- **Google reCAPTCHA v2**: Client-side spam friction. Token stripped before Google Sheets POST — no server-side verification.
+- **Google reCAPTCHA v2**: Token sent as `recaptchaToken` and verified by the Apps Script via Google's siteverify.
 - **Namecheap DNS**: A record `@` → `75.2.60.5` (Netlify), CNAME `www` → `carbondalebikeproject.netlify.app`
 
 ## CI/CD (`.github/workflows/ci.yml`)

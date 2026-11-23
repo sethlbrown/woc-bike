@@ -105,7 +105,8 @@ Form located in `30-contact.html`.
 - **Client-side validation**: Required fields (name, email, message), email format, phone format (optional), message length (max 2000 chars). Real-time feedback; errors shown only after user interacts with field.
 - **Honeypot field**: Hidden `website-url` field silently rejects bot submissions.
 - **Double-submit guard**: The button is disabled and reads "Sending…" while a request is in flight; repeat submits are ignored. The reCAPTCHA checkbox is reset after every attempt.
-- **reCAPTCHA**: The client requires a token and sends it as `recaptchaToken`. Apps Script source: `docs/google-apps-script-code.js` (deploy the site change before the script change).
+- **reCAPTCHA**: The client requires a token and sends it as `recaptchaToken`. The Apps Script also checks the solving hostname (production or `*--carbondalebikeproject.netlify.app`), so the key's origin verification can be off and previews work. Apps Script source: `docs/google-apps-script-code.js`; it is deployed by hand in the Apps Script editor, so keep the repo copy in sync with the live script.
+- **Error messages**: The webhook returns an error `code`; the page maps codes to its own wording (`ERROR_MESSAGES`) and falls back to a generic message with the contact email. Server error text is never shown to visitors.
 - **Submission**: Sends JSON as `text/plain` content type to bypass CORS preflight.
 - **Webhook URL**: Never committed to repo. Stored as GitHub Secret (`WEBHOOK_URL`) and injected into `_data/webhook_config.yml` during GitHub Actions build.
 - **Backend**: Google Apps Script validates and writes to Google Sheet; returns JSON success/error response.

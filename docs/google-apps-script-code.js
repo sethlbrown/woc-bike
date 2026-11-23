@@ -37,13 +37,53 @@
  *
  * Every submission must carry a reCAPTCHA token. Tokens are single-use, so a
  * repeated POST of the same submission is rejected by Google's siteverify.
+ *
+ * The script also checks the hostname where the checkbox was solved (see
+ * isAllowedHostname). That lets "Verify the origin of reCAPTCHA solutions" be
+ * turned off in the reCAPTCHA admin console, so the widget loads on every
+ * Netlify deploy preview without listing each one.
  */
+
+// Hostnames where a solved checkbox is accepted.
+const ALLOWED_HOSTNAMES = ['carbondalebikeproject.org', 'www.carbondalebikeproject.org'];
+// Netlify deploy previews and branch deploys: <name>--carbondalebikeproject.netlify.app
+const NETLIFY_SITE_SUFFIX = '--carbondalebikeproject.netlify.app';
+
+/**
+ * Build a JSON response for the contact form.
+ *
+ * The form shows its own wording for each error code and never displays the
+ * `error` text, so keep `error` for logs and older copies of the page.
+ *
+ * @param {Object} body - Response fields
+ * @returns {Object} ContentService JSON output
+ */
+function jsonResponse(body) {
+  return ContentService
+    .createTextOutput(JSON.stringify(body))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Whether a reCAPTCHA solution came from one of our sites.
+ *
+ * @param {string} hostname - The hostname siteverify reports
+ * @returns {boolean} True for production or a Netlify preview of this site
+ */
+function isAllowedHostname(hostname) {
+  if (!hostname) {
+    return false;
+  }
+  const host = hostname.toLowerCase();
+  return ALLOWED_HOSTNAMES.indexOf(host) !== -1 || host.endsWith(NETLIFY_SITE_SUFFIX);
+}
 
 /**
  * Check a reCAPTCHA v2 token with Google.
  *
  * @param {string} token - The g-recaptcha-response value sent by the form
- * @returns {boolean} True if Google says the token is valid
+ * @returns {boolean} True if Google says the token is valid and it was solved
+ *   on one of our hostnames
  */
 function verifyRecaptcha(token) {
   if (!token) {
@@ -70,10 +110,29 @@ function verifyRecaptcha(token) {
     muteHttpExceptions: true
   });
   const result = JSON.parse(response.getContentText());
-  if (!result.success) {
+  if (result.success !== true) {
     console.warn('reCAPTCHA rejected: ' + JSON.stringify(result['error-codes'] || []));
+    return false;
   }
-  return result.success === true;
+  if (!isAllowedHostname(result.hostname)) {
+    console.warn('reCAPTCHA rejected: solved on unexpected hostname ' + result.hostname);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Run this once from the editor after setting up the script (or if a
+ * submission fails with "You do not have permission to call UrlFetchApp").
+ * It makes a harmless request so Google shows the "Connect to an external
+ * service" authorization prompt. Running other functions may not prompt.
+ */
+function authorizeExternalRequests() {
+  UrlFetchApp.fetch('https://www.google.com/recaptcha/api/siteverify', {
+    method: 'post',
+    payload: { secret: 'x', response: 'x' },
+    muteHttpExceptions: true
+  });
 }
 
 /**
@@ -128,22 +187,20 @@ function doPost(e) {
     
     // Validate required fields
     if (!name || !email || !message) {
-      return ContentService
-        .createTextOutput(JSON.stringify({
-          success: false,
-          error: 'Missing required fields: name, email, and message are required'
-        }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return jsonResponse({
+        success: false,
+        code: 'missing_fields',
+        error: 'Missing required fields: name, email, and message are required'
+      });
     }
 
     // Reject submissions without a valid, unused reCAPTCHA token
     if (!verifyRecaptcha(data.recaptchaToken)) {
-      return ContentService
-        .createTextOutput(JSON.stringify({
-          success: false,
-          error: 'Please check the "I\'m not a robot" box and try again.'
-        }))
-        .setMimeType(ContentService.MimeType.JSON);
+      return jsonResponse({
+        success: false,
+        code: 'recaptcha',
+        error: 'Please check the "I\'m not a robot" box and try again.'
+      });
     }
 
     // Append the row to the sheet
@@ -168,21 +225,20 @@ function doPost(e) {
     sendEmailNotification(name, email, phone, message, timestamp);
     
     // Return success response
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        success: true,
-        message: 'Form submission received successfully'
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-      
+    return jsonResponse({
+      success: true,
+      message: 'Form submission received successfully'
+    });
+
   } catch (error) {
-    // Return error response
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        success: false,
-        error: error.toString()
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
+    // Log the details (visible under Executions) but don't send them to the
+    // visitor: raw errors can expose internals such as permission scopes.
+    console.error('doPost failed: ' + (error && error.stack ? error.stack : error));
+    return jsonResponse({
+      success: false,
+      code: 'server_error',
+      error: 'Sorry, something went wrong. Please try again or email carbondalebikeproject@gmail.com.'
+    });
   }
 }
 

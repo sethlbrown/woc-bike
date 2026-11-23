@@ -38,7 +38,7 @@ days:
     close: "5 p.m."
     last_project: "4:00 p.m."
     cleanup: "4:45 p.m."
-    notice:
+    notice: We are <strong class="font-bold">CLOSED</strong> Thursday, Nov. 26, for Thanksgiving.
 
   - day: Sunday
     short: Sun.
@@ -46,4 +46,4 @@ days:
     close: "5 p.m."
     last_project: "4:00 p.m."
     cleanup: "4:45 p.m."
-    notice:
+    notice: We are <strong class="font-bold">CLOSED</strong> Sunday, Nov. 29.

@@ -14,7 +14,7 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - **Firebase Hosting**: Production hosting platform
 - **Google Apps Script**: Webhook backend for contact form submissions
 - **Google Sheets**: Storage for contact form submissions
-- **Google reCAPTCHA v3**: Spam protection on contact form
+- **Google reCAPTCHA v2**: Checkbox on the contact form; token verified server-side by the Apps Script
 
 ## Build Commands
 
@@ -96,7 +96,7 @@ This is the website for the Carbondale Bike Project (CBP), a community bicycle s
 - **Firebase Hosting**: Production hosting. Web client config (`apiKey`, `projectId`, etc.) is loaded from `_data/firebase_config` and injected via `_includes/firebase-init.html`. This config is **intentionally public** — Firebase security is enforced by Firebase Security Rules and Auth, not by hiding the config. No GitHub Secret needed.
 - **Google Apps Script**: Webhook backend that receives contact form POST requests, validates required fields, and writes submissions (timestamp, name, email, phone, message) to a Google Sheet.
 - **Google Sheets**: Storage for all contact form submissions.
-- **Google reCAPTCHA v3**: Existing spam protection integration on the contact form.
+- **Google reCAPTCHA v2**: Checkbox widget on the contact form. The Apps Script verifies each token with Google's `siteverify` using the `RECAPTCHA_SECRET` script property. Tokens are single-use, which also rejects repeated POSTs of the same submission.
 
 ## Contact Form Architecture
 
@@ -104,6 +104,8 @@ Form located in `30-contact.html`.
 
 - **Client-side validation**: Required fields (name, email, message), email format, phone format (optional), message length (max 2000 chars). Real-time feedback; errors shown only after user interacts with field.
 - **Honeypot field**: Hidden `website-url` field silently rejects bot submissions.
+- **Double-submit guard**: The button is disabled and reads "Sending…" while a request is in flight; repeat submits are ignored. The reCAPTCHA checkbox is reset after every attempt.
+- **reCAPTCHA**: The client requires a token and sends it as `recaptchaToken`. Apps Script source: `docs/google-apps-script-code.js` (deploy the site change before the script change).
 - **Submission**: Sends JSON as `text/plain` content type to bypass CORS preflight.
 - **Webhook URL**: Never committed to repo. Stored as GitHub Secret (`WEBHOOK_URL`) and injected into `_data/webhook_config.yml` during GitHub Actions build.
 - **Backend**: Google Apps Script validates and writes to Google Sheet; returns JSON success/error response.
@@ -131,7 +133,7 @@ End-to-end tests live in `tests/e2e/` and cover core user flows:
 - `pages.spec.js` — verifies all pages load without errors
 - `navigation.spec.js` — tests header and footer navigation links
 - `contact.spec.js` — validates contact form fields, validation, and submission
-- `contact-live.spec.js` — tagged `@live`; submits the real form to the production Google Sheet. Skipped by `npm test` and CI. Run manually with `WEBHOOK_URL=<apps-script-url> npm run test:live`, then find the printed marker in the sheet and delete that row. The reCAPTCHA widget is not enforced, so it doesn't block this test.
+- `contact-live.spec.js` — tagged `@live`; submits the real form to the production Google Sheet. Skipped by `npm test` and CI. Run manually with `WEBHOOK_URL=<apps-script-url> LIVE_TEST_TOKEN=<token> npm run test:live`, then find the printed marker in the sheet and delete that row. `LIVE_TEST_TOKEN` must match the Apps Script's `LIVE_TEST_TOKEN` script property, which the webhook accepts in place of a solved checkbox.
 
 ### Visual Regression Snapshots
 

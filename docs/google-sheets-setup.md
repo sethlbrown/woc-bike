@@ -35,99 +35,19 @@ This guide walks you through setting up a Google Apps Script webhook to receive 
 
 1. In your Google Sheet, go to **Extensions** → **Apps Script**
 2. Delete any default code in the editor
-3. Copy and paste the following code:
-
-```javascript
-/**
- * Handle CORS preflight requests (OPTIONS)
- * Required for cross-origin requests from web browsers
- * 
- * @returns {Object} Empty response to satisfy preflight
- */
-function doOptions() {
-  return ContentService.createTextOutput('').setMimeType(ContentService.MimeType.TEXT);
-}
-
-/**
- * Web App to receive form submissions and write to Google Sheet
- *
- * @param {Object} e - Event object containing form data
- * @returns {Object} JSON response
- */
-function doPost(e) {
-  try {
-    // Parse the incoming JSON data
-    const data = JSON.parse(e.postData.contents);
-
-    // Get the active spreadsheet (the one this script is bound to)
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-
-    // Get current timestamp
-    const timestamp = new Date();
-
-    // Extract form fields (handle both camelCase and kebab-case field names)
-    const name = data.name || data["name"] || "";
-    const email = data.email || data["email"] || "";
-    const phone = data.phone || data["phone-number"] || data["phone"] || "";
-    const message = data.message || data["message"] || "";
-
-    // Validate required fields
-    if (!name || !email || !message) {
-      return ContentService.createTextOutput(
-        JSON.stringify({
-          success: false,
-          error:
-            "Missing required fields: name, email, and message are required",
-        })
-      ).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // Append the row to the sheet
-    // Format: [Timestamp, Name, Email, Phone, Message]
-    sheet.appendRow([timestamp, name, email, phone, message]);
-
-    // Return success response
-    return ContentService.createTextOutput(
-      JSON.stringify({
-        success: true,
-        message: "Form submission received successfully",
-      })
-    ).setMimeType(ContentService.MimeType.JSON);
-  } catch (error) {
-    // Return error response
-    return ContentService.createTextOutput(
-      JSON.stringify({
-        success: false,
-        error: error.toString(),
-      })
-    ).setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-/**
- * Test function to verify the script works
- * Run this from the Apps Script editor to test
- */
-function testSubmission() {
-  const testData = {
-    name: "Test User",
-    email: "test@example.com",
-    phone: "555-1234",
-    message: "This is a test submission",
-  };
-
-  const mockEvent = {
-    postData: {
-      contents: JSON.stringify(testData),
-    },
-  };
-
-  const result = doPost(mockEvent);
-  Logger.log(result.getContent());
-}
-```
+3. Copy and paste the full contents of [`docs/google-apps-script-code.js`](google-apps-script-code.js). That file is the source of truth for the deployed script.
 
 4. Click **Save** (💾 icon) and give your project a name like "Contact Form Handler"
+
+## Step 2b: Add the reCAPTCHA secret
+
+The script rejects any submission without a valid reCAPTCHA v2 token. Tokens are single-use, so this also blocks the same submission from being saved twice.
+
+1. In the Apps Script editor, open **Project Settings** (gear icon) → **Script Properties**
+2. Add `RECAPTCHA_SECRET` with the reCAPTCHA v2 **secret** key that pairs with the site key in `30-contact.html` (from the reCAPTCHA admin console). Never commit it.
+3. Optional: add `LIVE_TEST_TOKEN` with a long random string. The `@live` Playwright test and the `testSubmission` function use it to skip the checkbox. Leave it unset to disable that bypass.
+
+**Rollout order matters.** Deploy the website change that sends the token *before* deploying this script. An updated script behind an old page rejects every submission.
 
 ## Step 3: Deploy as Web App
 
@@ -168,7 +88,8 @@ curl -X POST \
     "name": "Test User",
     "email": "test@example.com",
     "phone": "555-1234",
-    "message": "This is a test message"
+    "message": "This is a test message",
+    "recaptchaToken": "[YOUR_LIVE_TEST_TOKEN]"
   }' \
   [YOUR_WEB_APP_URL]
 ```

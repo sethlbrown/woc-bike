@@ -4,7 +4,11 @@ const { test, expect } = require("@playwright/test");
 // Script webhook, which appends a row to the production Google Sheet.
 //
 // Excluded from `npm test` (see grepInvert in playwright.config.js).
-// Run with: WEBHOOK_URL=<apps-script-url> npm run test:live
+// Run with:
+//   WEBHOOK_URL=<apps-script-url> LIVE_TEST_TOKEN=<token> npm run test:live
+//
+// LIVE_TEST_TOKEN must match the LIVE_TEST_TOKEN script property in the Apps
+// Script. The webhook accepts it in place of a solved reCAPTCHA checkbox.
 //
 // After it passes, check the sheet for the row containing the printed marker,
 // then delete that row.
@@ -16,6 +20,10 @@ test(
     test.skip(
       !process.env.WEBHOOK_URL,
       "WEBHOOK_URL is not set. The dev server needs it to render the form's webhook.",
+    );
+    test.skip(
+      !process.env.LIVE_TEST_TOKEN,
+      "LIVE_TEST_TOKEN is not set. The webhook rejects submissions without a reCAPTCHA token.",
     );
 
     const marker = `e2e-${new Date().toISOString()}`;
@@ -38,6 +46,14 @@ test(
     );
 
     await expect(page.locator("#submit-button")).toBeEnabled();
+
+    // Stand in for ticking the checkbox: the widget stores its token in this
+    // hidden field, and the webhook accepts LIVE_TEST_TOKEN as a valid token.
+    const tokenField = page.locator('[name="g-recaptcha-response"]');
+    await tokenField.waitFor({ state: "attached" });
+    await tokenField.evaluate((el, token) => {
+      el.value = token;
+    }, process.env.LIVE_TEST_TOKEN);
 
     // Apps Script answers the POST with a 302 to script.googleusercontent.com,
     // which serves the JSON body. Wait for that final 200 response.

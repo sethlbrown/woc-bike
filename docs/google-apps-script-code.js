@@ -156,6 +156,17 @@ function doPost(e) {
       message
     ]);
     
+    // Refresh the sheet reference to ensure the new row is available
+    SpreadsheetApp.flush();
+    
+    // Sort sheet by timestamp (newest first - Z to A)
+    // Pass the spreadsheet object instead of just the sheet
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    sortSheetByTimestamp(spreadsheet);
+    
+    // Send email notification if enabled
+    sendEmailNotification(name, email, phone, message, timestamp);
+    
     // Return success response
     return ContentService
       .createTextOutput(JSON.stringify({
@@ -172,6 +183,142 @@ function doPost(e) {
         error: error.toString()
       }))
       .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+/**
+ * Sort the sheet by timestamp column (newest first - Z to A)
+ * This ensures new submissions appear at the top of the sheet
+ * 
+ * @param {Spreadsheet} spreadsheet - The Google Spreadsheet (optional, will get active if not provided)
+ */
+function sortSheetByTimestamp(spreadsheet) {
+  try {
+    // Get the spreadsheet and active sheet
+    const ss = spreadsheet || SpreadsheetApp.getActiveSpreadsheet();
+    if (!ss) {
+      Logger.log('Error: Could not get active spreadsheet for sorting');
+      return;
+    }
+    
+    const activeSheet = ss.getActiveSheet();
+    if (!activeSheet) {
+      Logger.log('Error: Could not get active sheet for sorting');
+      return;
+    }
+    
+    Logger.log('Starting sort. Sheet name: ' + activeSheet.getName());
+    
+    // Get the data range (assumes header row is in row 1 or 2)
+    const lastRow = activeSheet.getLastRow();
+    Logger.log('Last row: ' + lastRow);
+    
+    if (lastRow <= 1) {
+      Logger.log('No data to sort (only header row or empty)');
+      return; // No data to sort (only header row)
+    }
+    
+    // Check if B1 has an email (indicating headers are in row 2)
+    const b1Value = activeSheet.getRange('B1').getValue();
+    const hasEmailInB1 = b1Value && b1Value.toString().trim() !== '' && b1Value.toString().includes('@');
+    const headerRow = hasEmailInB1 ? 2 : 1;
+    const dataStartRow = hasEmailInB1 ? 3 : 2;
+    
+    Logger.log('Header row: ' + headerRow + ', Data start row: ' + dataStartRow);
+    
+    // Only sort if we have data rows
+    if (lastRow < dataStartRow) {
+      Logger.log('Not enough rows to sort. Last row: ' + lastRow + ', Data start: ' + dataStartRow);
+      return;
+    }
+    
+    // Get the data range (skip header row)
+    const numDataRows = lastRow - headerRow;
+    const numColumns = activeSheet.getLastColumn();
+    
+    Logger.log('Data rows: ' + numDataRows + ', Columns: ' + numColumns);
+    
+    if (numDataRows <= 0) {
+      Logger.log('No data rows to sort');
+      return;
+    }
+    
+    const dataRange = activeSheet.getRange(dataStartRow, 1, numDataRows, numColumns);
+    
+    // Sort by column A (Timestamp) in descending order (Z to A)
+    dataRange.sort([{column: 1, ascending: false}]);
+    Logger.log('Sheet sorted successfully. Rows sorted: ' + numDataRows);
+  } catch (error) {
+    // Log error but don't fail the submission
+    Logger.log('Error sorting sheet: ' + error.toString());
+    Logger.log('Error stack: ' + (error.stack || 'No stack trace'));
+  }
+}
+
+/**
+ * Send email notification when a new form submission is received
+ * 
+ * Email recipient can be configured in two ways:
+ * 1. Set in cell B1 of the sheet (recommended - easy to change)
+ * 2. Hardcode the email address in the NOTIFICATION_EMAIL constant below
+ * 
+ * To disable email notifications, leave cell B1 empty or set NOTIFICATION_EMAIL to empty string
+ * 
+ * @param {string} name - Submitter's name
+ * @param {string} email - Submitter's email
+ * @param {string} phone - Submitter's phone number
+ * @param {string} message - Submission message
+ * @param {Date} timestamp - Submission timestamp
+ */
+function sendEmailNotification(name, email, phone, message, timestamp) {
+  try {
+    // Option 1: Get email from cell B1 of the sheet (recommended)
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const notificationEmail = sheet.getRange('B1').getValue();
+    
+    // Option 2: Hardcode email address here (uncomment and set your email)
+    // const notificationEmail = 'your-email@gmail.com';
+    
+    // If no email is configured, skip notification
+    if (!notificationEmail || notificationEmail.toString().trim() === '') {
+      return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(notificationEmail.toString().trim())) {
+      Logger.log('Invalid notification email address in cell B1: ' + notificationEmail);
+      return;
+    }
+    
+    // Format timestamp
+    const formattedDate = Utilities.formatDate(timestamp, Session.getScriptTimeZone(), 'MMMM dd, yyyy hh:mm a');
+    
+    // Build email subject
+    const subject = 'New Contact Form Submission: ' + name;
+    
+    // Build email body
+    const body = 'You have received a new contact form submission:\n\n' +
+      'Name: ' + name + '\n' +
+      'Email: ' + email + '\n' +
+      'Phone: ' + (phone || 'Not provided') + '\n' +
+      'Submitted: ' + formattedDate + '\n\n' +
+      'Message:\n' + message + '\n\n' +
+      '---\n' +
+      'This is an automated notification from your contact form.';
+    
+    // Send email
+    MailApp.sendEmail({
+      to: notificationEmail.toString().trim(),
+      subject: subject,
+      body: body,
+      replyTo: email // Reply-to set to submitter's email for easy response
+    });
+    
+    Logger.log('Email notification sent to: ' + notificationEmail);
+  } catch (error) {
+    // Log error but don't fail the submission
+    Logger.log('Error sending email notification: ' + error.toString());
   }
 }
 
